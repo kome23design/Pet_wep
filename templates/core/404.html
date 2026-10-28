@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Page Not Found (404) | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto px-4 py-20 text-center space-y-6">
+  <div class="bg-white p-10 rounded-3xl border border-stone-200 shadow-sm space-y-4">
+    <div class="w-20 h-20 rounded-full bg-cream text-gold flex items-center justify-center mx-auto text-3xl font-serif font-bold">
+      404
+    </div>
+    <h1 class="font-serif text-3xl font-bold text-forest">Page Not Found</h1>
+    <p class="text-xs text-stone-500 leading-relaxed">
+      The companion listing or page you are seeking may have been placed into a forever home or moved.
+    </p>
+    <div class="pt-4 flex flex-col gap-2">
+      <a href="{% url 'catalog:pet_list' %}" class="btn-primary text-xs py-2.5 px-6 justify-center">
+        Browse Available Puppies
+      </a>
+      <a href="{% url 'pages:home' %}" class="btn-secondary text-xs py-2 px-6 justify-center">
+        Return to Home Page
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

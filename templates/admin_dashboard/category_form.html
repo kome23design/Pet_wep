@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Dynamic Pet Category | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-4 py-12">
+  <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm space-y-6">
+    <div class="border-b border-stone-100 pb-3">
+      <span class="badge-gold text-[10px]">Dynamic Expansion</span>
+      <h1 class="font-serif text-3xl font-bold text-forest mt-1">Create Dynamic Category</h1>
+      <p class="text-xs text-stone-500">Expand the atelier to support new species (e.g. Cats, Rabbits, Birds) dynamically without code changes.</p>
+    </div>
+
+    <form method="POST" class="space-y-4 text-xs">
+      {% csrf_token %}
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Category Name *</label>
+        <input type="text" name="name" required placeholder="e.g. Cats" class="form-input text-xs">
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Description</label>
+        <textarea name="description" rows="3" placeholder="Ethically hand-reared companion cats..." class="form-textarea text-xs"></textarea>
+      </div>
+
+      <div class="pt-4 flex items-center gap-3">
+        <button type="submit" class="btn-primary py-3 px-6 text-xs font-semibold">
+          Create Category &rarr;
+        </button>
+        <a href="{% url 'admin_dashboard:inventory' %}" class="text-stone-400 hover:text-stone-700">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

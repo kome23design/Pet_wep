@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Privacy &amp; Data Security Policy | Prestige Paws NYC{% endblock %}
+{% block meta_description %}Official privacy and client data security policy for Prestige Paws NYC. Learn how we protect client records, residence details, and payment credentials.{% endblock %}
+
+{% block content %}
+<div class="bg-cream-dark py-14 border-b border-[#DFD5C6]">
+  <div class="max-w-4xl mx-auto px-4 sm:px-8 text-center space-y-3">
+    <span class="badge-gold">Legal Governance &amp; Consumer Protection</span>
+    <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest">Privacy &amp; Data Security Policy</h1>
+    <p class="text-stone-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-light">
+      Prestige Paws NYC is committed to safeguarding the privacy, confidentiality, and data sovereignty of our private clients, adopters, and nursery partners.
+    </p>
+  </div>
+</div>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-8 py-16 space-y-8 text-xs sm:text-sm text-stone-700 leading-relaxed font-light">
+  
+  <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-xs space-y-3">
+    <h3 class="font-serif text-2xl font-bold text-forest">1. Scope and Controller Information</h3>
+    <p>
+      This Privacy Policy governs the collection, storage, and utilization of personal data by Prestige Paws NYC (&ldquo;Prestige Paws&rdquo;, &ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;us&rdquo;) through our website, concierge desks, and Manhattan atelier located at 450 Lexington Avenue, Suite 1800, New York, NY 10017.
+    </p>
+  </div>
+
+  <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-xs space-y-3">
+    <h3 class="font-serif text-2xl font-bold text-forest">2. Categories of Information Collected</h3>
+    <p>In order to coordinate legitimate companion pet placement, official USDA health documentation, and chaperoned hand-delivery, we collect:</p>
+    <ul class="list-disc pl-5 space-y-1.5 text-stone-600">
+      <li><strong>Client Identification:</strong> Legal full name, email address, direct telephone number, and government-verified contact details.</li>
+      <li><strong>Residence &amp; Destination Records:</strong> Physical street address, apartment/suite number, doorman/gatehouse access instructions, and preferred delivery windows.</li>
+      <li><strong>Pet Lineage &amp; Microchip Registration Data:</strong> Registered owner details transmitted to the 24/7 Universal Pet Recovery Database upon placement.</li>
+      <li><strong>Technical &amp; Session Logs:</strong> IP address, browser type, device identifiers, and session tokens utilized solely for CSRF protection and shopping cart persistence.</li>
+    </ul>
+  </div>
+
+  <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-xs space-y-3">
+    <h3 class="font-serif text-2xl font-bold text-forest">3. Payment &amp; Financial Security (PCI-DSS Level 1)</h3>
+    <p>
+      We categorically never store, process, or retain raw credit card numbers, CVV codes, or full banking credentials on our local servers. All electronic payments are processed through Stripe's certified PCI-DSS Level 1 encrypted payment architecture. Data transmissions are encrypted using Transport Layer Security (TLS 1.3) with 256-bit cryptographic keys.
+    </p>
+  </div>
+
+  <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-xs space-y-3">
+    <h3 class="font-serif text-2xl font-bold text-forest">4. Third-Party Disclosures &amp; Strict Confidentiality</h3>
+    <p>
+      Prestige Paws NYC will never sell, lease, or monetize client personal data to marketing brokers, data aggregators, or unauthorized commercial third parties. Information is disclosed exclusively to:
+    </p>
+    <ul class="list-disc pl-5 space-y-1.5 text-stone-600">
+      <li><strong>Licensed Examining Veterinarians:</strong> To generate legally mandated USDA-APHIS interstate travel health certificates.</li>
+      <li><strong>Assigned Chaperones &amp; Flight Nannies:</strong> Solely for the operational coordination of door-to-door hand delivery.</li>
+      <li><strong>Microchip Registration Authorities:</strong> To link the 15-digit ISO microchip to your name in universal lost-pet recovery networks.</li>
+    </ul>
+  </div>
+
+  <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-xs space-y-3">
+    <h3 class="font-serif text-2xl font-bold text-forest">5. Adopter Rights &amp; Data Subject Access (SHIELD &amp; CCPA)</h3>
+    <p>
+      In compliance with the New York Stop Hacks and Improve Electronic Data Security (SHIELD) Act and California Consumer Privacy Act (CCPA), you retain the right to request access to the personal records held in your client dossier, request correction of inaccurate addresses, or request account deletion, subject only to mandatory veterinary record retention requirements mandated by Federal animal welfare laws.
+    </p>
+  </div>
+
+  <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-xs space-y-3">
+    <h3 class="font-serif text-2xl font-bold text-forest">6. Privacy Inquiries &amp; Data Protection Officer</h3>
+    <p>
+      Inquiries regarding data confidentiality or account management should be addressed to our Privacy Compliance Directorate via email at <a href="mailto:privacy@prestigepaws.nyc" class="text-forest font-bold underline">privacy@prestigepaws.nyc</a> or via written correspondence to Prestige Paws NYC, 450 Lexington Avenue, Suite 1800, New York, NY 10017.
+    </p>
+  </div>
+
+</div>
+{% endblock %}

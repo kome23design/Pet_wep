@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prestige Paws NYC &bull; Placement Receipt &amp; Health Certificate Transfer #{{ order.order_number }}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1B3B2B; margin: 40px; }
+    .header { border-bottom: 2px solid #D4AF37; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-start; }
+    .brand { font-size: 26px; font-weight: bold; letter-spacing: 2px; }
+    .tagline { font-size: 11px; text-transform: uppercase; color: #D4AF37; letter-spacing: 1.5px; }
+    .order-title { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
+    .meta { font-size: 12px; color: #555; }
+    table { width: 100%; border-collapse: collapse; margin: 30px 0; }
+    th { background: #FAF8F5; text-align: left; padding: 12px; font-size: 12px; border-bottom: 2px solid #ddd; text-transform: uppercase; }
+    td { padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+    .totals { width: 350px; margin-left: auto; margin-top: 20px; font-size: 13px; }
+    .totals div { display: flex; justify-content: space-between; padding: 6px 0; }
+    .totals .total-row { border-top: 2px solid #1B3B2B; font-weight: bold; font-size: 16px; margin-top: 8px; padding-top: 8px; }
+    .compliance { margin-top: 50px; padding: 20px; background: #FAF8F5; border: 1px solid #EFE8DC; border-radius: 8px; font-size: 11px; line-height: 1.6; color: #444; }
+    @media print {
+      body { margin: 0; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="no-print" style="margin-bottom: 20px; text-align: right;">
+    <button onclick="window.print()" style="background: #1B3B2B; color: #fff; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+      Print Receipt / Save as PDF
+    </button>
+  </div>
+
+  <div class="header">
+    <div>
+      <div class="brand">PRESTIGE PAWS NYC</div>
+      <div class="tagline">Luxury Pet Placement Atelier &bull; New York City</div>
+      <div class="meta" style="margin-top: 8px;">
+        450 Lexington Avenue, Suite 1800, New York, NY 10017<br>
+        Direct: (212) 555-PAWS | concierge@prestigepaws.nyc
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <div class="order-title">OFFICIAL RECEIPT</div>
+      <div class="meta">
+        Order Number: <strong>#{{ order.order_number }}</strong><br>
+        Date: {{ order.created_at|date:"F d, Y" }}<br>
+        Payment Status: <strong style="color: green;">{{ order.get_payment_status_display }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+    <div>
+      <strong style="font-size: 12px; text-transform: uppercase; color: #666;">Placed With (Adopter):</strong><br>
+      <div style="font-size: 14px; font-weight: bold; margin-top: 4px;">{{ order.customer_name }}</div>
+      <div style="font-size: 12px; color: #555; margin-top: 2px;">
+        {{ order.delivery_street_address }} {% if order.delivery_apartment %}{{ order.delivery_apartment }}{% endif %}<br>
+        {{ order.delivery_city }}, {{ order.delivery_state }} {{ order.delivery_postal_code }}<br>
+        {{ order.customer_phone }} | {{ order.customer_email }}
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <strong style="font-size: 12px; text-transform: uppercase; color: #666;">Chaperoned Transport:</strong><br>
+      <div style="font-size: 13px; margin-top: 4px;">
+        Tracking Code: <strong>{{ order.delivery.tracking_number|default:"Pending Dispatch" }}</strong><br>
+        Window: {{ order.preferred_delivery_window }}
+      </div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Reference ID</th>
+        <th>Puppy Description</th>
+        <th>Breed</th>
+        <th>Health Guarantee</th>
+        <th style="text-align: right;">Amount (USD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in order.items.all %}
+        <tr>
+          <td style="font-family: monospace;">{{ item.pet_reference_number }}</td>
+          <td><strong>{{ item.pet_name }}</strong></td>
+          <td>{{ item.pet_breed_name }}</td>
+          <td>10-Year Genetic Warranty &bull; USDA Certified</td>
+          <td style="text-align: right;">${{ item.price|floatformat:2 }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="totals">
+    <div>
+      <span>Placement Subtotal:</span>
+      <span>${{ order.subtotal|floatformat:2 }}</span>
+    </div>
+    <div>
+      <span>Chaperoned Travel Fee:</span>
+      <span>${{ order.delivery_fee|floatformat:2 }}</span>
+    </div>
+    <div>
+      <span>Sales Tax:</span>
+      <span>${{ order.tax_amount|floatformat:2 }}</span>
+    </div>
+    <div class="total-row">
+      <span>Total Paid:</span>
+      <span>${{ order.total_amount|floatformat:2 }} USD</span>
+    </div>
+  </div>
+
+  <div class="compliance">
+    <strong>Prestige Paws Legal &amp; Veterinary Compliance Covenant:</strong><br>
+    All puppies placed through Prestige Paws NYC have undergone required USDA interstate health examinations and maintain valid rabies/DHPP vaccination records commensurate with age. The 10-Year Genetic Health Warranty transfers to the purchaser specified above upon physical custody transfer. Microchip ownership registration is processed automatically into the national 24/7 recovery database.
+  </div>
+</body>
+</html>

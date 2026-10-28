@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pet Inventory Catalog Management | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-forest text-white py-8 border-b border-forest-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <span class="badge-gold text-[10px]">Staff Management Suite</span>
+        <h1 class="font-serif text-3xl font-bold mt-1">Pet Inventory Catalog</h1>
+        <p class="text-xs text-stone-300">Create, edit, feature, and archive companion puppy listings and dynamic categories.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="{% url 'admin_dashboard:add_pet' %}" class="btn-gold text-xs py-2 px-4">
+          <i class="fa-solid fa-plus"></i> Add New Pet Listing
+        </a>
+        <a href="{% url 'admin_dashboard:add_category' %}" class="btn-secondary text-xs py-2 px-3 text-white border-stone-400 hover:bg-white hover:text-forest">
+          + Category
+        </a>
+        <a href="{% url 'admin_dashboard:add_breed' %}" class="btn-secondary text-xs py-2 px-3 text-white border-stone-400 hover:bg-white hover:text-forest">
+          + Breed
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-8">
+  
+  <!-- Dynamic Categories Overview -->
+  <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-3">
+    <div class="flex items-center justify-between border-b border-stone-100 pb-2">
+      <h3 class="font-serif text-xl font-bold text-forest">Dynamic Categories &amp; Breeds</h3>
+      <span class="text-xs text-stone-400">{{ categories.count }} active categories in database</span>
+    </div>
+    <div class="flex flex-wrap gap-3 text-xs">
+      {% for cat in categories %}
+        <div class="p-3 bg-cream rounded-xl border border-stone-200 space-y-1">
+          <strong class="font-bold text-forest block">{{ cat.name }}</strong>
+          <div class="flex flex-wrap gap-1 text-[10px] text-stone-600">
+            {% for b in cat.breeds.all %}
+              <span class="bg-white px-2 py-0.5 rounded border border-stone-200">{{ b.name }}</span>
+            {% empty %}
+              <span class="text-stone-400">No breeds yet</span>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Pet Listings Table -->
+  <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-stone-100 gap-3">
+      <h3 class="font-serif text-xl font-bold text-forest">Companion Listings ({{ pets.count }})</h3>
+      
+      <!-- Filter chips -->
+      <div class="flex items-center gap-2 text-xs">
+        <a href="{% url 'admin_dashboard:inventory' %}" class="px-3 py-1 rounded-full {% if not current_status %}bg-forest text-gold font-bold{% else %}bg-cream text-stone-600{% endif %}">All</a>
+        <a href="?status=available" class="px-3 py-1 rounded-full {% if current_status == 'available' %}bg-forest text-gold font-bold{% else %}bg-cream text-stone-600{% endif %}">Available</a>
+        <a href="?status=reserved" class="px-3 py-1 rounded-full {% if current_status == 'reserved' %}bg-forest text-gold font-bold{% else %}bg-cream text-stone-600{% endif %}">Reserved</a>
+        <a href="?status=sold" class="px-3 py-1 rounded-full {% if current_status == 'sold' %}bg-forest text-gold font-bold{% else %}bg-cream text-stone-600{% endif %}">Sold</a>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto text-xs">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-stone-400 uppercase text-[10px] border-b border-stone-100">
+            <th class="py-2.5">Photo</th>
+            <th class="py-2.5">Name</th>
+            <th class="py-2.5">Ref #</th>
+            <th class="py-2.5">Category &bull; Breed</th>
+            <th class="py-2.5">Price (USD)</th>
+            <th class="py-2.5">Age &bull; Gender</th>
+            <th class="py-2.5">Status</th>
+            <th class="py-2.5 text-right">Public Link</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100 text-stone-700">
+          {% for pet in pets %}
+            <tr class="hover:bg-cream">
+              <td class="py-2.5">
+                <img src="{{ pet.primary_image.url|default:'/static/images/placeholder_puppy.svg' }}" 
+                     alt="{{ pet.name }}" 
+                     class="w-12 h-12 object-cover rounded-lg border border-stone-200">
+              </td>
+              <td class="py-2.5 font-serif font-bold text-base text-forest">
+                {{ pet.name }}
+                {% if pet.is_featured %}<span class="badge-gold text-[9px] ml-1">Featured</span>{% endif %}
+              </td>
+              <td class="py-2.5 font-mono text-stone-500">{{ pet.reference_number }}</td>
+              <td class="py-2.5 font-medium">{{ pet.category.name }} &bull; {{ pet.breed.name }}</td>
+              <td class="py-2.5 font-serif font-bold text-forest text-sm">${{ pet.price|floatformat:2 }}</td>
+              <td class="py-2.5">{{ pet.age_display }} &bull; <span class="capitalize">{{ pet.sex }}</span></td>
+              <td class="py-2.5">
+                {% if pet.status == 'available' %}
+                  <span class="badge-forest font-bold text-[9px]">Available</span>
+                {% elif pet.status == 'reserved' %}
+                  <span class="badge-gold font-bold text-[9px]">Reserved</span>
+                {% elif pet.status == 'sold' %}
+                  <span class="bg-stone-200 text-stone-600 px-2 py-0.5 rounded text-[9px]">Sold</span>
+                {% else %}
+                  <span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[9px]">{{ pet.get_status_display }}</span>
+                {% endif %}
+              </td>
+              <td class="py-2.5 text-right">
+                <a href="{{ pet.get_absolute_url }}" target="_blank" class="text-gold-dark hover:underline font-medium">
+                  View <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

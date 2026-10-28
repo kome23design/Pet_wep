@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} for Sale | Prestige Paws NYC{% endblock %}
+{% block meta_description %}{{ category.seo_description|default:category.description }}{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-b from-cream to-cream-dark py-12 border-b border-[#DFD5C6]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <nav class="text-xs text-stone-500 mb-2 flex items-center gap-1.5">
+      <a href="{% url 'pages:home' %}" class="hover:underline">Home</a>
+      <span>/</span>
+      <a href="{% url 'catalog:pet_list' %}" class="hover:underline">Catalog</a>
+      <span>/</span>
+      <span class="text-forest font-medium">{{ category.name }}</span>
+    </nav>
+    <div class="max-w-3xl">
+      <span class="badge-gold">Category Collection</span>
+      <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest mt-2">{{ category.name }}</h1>
+      <p class="text-stone-600 text-sm mt-3 leading-relaxed">{{ category.description }}</p>
+    </div>
+
+    <!-- Sub-Breeds Filter Bar -->
+    {% if breeds %}
+      <div class="mt-8 flex flex-wrap gap-2.5">
+        <a href="{% url 'catalog:category_detail' category.slug %}" class="px-4 py-1.5 rounded-full text-xs font-semibold {% if not request.GET.breed %}bg-forest text-gold{% else %}bg-white text-stone-700 hover:bg-cream border border-stone-200{% endif %} shadow-xs">
+          All {{ category.name }}
+        </a>
+        {% for b in breeds %}
+          <a href="{% url 'catalog:collection_detail' b.slug %}" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-700 hover:bg-cream border border-stone-200 shadow-xs flex items-center gap-1.5">
+            <span>{{ b.name }}</span>
+            <span class="text-[10px] text-stone-400">({{ b.pets.count }})</span>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-12">
+  {% if pets %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {% for pet in pets %}
+        {% include 'components/pet_card.html' with pet=pet %}
+      {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+      <div class="mt-12 flex items-center justify-center gap-2 text-xs">
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <span class="px-3 py-1.5 rounded-lg bg-forest text-gold font-bold">{{ num }}</span>
+          {% else %}
+            <a href="?page={{ num }}" class="px-3 py-1.5 rounded-lg border border-stone-300 bg-white text-forest hover:bg-cream">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="bg-white p-12 text-center rounded-2xl border border-stone-200 shadow-sm">
+      <p class="text-stone-500 text-sm">No pets are currently available in this category. New litters are registered weekly.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

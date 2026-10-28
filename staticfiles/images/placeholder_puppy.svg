@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="luxuryBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FAF8F5"/>
+      <stop offset="100%" stop-color="#F3EDE4"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#AA820A"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#luxuryBg)" rx="16"/>
+  <!-- Decorative border -->
+  <rect x="20" y="20" width="560" height="560" fill="none" stroke="#D4AF37" stroke-width="2" stroke-dasharray="6,4" rx="12" opacity="0.6"/>
+  <circle cx="300" cy="270" r="130" fill="#E8DEC8" opacity="0.4"/>
+  <!-- Dog Face Silhouette -->
+  <g transform="translate(190, 160)" fill="#1B3B2B">
+    <!-- Ears -->
+    <path d="M-10,40 C-35,60 -45,130 -25,170 C-10,195 10,180 15,140 Z" fill="#2D5A40"/>
+    <path d="M230,40 C255,60 265,130 245,170 C230,195 210,180 205,140 Z" fill="#2D5A40"/>
+    <!-- Head -->
+    <path d="M20,60 C40,0 180,0 200,60 C230,120 210,200 110,210 C10,200 -10,120 20,60 Z"/>
+    <!-- Snout -->
+    <ellipse cx="110" cy="155" rx="55" ry="42" fill="#FAF8F5"/>
+    <polygon points="110,140 95,122 125,122" fill="#1B3B2B"/>
+    <path d="M110,140 L110,165 M95,165 Q110,175 125,165" stroke="#1B3B2B" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <!-- Eyes -->
+    <circle cx="65" cy="95" r="14" fill="#0D1F16"/>
+    <circle cx="62" cy="90" r="4" fill="#FFFFFF"/>
+    <circle cx="155" cy="95" r="14" fill="#0D1F16"/>
+    <circle cx="152" cy="90" r="4" fill="#FFFFFF"/>
+    <!-- Gold Crown Accent -->
+    <path d="M70,5 L90,25 L110,0 L130,25 L150,5 L145,35 L75,35 Z" fill="url(#goldGrad)"/>
+  </g>
+  <text x="300" y="470" font-family="'Cinzel', 'Playfair Display', Georgia, serif" font-size="24" font-weight="bold" fill="#1B3B2B" text-anchor="middle" letter-spacing="3">PRESTIGE PAWS NYC</text>
+  <text x="300" y="505" font-family="'Montserrat', sans-serif" font-size="14" font-weight="500" fill="#D4AF37" text-anchor="middle" letter-spacing="4">WHITE-GLOVE ATELIER &amp; COURIER</text>
+</svg>

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Dynamic Pet Breed | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-4 py-12">
+  <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm space-y-6">
+    <div class="border-b border-stone-100 pb-3">
+      <span class="badge-gold text-[10px]">Dynamic Expansion</span>
+      <h1 class="font-serif text-3xl font-bold text-forest mt-1">Create Dynamic Breed</h1>
+      <p class="text-xs text-stone-500">Associate a new breed or species subtype to an existing category.</p>
+    </div>
+
+    <form method="POST" class="space-y-4 text-xs">
+      {% csrf_token %}
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Parent Category *</label>
+        <select name="category" required class="form-select text-xs">
+          {% for c in categories %}
+            <option value="{{ c.id }}">{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Breed Name *</label>
+        <input type="text" name="name" required placeholder="e.g. British Shorthair or Kitten" class="form-input text-xs">
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Temperament &amp; Traits</label>
+        <input type="text" name="temperament" placeholder="e.g. Calm, affectionate, gentle" class="form-input text-xs">
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Breed Heritage Description</label>
+        <textarea name="description" rows="3" placeholder="History and breed profile..." class="form-textarea text-xs"></textarea>
+      </div>
+
+      <div class="pt-4 flex items-center gap-3">
+        <button type="submit" class="btn-primary py-3 px-6 text-xs font-semibold">
+          Create Breed &rarr;
+        </button>
+        <a href="{% url 'admin_dashboard:inventory' %}" class="text-stone-400 hover:text-stone-700">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

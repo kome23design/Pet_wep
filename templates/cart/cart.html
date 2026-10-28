@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Your Reservation Cart | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-cream-dark py-8 border-b border-[#DFD5C6]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <nav class="text-xs text-stone-500 mb-1 flex items-center gap-1.5">
+      <a href="{% url 'pages:home' %}" class="hover:underline">Home</a>
+      <span>/</span>
+      <span class="text-forest font-medium">Reservation Cart</span>
+    </nav>
+    <h1 class="font-serif text-3xl sm:text-4xl font-bold text-forest">Your Reservation Cart</h1>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10">
+  {% if items %}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      
+      <!-- Cart Items List -->
+      <div class="lg:col-span-8 space-y-4">
+        
+        <!-- Unique Animal Notice -->
+        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-xs flex items-center gap-3">
+          <i class="fa-solid fa-circle-info text-amber-600 text-base shrink-0"></i>
+          <span>Each companion puppy is a unique individual animal. Quantities are strictly limited to one per unique animal. Placing an order reserves your puppy exclusively.</span>
+        </div>
+
+        {% for item in items %}
+          <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-xs flex flex-col sm:flex-row items-center gap-5 justify-between">
+            <div class="flex items-center gap-4 w-full sm:w-auto">
+              <a href="{{ item.pet.get_absolute_url }}" class="shrink-0">
+                <img src="{{ item.pet.primary_image.url|default:'/static/images/placeholder_puppy.svg' }}" 
+                     alt="{{ item.pet.name }}" 
+                     class="w-24 h-24 object-cover rounded-xl border border-stone-200"
+                     onerror="this.onerror=null; this.src='{% static 'images/placeholder_puppy.svg' %}';">
+              </a>
+              <div>
+                <span class="text-[10px] font-bold text-gold-dark uppercase tracking-wider">{{ item.pet.breed.name }}</span>
+                <a href="{{ item.pet.get_absolute_url }}">
+                  <h3 class="font-serif text-2xl font-bold text-forest hover:text-gold-dark transition-colors">{{ item.pet.name }}</h3>
+                </a>
+                <p class="text-xs text-stone-500">Ref: {{ item.pet.reference_number }} &bull; {{ item.pet.coat_color }} &bull; {{ item.pet.age_display }}</p>
+                <div class="mt-2 text-xs">
+                  {% if item.pet.status == 'available' %}
+                    <span class="text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check"></i> Ready for Immediate Travel Scheduling</span>
+                  {% else %}
+                    <span class="text-amber-700 font-semibold"><i class="fa-solid fa-circle-exclamation"></i> Status: {{ item.pet.get_status_display }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-0 border-stone-100">
+              <div class="text-left sm:text-right">
+                <span class="text-[10px] text-stone-400 uppercase block font-medium">Placement Fee</span>
+                <span class="font-serif text-2xl font-bold text-forest">${{ item.pet.price|floatformat:2 }}</span>
+              </div>
+              <a href="{% url 'cart:remove_from_cart' item.id %}" 
+                 class="w-9 h-9 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition-colors"
+                 title="Remove from Cart">
+                <i class="fa-regular fa-trash-can text-sm"></i>
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+
+        <!-- Assurance Box -->
+        <div class="p-5 bg-cream rounded-2xl border border-stone-200 text-xs text-stone-600 space-y-2">
+          <h4 class="font-bold text-forest uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-shield-cat text-gold"></i> Companion Placement Guarantee
+          </h4>
+          <p>Every pet placement includes complete USDA veterinary clearance, official lifetime microchip transfer, starter transition nutrition kit, and our 10-Year Genetic Health Warranty.</p>
+        </div>
+
+      </div>
+
+      <!-- Financial Order Summary -->
+      <div class="lg:col-span-4">
+        <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm sticky top-24 space-y-5">
+          <h3 class="font-serif text-2xl font-bold text-forest pb-3 border-b border-stone-200">Reservation Summary</h3>
+
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between text-stone-600">
+              <span>Puppy Placement Subtotal</span>
+              <span class="font-medium text-forest">${{ cart.subtotal|floatformat:2 }}</span>
+            </div>
+
+            <div class="flex justify-between text-stone-600">
+              <span class="flex items-center gap-1">
+                Chaperoned Delivery
+                <i class="fa-regular fa-circle-question text-stone-400 text-xs" title="Bonded nationwide climate-controlled courier or flight nanny"></i>
+              </span>
+              <span class="font-medium text-forest">${{ cart.delivery_fee|floatformat:2 }}</span>
+            </div>
+
+            <div class="flex justify-between text-stone-600">
+              <span>Estimated Sales Tax (8.88%)</span>
+              <span class="font-medium text-forest">${{ cart.tax_amount|floatformat:2 }}</span>
+            </div>
+
+            <div class="border-t border-stone-200 pt-3 flex justify-between items-baseline">
+              <span class="font-serif text-lg font-bold text-forest">Total (USD)</span>
+              <span class="font-serif text-3xl font-bold text-forest">${{ cart.total|floatformat:2 }}</span>
+            </div>
+          </div>
+
+          <a href="{% url 'orders:checkout' %}" class="btn-primary w-full py-3.5 text-base justify-center shadow-md hover:shadow-lg">
+            Proceed to Secure Checkout <i class="fa-solid fa-arrow-right ml-1"></i>
+          </a>
+
+          <div class="text-center pt-2">
+            <a href="{% url 'catalog:pet_list' %}" class="text-xs text-stone-500 hover:text-forest">
+              &larr; Continue Exploring Other Puppies
+            </a>
+          </div>
+
+          <div class="pt-4 border-t border-stone-100 flex items-center justify-center gap-4 text-xs text-stone-400">
+            <span><i class="fa-solid fa-lock text-emerald-600"></i> 256-Bit SSL Encrypted</span>
+            <span>&bull;</span>
+            <span>Stripe Verified</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  {% else %}
+    <div class="bg-white p-16 text-center rounded-2xl border border-stone-200 shadow-sm max-w-lg mx-auto space-y-5">
+      <div class="w-20 h-20 rounded-full bg-cream text-stone-400 flex items-center justify-center mx-auto text-3xl">
+        <i class="fa-solid fa-bag-shopping"></i>
+      </div>
+      <h2 class="font-serif text-3xl font-bold text-forest">Your Reservation Cart is Empty</h2>
+      <p class="text-stone-500 text-xs leading-relaxed">
+        Browse our certified nursery listings to find your ideal Maltipoo or Maltese companion.
+      </p>
+      <a href="{% url 'catalog:pet_list' %}" class="btn-primary text-sm py-3 px-6 inline-block">
+        Explore Available Puppies
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

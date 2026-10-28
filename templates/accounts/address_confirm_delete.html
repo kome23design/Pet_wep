@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirm Address Removal | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto px-4 py-16 text-center">
+  <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm space-y-5">
+    <div class="w-16 h-16 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto text-2xl">
+      <i class="fa-solid fa-trash-can"></i>
+    </div>
+    <h1 class="font-serif text-2xl font-bold text-forest">Remove Address?</h1>
+    <p class="text-xs text-stone-600">
+      Are you sure you want to remove <strong class="text-forest">{{ address.address_label }}</strong> ({{ address.street_address }}) from your saved address book?
+    </p>
+
+    <form method="POST" class="pt-4 flex items-center justify-center gap-3">
+      {% csrf_token %}
+      <button type="submit" class="px-5 py-2 rounded-full bg-rose-600 hover:bg-rose-700 text-white font-medium text-xs">
+        Yes, Remove Address
+      </button>
+      <a href="{% url 'accounts:addresses' %}" class="btn-secondary text-xs py-2 px-4">
+        Cancel
+      </a>
+    </form>
+  </div>
+</div>
+{% endblock %}

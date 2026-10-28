@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Courier Telemetry &amp; GPS Dispatch Portal | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-forest text-white py-8 border-b border-forest-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <span class="badge-gold text-[10px]">Staff &bull; Transport Operations</span>
+        <h1 class="font-serif text-3xl font-bold mt-1">Courier Telemetry &amp; GPS Portal</h1>
+        <p class="text-xs text-stone-300">Authorized courier console for live GPS broadcast, milestone transitions, and hand-delivery confirmation.</p>
+      </div>
+      <div class="text-xs font-mono bg-[#142C20] px-4 py-2 rounded-xl border border-forest-700">
+        Officer: {{ user.get_full_name|default:user.username }} &bull; Badge: {{ user.delivery_profile.badge_number|default:"PP-NY-882" }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    
+    <!-- LEFT: LIVE GPS TRANSMITTER -->
+    <div class="lg:col-span-6 space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-5">
+        <h3 class="font-serif text-2xl font-bold text-forest border-b border-stone-100 pb-3 flex items-center gap-2">
+          <i class="fa-solid fa-satellite-dish text-gold"></i> Transmit Courier Coordinates
+        </h3>
+
+        <!-- HTML5 One-Click Geolocation Button -->
+        <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="text-xs text-emerald-900">
+            <strong class="block font-bold">Automatic Device GPS Transmission</strong>
+            <span class="text-[11px] text-emerald-700">Reads your mobile phone/tablet onboard GPS chip directly.</span>
+          </div>
+          <button id="get-gps-btn" type="button" class="btn-primary text-xs py-2.5 px-4 shrink-0 bg-emerald-800 hover:bg-emerald-900 border-none shadow-sm">
+            <i class="fa-solid fa-location-crosshairs"></i> Read Device GPS
+          </button>
+        </div>
+
+        <!-- Telemetry Submission Form -->
+        <form id="courier-update-form" class="space-y-4 text-xs">
+          {% csrf_token %}
+          
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Select Delivery Assignment *</label>
+            <select id="tracking_select" name="tracking_number" required class="form-select text-xs">
+              {% for d in deliveries %}
+                <option value="{{ d.tracking_number }}">{{ d.tracking_number }} &rarr; {{ d.destination_name }} [{{ d.get_status_display }}]</option>
+              {% empty %}
+                <option value="">No active deliveries assigned</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Latitude (-90 to 90) *</label>
+              <input type="number" id="lat-input" step="any" name="latitude" required value="40.7640" class="form-input text-xs font-mono">
+            </div>
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Longitude (-180 to 180) *</label>
+              <input type="number" id="lng-input" step="any" name="longitude" required value="-73.9770" class="form-input text-xs font-mono">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Location Landmark / Street Label *</label>
+            <input type="text" id="label-input" name="location_label" required placeholder="e.g. Central Park South / 59th St, New York" value="Central Park South, New York, NY" class="form-input text-xs">
+          </div>
+
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Update Status Milestone</label>
+            <select name="status" class="form-select text-xs">
+              <option value="in_transit" selected>In Transit with Certified Chaperone</option>
+              <option value="picked_up">Picked Up from Manhattan Atelier</option>
+              <option value="out_for_delivery">Out for Final Hand-Delivery</option>
+              <option value="delivered">Safely Delivered &amp; Health Transferred</option>
+              <option value="delayed">Animal Welfare Comfort / Weather Stop</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Comfort Notes &amp; Observations</label>
+            <textarea name="notes" rows="2" placeholder="Puppy calm, hydration verified, cabin climate optimal at 70°F..." class="form-textarea text-xs"></textarea>
+          </div>
+
+          <button id="submit-telemetry-btn" type="submit" class="btn-primary w-full py-3 text-sm justify-center shadow-md">
+            <i class="fa-solid fa-tower-broadcast mr-1"></i> Broadcast Telemetry to Customer Map
+          </button>
+
+          <div id="telemetry-feedback" class="text-xs text-center font-medium mt-2"></div>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: ACTIVE ASSIGNMENTS LIST -->
+    <div class="lg:col-span-6 space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+        <h3 class="font-serif text-2xl font-bold text-forest border-b border-stone-100 pb-3">Assigned Deliveries</h3>
+
+        <div class="space-y-4">
+          {% for d in deliveries %}
+            <div class="p-4 bg-cream rounded-xl border border-stone-200 text-xs space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-mono font-bold text-forest">{{ d.tracking_number }}</span>
+                <span class="badge-gold text-[10px]">{{ d.get_status_display }}</span>
+              </div>
+              <p class="font-bold text-sm text-forest">{{ d.order.items.first.pet_name }} ({{ d.order.items.first.pet_breed_name }})</p>
+              <p class="text-stone-600"><strong>Destination:</strong> {{ d.destination_name }} &bull; {{ d.destination_address }}</p>
+              <p class="text-stone-500"><strong>Last Ping:</strong> {{ d.current_location_label }} ({{ d.last_location_update|date:"H:i:s"|default:"Atelier" }})</p>
+              
+              <div class="pt-2 flex items-center justify-between border-t border-stone-200/60">
+                <a href="{% url 'deliveries:live_tracking' d.tracking_number %}" target="_blank" class="text-gold-dark font-medium hover:underline">
+                  <i class="fa-solid fa-up-right-from-square"></i> Open Live Map
+                </a>
+                <span class="text-stone-400 font-mono text-[10px]">Order #{{ d.order.order_number }}</span>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-stone-500 text-xs">No current deliveries assigned to your badge.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const gpsBtn = document.getElementById('get-gps-btn');
+  const latInput = document.getElementById('lat-input');
+  const lngInput = document.getElementById('lng-input');
+  const labelInput = document.getElementById('label-input');
+  const form = document.getElementById('courier-update-form');
+  const feedback = document.getElementById('telemetry-feedback');
+
+  if (gpsBtn && navigator.geolocation) {
+    gpsBtn.addEventListener('click', function() {
+      gpsBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Reading GPS...';
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          latInput.value = pos.coords.latitude.toFixed(6);
+          lngInput.value = pos.coords.longitude.toFixed(6);
+          labelInput.value = `Mobile GPS Position (${pos.coords.accuracy.toFixed(0)}m accuracy)`;
+          gpsBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> GPS Acquired';
+        },
+        function(err) {
+          alert('Could not access mobile GPS: ' + err.message + '. You may enter coordinates manually.');
+          gpsBtn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> Retry GPS';
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    });
+  }
+
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const trackingNumber = document.getElementById('tracking_select').value;
+      if (!trackingNumber) {
+        alert('Please select a delivery assignment.');
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-telemetry-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Broadcasting...';
+
+      const formData = new FormData(form);
+
+      fetch(`/deliveries/courier/update/${trackingNumber}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-tower-broadcast mr-1"></i> Broadcast Telemetry to Customer Map';
+        if (data.success) {
+          feedback.textContent = `✓ Coordinates broadcasted live at ${data.last_update}! Customer map updated.`;
+          feedback.className = 'text-xs text-center font-medium mt-2 text-emerald-700 bg-emerald-50 p-2 rounded-lg';
+        } else {
+          feedback.textContent = data.error || 'Failed to broadcast coordinates.';
+          feedback.className = 'text-xs text-center font-medium mt-2 text-red-600 bg-red-50 p-2 rounded-lg';
+        }
+      })
+      .catch(err => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-tower-broadcast mr-1"></i> Broadcast Telemetry to Customer Map';
+        feedback.textContent = 'Network error while broadcasting coordinates.';
+        feedback.className = 'text-xs text-center font-medium mt-2 text-red-600';
+      });
+    });
+  }
+});
+</script>
+{% endblock %}

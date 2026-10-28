@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Review Moderation Queue | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-forest text-white py-8 border-b border-forest-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <span class="badge-gold text-[10px]">Quality &amp; Content Moderation</span>
+        <h1 class="font-serif text-3xl font-bold mt-1">Review Moderation Queue</h1>
+        <p class="text-xs text-stone-300">Approve or reject customer reviews before they appear publicly on the verified adopter wall.</p>
+      </div>
+      <a href="{% url 'admin_dashboard:overview' %}" class="btn-secondary text-xs py-2 px-3 text-white border-stone-400 hover:bg-white hover:text-forest">
+        &larr; Back to Overview
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-10">
+  
+  <!-- PENDING MODERATION QUEUE -->
+  <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-4">
+    <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+      <h3 class="font-serif text-2xl font-bold text-forest">Pending Customer Submissions ({{ pending_reviews.count }})</h3>
+      <span class="badge-gold text-xs">Awaiting Editorial Action</span>
+    </div>
+
+    {% if pending_reviews %}
+      <div class="space-y-6">
+        {% for r in pending_reviews %}
+          <div class="p-6 bg-cream rounded-2xl border border-stone-200 space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex items-center gap-3">
+                <span class="font-serif text-xl font-bold text-forest">&ldquo;{{ r.headline }}&rdquo;</span>
+                <div class="text-amber-500 text-xs">
+                  {% for _ in r.stars_range %}<i class="fa-solid fa-star"></i>{% endfor %}
+                </div>
+                {% if r.is_verified_purchase %}
+                  <span class="badge-forest text-[9px]">Verified Purchase</span>
+                {% endif %}
+              </div>
+              <span class="text-stone-400 text-xs">{{ r.created_at|date:"M d, Y - H:i" }}</span>
+            </div>
+
+            <p class="text-xs sm:text-sm text-stone-700 italic leading-relaxed">&ldquo;{{ r.comment }}&rdquo;</p>
+
+            <div class="text-xs text-stone-500 pt-1">
+              <strong>Adopter:</strong> {{ r.customer.get_full_name|default:r.customer.username }} ({{ r.customer.email }}) &bull; Location: {{ r.adopter_location }}
+              {% if r.pet %} &bull; Puppy: <strong>{{ r.pet.name }}</strong> ({{ r.pet.breed.name }}){% endif %}
+            </div>
+
+            <!-- Approval / Rejection Action Form -->
+            <form method="POST" class="pt-3 border-t border-stone-200 flex flex-col sm:flex-row items-center gap-3">
+              {% csrf_token %}
+              <input type="hidden" name="review_id" value="{{ r.id }}">
+              
+              <input type="text" name="admin_notes" placeholder="Optional editorial note..." class="form-input text-xs sm:w-80">
+
+              <div class="flex items-center gap-2 w-full sm:w-auto">
+                <button type="submit" name="decision" value="approve" class="btn-primary text-xs py-2 px-5 bg-emerald-800 hover:bg-emerald-900 border-none shadow-xs">
+                  <i class="fa-solid fa-check mr-1"></i> Approve &amp; Publish
+                </button>
+                <button type="submit" name="decision" value="reject" class="px-4 py-2 rounded-full border border-rose-300 text-rose-700 bg-rose-50 hover:bg-rose-100 text-xs font-semibold">
+                  <i class="fa-solid fa-xmark mr-1"></i> Reject
+                </button>
+              </div>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="p-8 text-center text-xs text-stone-500">
+        <i class="fa-solid fa-circle-check text-emerald-600 text-2xl block mb-2"></i>
+        All customer review submissions have been moderated. The queue is empty.
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- RECENTLY MODERATED AUDIT LOG -->
+  <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-4">
+    <h3 class="font-serif text-xl font-bold text-forest border-b border-stone-100 pb-2">Recently Moderated Reviews</h3>
+
+    <div class="overflow-x-auto text-xs">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-stone-400 uppercase text-[10px] border-b border-stone-100">
+            <th class="py-2.5">Headline</th>
+            <th class="py-2.5">Adopter</th>
+            <th class="py-2.5">Rating</th>
+            <th class="py-2.5">Status</th>
+            <th class="py-2.5">Moderator</th>
+            <th class="py-2.5">Date</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100 text-stone-700">
+          {% for r in recent_moderated %}
+            <tr class="hover:bg-cream">
+              <td class="py-2.5 font-bold text-forest">{{ r.headline }}</td>
+              <td class="py-2.5">{{ r.customer.get_full_name|default:r.customer.username }}</td>
+              <td class="py-2.5 text-amber-500">{{ r.rating }} ★</td>
+              <td class="py-2.5">
+                {% if r.status == 'approved' %}
+                  <span class="badge-forest text-[9px]">Approved</span>
+                {% else %}
+                  <span class="bg-rose-100 text-rose-800 px-2 py-0.5 rounded text-[9px] font-bold">Rejected</span>
+                {% endif %}
+              </td>
+              <td class="py-2.5 text-stone-500">{{ r.moderated_by.username|default:"Staff" }}</td>
+              <td class="py-2.5 text-stone-400">{{ r.moderated_at|date:"M d, Y" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

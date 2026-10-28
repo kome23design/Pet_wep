@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Puppy Portrait Gallery &bull; Visual Atelier | Prestige Paws NYC{% endblock %}
+{% block meta_description %}Explore our high-resolution visual gallery of ethically hand-reared Maltipoo and Maltese companions, nursery developmental milestones, and placed happy families.{% endblock %}
+
+{% block content %}
+<!-- HEADER BANNER -->
+<div class="bg-cream-dark py-14 border-b border-[#DFD5C6]">
+  <div class="max-w-4xl mx-auto px-4 sm:px-8 text-center space-y-3">
+    <span class="badge-gold">Visual Atelier &bull; Nursery Archive</span>
+    <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest">Puppy Portrait Gallery</h1>
+    <p class="text-stone-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-light">
+      A visual retrospective celebrating our delicate Maltipoo and purebred Maltese companions from their earliest nursery milestones to loving residences across the nation.
+    </p>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-14 space-y-12">
+  
+  <!-- GALLERY FILTER TABS (Client-Side Vanilla JS Filter) -->
+  <div class="flex items-center justify-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+    <button onclick="filterGallery('all')" class="gallery-tab-btn active px-4 py-2 rounded-full text-xs font-semibold bg-forest text-gold shadow-xs">
+      All Portraits
+    </button>
+    <button onclick="filterGallery('maltipoo')" class="gallery-tab-btn px-4 py-2 rounded-full text-xs font-medium bg-white text-forest border border-stone-200 hover:border-gold">
+      Maltipoo Companions
+    </button>
+    <button onclick="filterGallery('maltese')" class="gallery-tab-btn px-4 py-2 rounded-full text-xs font-medium bg-white text-forest border border-stone-200 hover:border-gold">
+      Maltese Elegance
+    </button>
+    <button onclick="filterGallery('nursery')" class="gallery-tab-btn px-4 py-2 rounded-full text-xs font-medium bg-white text-forest border border-stone-200 hover:border-gold">
+      Nursery &amp; Socialization
+    </button>
+    <button onclick="filterGallery('homes')" class="gallery-tab-btn px-4 py-2 rounded-full text-xs font-medium bg-white text-forest border border-stone-200 hover:border-gold">
+      In Forever Homes
+    </button>
+  </div>
+
+  <!-- GALLERY GRID -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="gallery-grid">
+    
+    <!-- Dynamic Items (if any from DB) -->
+    {% for item in gallery_items %}
+      <div class="gallery-card atelier-card group overflow-hidden bg-white shadow-xs rounded-2xl border border-stone-200 flex flex-col" data-tag="{{ item.breed_tag|lower }}">
+        <div class="aspect-[4/3] overflow-hidden bg-stone-100 relative">
+          <img src="{{ item.url }}" alt="{{ item.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          <span class="absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-stone-200 text-[10px] font-medium px-2.5 py-0.5 rounded-full">
+            {{ item.breed_tag }}
+          </span>
+        </div>
+        <div class="p-5 space-y-1.5 flex-grow flex flex-col justify-between">
+          <div>
+            <h3 class="font-serif text-2xl font-bold text-forest">{{ item.title }}</h3>
+            {% if item.caption %}
+              <p class="text-xs text-stone-600 font-light mt-1 leading-relaxed">{{ item.caption }}</p>
+            {% endif %}
+          </div>
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-400">
+            <span>Prestige Paws NYC Archive</span>
+            <span class="text-gold-dark font-medium">Verified Companion</span>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    <!-- Curated Editorial Gallery Cards -->
+    <div class="gallery-card atelier-card group overflow-hidden bg-white shadow-xs rounded-2xl border border-stone-200 flex flex-col" data-tag="maltipoo">
+      <div class="aspect-[4/3] overflow-hidden bg-stone-100 relative">
+        <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80" alt="Maltipoo in Champagne Apricot" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+        <span class="absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-stone-200 text-[10px] font-medium px-2.5 py-0.5 rounded-full">
+          Maltipoo
+        </span>
+      </div>
+      <div class="p-5 space-y-1.5 flex-grow flex flex-col justify-between">
+        <div>
+          <h3 class="font-serif text-2xl font-bold text-forest">Oliver &bull; Champagne Apricot</h3>
+          <p class="text-xs text-stone-600 font-light mt-1 leading-relaxed">
+            Pictured at 10 weeks in our Manhattan nursery salon. Gentle teddy-bear face with plush wavy fleece coat and calm disposition.
+          </p>
+        </div>
+        <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-400">
+          <span>Placed with Manhattan Adopter</span>
+          <span class="text-gold-dark font-medium">Toy Size (6.5 lbs)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-card atelier-card group overflow-hidden bg-white shadow-xs rounded-2xl border border-stone-200 flex flex-col" data-tag="maltese">
+      <div class="aspect-[4/3] overflow-hidden bg-stone-100 relative">
+        <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80" alt="Purebred Maltese Companion" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+        <span class="absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-stone-200 text-[10px] font-medium px-2.5 py-0.5 rounded-full">
+          Maltese
+        </span>
+      </div>
+      <div class="p-5 space-y-1.5 flex-grow flex flex-col justify-between">
+        <div>
+          <h3 class="font-serif text-2xl font-bold text-forest">Genevieve &bull; Pure Snow White</h3>
+          <p class="text-xs text-stone-600 font-light mt-1 leading-relaxed">
+            AKC heritage purebred Maltese. Silky straight coat, button black eyes, and delicate, affectionate lap-dog temperament.
+          </p>
+        </div>
+        <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-400">
+          <span>Placed in Greenwich, CT</span>
+          <span class="text-gold-dark font-medium">Toy Size (5.2 lbs)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-card atelier-card group overflow-hidden bg-white shadow-xs rounded-2xl border border-stone-200 flex flex-col" data-tag="nursery">
+      <div class="aspect-[4/3] overflow-hidden bg-stone-100 relative">
+        <img src="https://images.unsplash.com/photo-1591769225440-811ad7d6eab2?auto=format&fit=crop&w=800&q=80" alt="Nursery Early Neurological Stimulation" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+        <span class="absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-stone-200 text-[10px] font-medium px-2.5 py-0.5 rounded-full">
+          Nursery
+        </span>
+      </div>
+      <div class="p-5 space-y-1.5 flex-grow flex flex-col justify-between">
+        <div>
+          <h3 class="font-serif text-2xl font-bold text-forest">Early Neurological Stimulation</h3>
+          <p class="text-xs text-stone-600 font-light mt-1 leading-relaxed">
+            Daily gentle handling exercises, tactile stimulation, and soothing music designed to promote cardiovascular strength and calm domestic confidence.
+          </p>
+        </div>
+        <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-400">
+          <span>Puppy Culture Protocol</span>
+          <span class="text-emerald-700 font-medium">Days 3 to 16</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-card atelier-card group overflow-hidden bg-white shadow-xs rounded-2xl border border-stone-200 flex flex-col" data-tag="homes">
+      <div class="aspect-[4/3] overflow-hidden bg-stone-100 relative">
+        <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=800&q=80" alt="Puppies in Forever Home" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+        <span class="absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-stone-200 text-[10px] font-medium px-2.5 py-0.5 rounded-full">
+          In Forever Homes
+        </span>
+      </div>
+      <div class="p-5 space-y-1.5 flex-grow flex flex-col justify-between">
+        <div>
+          <h3 class="font-serif text-2xl font-bold text-forest">The Kensington Family &bull; NYC</h3>
+          <p class="text-xs text-stone-600 font-light mt-1 leading-relaxed">
+            &ldquo;Waffles arrived via chaperoned hand delivery in perfect health. He is the most loving, allergy-free companion our family could have dreamed of.&rdquo;
+          </p>
+        </div>
+        <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-400">
+          <span>Upper East Side, Manhattan</span>
+          <span class="text-gold-dark font-medium">Verified Adopter</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-card atelier-card group overflow-hidden bg-white shadow-xs rounded-2xl border border-stone-200 flex flex-col" data-tag="maltipoo">
+      <div class="aspect-[4/3] overflow-hidden bg-stone-100 relative">
+        <img src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&w=800&q=80" alt="Maltipoo at 8 weeks" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+        <span class="absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-stone-200 text-[10px] font-medium px-2.5 py-0.5 rounded-full">
+          Maltipoo
+        </span>
+      </div>
+      <div class="p-5 space-y-1.5 flex-grow flex flex-col justify-between">
+        <div>
+          <h3 class="font-serif text-2xl font-bold text-forest">Chloe &bull; Biscuit Cream</h3>
+          <p class="text-xs text-stone-600 font-light mt-1 leading-relaxed">
+            First-generation (F1) Maltipoo puppy photographed during her weekly veterinary weight audit. Playful, affectionate, and zero-shedding coat.
+          </p>
+        </div>
+        <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-400">
+          <span>Placed in Beverly Hills, CA</span>
+          <span class="text-gold-dark font-medium">In-Cabin Flight Delivery</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-card atelier-card group overflow-hidden bg-white shadow-xs rounded-2xl border border-stone-200 flex flex-col" data-tag="maltese">
+      <div class="aspect-[4/3] overflow-hidden bg-stone-100 relative">
+        <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=800&q=80" alt="Royal Maltese Portrait" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+        <span class="absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-stone-200 text-[10px] font-medium px-2.5 py-0.5 rounded-full">
+          Maltese
+        </span>
+      </div>
+      <div class="p-5 space-y-1.5 flex-grow flex flex-col justify-between">
+        <div>
+          <h3 class="font-serif text-2xl font-bold text-forest">Archie &bull; Classic Toy Maltese</h3>
+          <p class="text-xs text-stone-600 font-light mt-1 leading-relaxed">
+            Intense pigmentation, coal-black nose, and immaculate halo of silky hair. A calm, dignified aristocrat who loves nothing more than laps and soft cuddles.
+          </p>
+        </div>
+        <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-400">
+          <span>Placed in Palm Beach, FL</span>
+          <span class="text-gold-dark font-medium">Mercedes Sprinter Delivery</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GALLERY CTA -->
+  <div class="bg-cream p-8 sm:p-10 rounded-3xl border border-[#DFD5C6] text-center space-y-4">
+    <h3 class="font-serif text-3xl font-bold text-forest">Ready to Experience Our Atelier Firsthand?</h3>
+    <p class="text-stone-600 text-xs sm:text-sm max-w-lg mx-auto leading-relaxed font-light">
+      Arrange a private consultation at our 450 Lexington Avenue viewing suite or explore our current nursery litters online.
+    </p>
+    <div class="pt-2 flex flex-wrap items-center justify-center gap-4">
+      <a href="{% url 'catalog:pet_list' %}" class="btn-primary text-xs py-3 px-8 shadow-sm">
+        Meet Current Puppies
+      </a>
+      <a href="{% url 'pages:contact' %}?subject=private_viewing" class="btn-secondary text-xs py-3 px-8">
+        Schedule Private Viewing
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function filterGallery(category) {
+    const cards = document.querySelectorAll('.gallery-card');
+    const buttons = document.querySelectorAll('.gallery-tab-btn');
+
+    buttons.forEach(btn => {
+      btn.classList.remove('bg-forest', 'text-gold', 'font-semibold', 'shadow-xs');
+      btn.classList.add('bg-white', 'text-forest');
+    });
+
+    event.currentTarget.classList.add('bg-forest', 'text-gold', 'font-semibold', 'shadow-xs');
+    event.currentTarget.classList.remove('bg-white', 'text-forest');
+
+    cards.forEach(card => {
+      const tag = card.getAttribute('data-tag');
+      if (category === 'all' || tag.includes(category)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+{% endblock %}

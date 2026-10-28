@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Exquisite {{ breed.name }} Puppies for Sale | Prestige Paws NYC{% endblock %}
+{% block meta_description %}{{ breed.description }}{% endblock %}
+
+{% block content %}
+<div class="bg-cream-dark py-12 border-b border-[#DFD5C6]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <nav class="text-xs text-stone-500 mb-2 flex items-center gap-1.5">
+      <a href="{% url 'pages:home' %}" class="hover:underline">Home</a>
+      <span>/</span>
+      <a href="{% url 'catalog:pet_list' %}" class="hover:underline">Catalog</a>
+      {% if breed.category %}
+      <span>/</span>
+      <a href="{% url 'catalog:category_detail' breed.category.slug %}" class="hover:underline">{{ breed.category.name }}</a>
+      {% endif %}
+      <span>/</span>
+      <span class="text-forest font-medium">{{ breed.name }}</span>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mt-4">
+      <div class="lg:col-span-8 space-y-4">
+        <span class="badge-gold">Signature Collection</span>
+        <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest">The {{ breed.name }} Collection</h1>
+        <p class="text-stone-600 text-sm leading-relaxed max-w-2xl">{{ breed.description }}</p>
+
+        <!-- Breed Characteristics Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 text-xs">
+          <div class="bg-white p-3 rounded-xl border border-stone-200 shadow-xs">
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Temperament</span>
+            <span class="font-semibold text-forest mt-0.5 block truncate">{{ breed.temperament|truncatewords:4 }}</span>
+          </div>
+          <div class="bg-white p-3 rounded-xl border border-stone-200 shadow-xs">
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Adult Weight</span>
+            <span class="font-semibold text-forest mt-0.5 block">{{ breed.typical_weight }}</span>
+          </div>
+          <div class="bg-white p-3 rounded-xl border border-stone-200 shadow-xs">
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Coat Profile</span>
+            <span class="font-semibold text-emerald-800 mt-0.5 block">{% if breed.hypoallergenic %}Hypoallergenic{% else %}Low Shedding{% endif %}</span>
+          </div>
+          <div class="bg-white p-3 rounded-xl border border-stone-200 shadow-xs">
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Life Expectancy</span>
+            <span class="font-semibold text-forest mt-0.5 block">{{ breed.life_expectancy }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-4 bg-white p-5 rounded-2xl border border-stone-200 shadow-sm text-xs space-y-3">
+        <h4 class="font-serif text-base font-bold text-forest border-b border-stone-100 pb-2">Breed Heritage</h4>
+        <p class="text-stone-600 leading-relaxed">{{ breed.origin_history|default:"Ethically hand-reared under veterinary supervision in certified partner nurseries." }}</p>
+        <div class="pt-2 text-stone-500 flex items-center gap-1.5">
+          <i class="fa-solid fa-circle-check text-emerald-600"></i>
+          <span>10-Year Genetic Health Warranty Standard</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AVAILABLE PUPPIES IN THIS BREED -->
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-12">
+  <div class="flex items-center justify-between mb-8 pb-3 border-b border-stone-200">
+    <h2 class="font-serif text-2xl font-bold text-forest">Available {{ breed.name }} Puppies</h2>
+    <span class="text-xs text-stone-500">{{ pets.count }} puppies ready for placement</span>
+  </div>
+
+  {% if pets %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {% for pet in pets %}
+        {% include 'components/pet_card.html' with pet=pet %}
+      {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+      <div class="mt-12 flex items-center justify-center gap-2 text-xs">
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <span class="px-3 py-1.5 rounded-lg bg-forest text-gold font-bold">{{ num }}</span>
+          {% else %}
+            <a href="?page={{ num }}" class="px-3 py-1.5 rounded-lg border border-stone-300 bg-white text-forest hover:bg-cream">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="bg-white p-12 text-center rounded-2xl border border-stone-200 shadow-sm">
+      <p class="text-stone-500 text-sm">All currently listed {{ breed.name }} puppies are reserved. Please contact concierge to pre-register for upcoming nursery litters.</p>
+      <a href="{% url 'pages:contact' %}" class="btn-primary text-xs py-2 px-5 mt-4 inline-block">Contact Concierge</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

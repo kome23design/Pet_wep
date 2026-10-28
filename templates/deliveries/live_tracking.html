@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Live Chaperoned Pet Delivery Tracking &bull; {{ delivery.tracking_number }} | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-cream-dark py-8 border-b border-[#DFD5C6]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <nav class="text-xs text-stone-500 mb-1 flex items-center gap-1.5">
+          <a href="{% url 'pages:home' %}" class="hover:underline">Home</a>
+          <span>/</span>
+          <a href="{% url 'orders:order_history' %}" class="hover:underline">Orders</a>
+          <span>/</span>
+          <span class="text-forest font-medium">Tracking #{{ delivery.tracking_number }}</span>
+        </nav>
+        <div class="flex items-center gap-3">
+          <h1 class="font-serif text-3xl font-bold text-forest">Live Chaperoned Delivery Telemetry</h1>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Live Satellite Link
+          </span>
+        </div>
+      </div>
+      
+      <!-- Courier / Staff update shortcut -->
+      {% if is_courier_viewer %}
+        <div>
+          <a href="{% url 'deliveries:courier_portal' %}" class="btn-primary text-xs py-2 px-4 shadow-sm">
+            <i class="fa-solid fa-satellite-dish mr-1"></i> Courier Update Console
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    
+    <!-- LEFT: INTERACTIVE LEAFLET MAP & TELEMETRY PANEL -->
+    <div class="lg:col-span-8 space-y-6">
+      
+      <!-- Map Container -->
+      <div class="bg-white p-4 rounded-3xl border border-stone-200 shadow-md">
+        <div class="flex items-center justify-between pb-3 px-2 border-b border-stone-100 text-xs">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-satellite text-gold text-sm"></i>
+            <span class="font-bold text-forest uppercase tracking-wider">Active Telemetry Stream</span>
+          </div>
+          <div id="polling-indicator" class="text-stone-400 font-mono text-[11px] flex items-center gap-1">
+            <i class="fa-solid fa-arrows-rotate text-[10px] animate-spin"></i> Polling telemetry (5s)
+          </div>
+        </div>
+
+        <div id="tracking-map" class="mt-3 relative shadow-inner">
+          <!-- Fallback notice inside map container -->
+          <noscript>
+            <div class="p-6 text-center text-sm text-stone-600">JavaScript is required to display the interactive Leaflet tracking map.</div>
+          </noscript>
+        </div>
+
+        <!-- Live Metrics Bar -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-3 border-t border-stone-100 text-xs text-stone-600">
+          <div>
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Current Status</span>
+            <span id="metric-status" class="font-bold text-forest mt-0.5 block">{{ delivery.get_status_display }}</span>
+          </div>
+          <div>
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Current Location</span>
+            <span id="metric-location" class="font-medium text-forest mt-0.5 block truncate">{{ delivery.current_location_label }}</span>
+          </div>
+          <div>
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Last GPS Ping</span>
+            <span id="metric-last-update" class="font-mono text-stone-700 mt-0.5 block">{{ delivery.last_location_update|date:"H:i:s A"|default:"Active at Atelier" }}</span>
+          </div>
+          <div>
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Estimated Arrival</span>
+            <span class="font-bold text-emerald-700 mt-0.5 block">{{ delivery.estimated_arrival|date:"h:i A"|default:delivery.order.preferred_delivery_window }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DELIVERY MILESTONES TIMELINE -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+        <h3 class="font-serif text-2xl font-bold text-forest border-b border-stone-100 pb-3 flex items-center gap-2">
+          <i class="fa-solid fa-timeline text-gold"></i> Chaperoned Travel Milestones
+        </h3>
+
+        <div id="milestones-container" class="space-y-4">
+          {% for event in events %}
+            <div class="flex items-start gap-4 text-xs border-l-2 border-forest pl-4 pb-1 relative">
+              <span class="w-3 h-3 rounded-full bg-forest absolute -left-[7px] top-1"></span>
+              <div class="flex-grow">
+                <div class="flex items-center justify-between">
+                  <h4 class="font-bold text-forest text-sm">{{ event.title }}</h4>
+                  <span class="text-stone-400 text-[10px]">{{ event.event_time|date:"M d, g:i A" }}</span>
+                </div>
+                <p class="text-stone-600 mt-0.5">{{ event.description }}</p>
+                <p class="text-stone-400 text-[10px] mt-1"><i class="fa-solid fa-location-dot mr-1 text-gold"></i>{{ event.location_name }}</p>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-stone-500 text-xs">Awaiting courier dispatch milestones.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: COURIER & PUPPY CARD -->
+    <div class="lg:col-span-4 space-y-6">
+      
+      <!-- Puppy in Transit -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+        <span class="badge-gold text-[10px]">Companion in Transit</span>
+        
+        {% with pet=delivery.order.items.first.pet %}
+          <div class="flex items-center gap-4">
+            <img src="{{ pet.primary_image.url|default:'/static/images/placeholder_puppy.svg' }}" 
+                 alt="{{ pet.name }}" 
+                 class="w-20 h-20 object-cover rounded-xl border border-stone-200"
+                 onerror="this.onerror=null; this.src='{% static 'images/placeholder_puppy.svg' %}';">
+            <div>
+              <h3 class="font-serif text-2xl font-bold text-forest">{{ pet.name }}</h3>
+              <p class="text-xs text-gold-dark font-medium">{{ pet.breed.name }} &bull; {{ pet.coat_color }}</p>
+              <p class="text-[10px] text-stone-400 font-mono mt-1">Microchip: {{ pet.microchip_id }}</p>
+            </div>
+          </div>
+        {% endwith %}
+
+        <div class="p-3 bg-cream rounded-xl border border-stone-200 text-xs text-stone-600 space-y-1">
+          <p><strong>Travel Health Status:</strong> Vetted Clear for Travel</p>
+          <p><strong>Crate Climate:</strong> Regulated at 70°F &bull; Continuous Air Filtration</p>
+        </div>
+      </div>
+
+      <!-- Courier Details -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+        <h3 class="font-serif text-xl font-bold text-forest border-b border-stone-100 pb-2">Assigned Transport Chaperone</h3>
+        
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-forest text-gold flex items-center justify-center font-bold text-base border border-gold/40">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-forest text-sm">{{ delivery.assigned_agent.get_full_name|default:"David Ross" }}</h4>
+            <span class="badge-gold text-[9px]">Certified Animal Courier</span>
+            <p class="text-[10px] text-stone-400 mt-0.5">USDA Badge: {{ delivery.assigned_agent.delivery_profile.badge_number|default:"PP-NY-882" }}</p>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-xs text-stone-600 pt-2 border-t border-stone-100">
+          <p><strong>Vehicle:</strong> {{ delivery.assigned_agent.delivery_profile.vehicle_make_model|default:"Climate-Controlled Mercedes-Benz Sprinter" }}</p>
+          <p><strong>License Plate:</strong> {{ delivery.assigned_agent.delivery_profile.vehicle_license_plate|default:"NYC-PET-1" }}</p>
+          <p><strong>Direct Line:</strong> {{ delivery.assigned_agent.delivery_profile.contact_phone|default:"(212) 555-0199" }}</p>
+        </div>
+
+        <div class="pt-3">
+          <a href="tel:{{ delivery.assigned_agent.delivery_profile.contact_phone|default:'2125550199' }}" class="btn-secondary w-full text-xs py-2.5 justify-center">
+            <i class="fa-solid fa-phone mr-1.5"></i> Call Courier Chaperone
+          </a>
+        </div>
+      </div>
+
+      <!-- Destination Summary -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-3 text-xs">
+        <h4 class="font-serif text-lg font-bold text-forest border-b border-stone-100 pb-2">Destination Residence</h4>
+        <p class="font-bold text-forest text-sm">{{ delivery.destination_name }}</p>
+        <p class="text-stone-600">{{ delivery.destination_address }}</p>
+        <div class="p-3 bg-cream rounded-xl border border-stone-200 mt-2 space-y-1">
+          <span class="font-bold text-stone-600 block text-[10px] uppercase">Concierge Guidelines:</span>
+          <p class="text-stone-500">{{ delivery.order.delivery_notes|default:"Personal in-person handoff required." }}</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const trackingNumber = "{{ delivery.tracking_number }}";
+  const originLat = {{ delivery.origin_latitude }};
+  const originLng = {{ delivery.origin_longitude }};
+  const destLat = {{ delivery.destination_latitude }};
+  const destLng = {{ delivery.destination_longitude }};
+  let currentLat = {{ delivery.current_latitude }};
+  let currentLng = {{ delivery.current_longitude }};
+
+  // Initialize Leaflet Map
+  const map = L.map('tracking-map').setView([currentLat, currentLng], 12);
+
+  // OpenStreetMap Tile Layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors | Prestige Paws NYC'
+  }).addTo(map);
+
+  // Custom Icon: Origin (Manhattan Atelier)
+  const originIcon = L.divIcon({
+    html: '<div style="background:#1B3B2B;color:#D4AF37;padding:6px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);text-align:center;"><i class="fa-solid fa-store" style="font-size:12px;"></i></div>',
+    className: 'custom-origin-icon',
+    iconSize: [28, 28]
+  });
+
+  // Custom Icon: Destination (Customer Residence)
+  const destIcon = L.divIcon({
+    html: '<div style="background:#8C6A05;color:#fff;padding:6px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);text-align:center;"><i class="fa-solid fa-house" style="font-size:12px;"></i></div>',
+    className: 'custom-dest-icon',
+    iconSize: [28, 28]
+  });
+
+  // Custom Icon: Live Courier Sprinter (Pulsing Van)
+  const courierIcon = L.divIcon({
+    html: '<div class="courier-pulse" title="Live Courier Position"></div>',
+    className: 'custom-courier-icon',
+    iconSize: [24, 24]
+  });
+
+  // Add Markers
+  const originMarker = L.marker([originLat, originLng], { icon: originIcon }).addTo(map)
+    .bindPopup('<strong>Prestige Paws Flagship Atelier</strong><br>Dispatch Facility, 450 Lexington Ave, NY');
+
+  const destMarker = L.marker([destLat, destLng], { icon: destIcon }).addTo(map)
+    .bindPopup('<strong>Destination Residence</strong><br>{{ delivery.destination_address }}');
+
+  const courierMarker = L.marker([currentLat, currentLng], { icon: courierIcon }).addTo(map)
+    .bindPopup('<strong>Live Courier Sprinter (David Ross)</strong><br>{{ delivery.current_location_label }}');
+
+  // Breadcrumb route polyline
+  let routeCoords = {{ route_coords_json|safe }};
+  if (routeCoords.length === 0) {
+    routeCoords = [[originLat, originLng], [currentLat, currentLng], [destLat, destLng]];
+  }
+  const routePolyline = L.polyline(routeCoords, {
+    color: '#1B3B2B',
+    weight: 4,
+    opacity: 0.8,
+    dashArray: '8, 6'
+  }).addTo(map);
+
+  // Fit bounds to display all markers nicely
+  const group = new L.featureGroup([originMarker, destMarker, courierMarker]);
+  map.fitBounds(group.getBounds().pad(0.2));
+
+  // REAL-TIME POLLING FALLBACK (Every 5 seconds)
+  function pollTelemetry() {
+    fetch(`/deliveries/api/telemetry/${trackingNumber}/`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.current_location && data.current_location.lat && data.current_location.lng) {
+          const newLat = data.current_location.lat;
+          const newLng = data.current_location.lng;
+
+          // Update marker position with smooth animation
+          courierMarker.setLatLng([newLat, newLng]);
+
+          // Update metrics
+          const statusElem = document.getElementById('metric-status');
+          const locElem = document.getElementById('metric-location');
+          const updateElem = document.getElementById('metric-last-update');
+
+          if (statusElem) statusElem.textContent = data.status_display;
+          if (locElem) locElem.textContent = data.current_location.label;
+          if (updateElem && data.current_location.last_update) updateElem.textContent = data.current_location.last_update;
+
+          // Update breadcrumbs in polyline
+          if (data.breadcrumbs && data.breadcrumbs.length > 0) {
+            const newPoints = data.breadcrumbs.map(b => [b.lat, b.lng]);
+            newPoints.push([newLat, newLng]);
+            routePolyline.setLatLngs(newPoints);
+          }
+        }
+      })
+      .catch(err => {
+        console.warn('Telemetry poll retry in 5s...', err);
+      });
+  }
+
+  // Poll every 5 seconds
+  setInterval(pollTelemetry, 5000);
+});
+</script>
+{% endblock %}

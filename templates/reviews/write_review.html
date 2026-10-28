@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Share Your Placement Review | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-12">
+  <div class="bg-white p-8 sm:p-10 rounded-3xl border border-stone-200 shadow-sm space-y-6">
+    <div class="border-b border-stone-100 pb-3">
+      <span class="badge-gold text-[10px]">Client Feedback</span>
+      <h1 class="font-serif text-3xl font-bold text-forest mt-1">Submit Your Placement Review</h1>
+      <p class="text-stone-500 text-xs">Help other families learn about your experience with our nursery, veterinary credentials, and chaperoned transport.</p>
+    </div>
+
+    <form method="POST" class="space-y-4 text-xs">
+      {% csrf_token %}
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Star Rating *</label>
+        {{ form.rating }}
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Review Headline *</label>
+        {{ form.headline }}
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Your Detailed Experience *</label>
+        {{ form.comment }}
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Your City, State *</label>
+          {{ form.adopter_location }}
+        </div>
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Specific Puppy (Optional)</label>
+          {{ form.pet }}
+        </div>
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Breed (Optional)</label>
+          {{ form.breed }}
+        </div>
+      </div>
+
+      <div class="p-3 bg-cream rounded-xl border border-stone-200 text-stone-500 text-[11px] leading-relaxed">
+        <i class="fa-solid fa-shield-halved text-gold mr-1"></i>
+        <strong>Moderation Protocol:</strong> In accordance with our consumer protection standards, all reviews are reviewed by our editorial team prior to public display to filter profanity and protect personal information.
+      </div>
+
+      <div class="pt-4 flex items-center gap-3">
+        <button type="submit" class="btn-primary py-3 px-6 text-xs font-semibold">
+          Submit Review for Verification
+        </button>
+        <a href="{% url 'reviews:review_list' %}" class="text-stone-400 hover:text-stone-700">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

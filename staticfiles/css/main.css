@@ -1,0 +1,224 @@
+/* Prestige Paws NYC - Luxury Atelier Design System */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --color-cream: #FAF8F5;
+  --color-cream-dark: #F3EDE4;
+  --color-forest: #1B3B2B;
+  --color-forest-dark: #0F2319;
+  --color-forest-light: #2A543E;
+  --color-charcoal: #1E2421;
+  --color-gold: #D4AF37;
+  --color-gold-light: #F4E7BD;
+  --color-gold-dark: #A68318;
+  --color-beige: #EFE8DC;
+  --color-text-main: #242E28;
+  --color-text-muted: #657069;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-serif {
+  font-family: var(--font-serif);
+  letter-spacing: -0.01em;
+}
+
+/* Premium Buttons */
+.btn-primary {
+  background-color: var(--color-forest);
+  color: #FFFFFF;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  font-size: 0.925rem;
+  letter-spacing: 0.02em;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--color-forest);
+  text-decoration: none;
+}
+.btn-primary:hover {
+  background-color: var(--color-forest-light);
+  box-shadow: 0 4px 14px rgba(27, 59, 43, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #D4AF37 0%, #B89220 100%);
+  color: #0F2319;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.925rem;
+  letter-spacing: 0.03em;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  text-decoration: none;
+}
+.btn-gold:hover {
+  background: linear-gradient(135deg, #DFBE4B 0%, #C49E28 100%);
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-forest);
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  font-size: 0.925rem;
+  border: 1.5px solid var(--color-forest);
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+.btn-secondary:hover {
+  background-color: var(--color-forest);
+  color: #FFFFFF;
+}
+
+/* Luxury Cards */
+.atelier-card {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(223, 213, 198, 0.6);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+.atelier-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(27, 59, 43, 0.08);
+  border-color: rgba(212, 175, 55, 0.5);
+}
+
+/* Luxury Form Inputs */
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #DFD5C6;
+  border-radius: 0.75rem;
+  background-color: #FFFFFF;
+  color: var(--color-text-main);
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--color-forest);
+  box-shadow: 0 0 0 3px rgba(27, 59, 43, 0.12);
+}
+
+/* Gold Accents & Badges */
+.badge-gold {
+  background-color: rgba(212, 175, 55, 0.15);
+  color: #8C6A05;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-forest {
+  background-color: rgba(27, 59, 43, 0.1);
+  color: var(--color-forest);
+  border: 1px solid rgba(27, 59, 43, 0.25);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.badge-demo {
+  background-color: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Pulsing Leaflet Marker for Live Courier Telemetry */
+.courier-pulse {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-forest);
+  border: 3px solid #FFFFFF;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+.courier-pulse::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  animation: pulseAnim 2s infinite;
+}
+@keyframes pulseAnim {
+  0% { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Navigation Dropdown */
+.nav-dropdown {
+  position: relative;
+}
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #FFFFFF;
+  min-width: 220px;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  border: 1px solid rgba(223, 213, 198, 0.6);
+  padding: 0.5rem 0;
+  z-index: 50;
+}
+.nav-dropdown:hover .nav-dropdown-menu {
+  display: block;
+}
+
+/* Custom Leaflet Map Container */
+#tracking-map {
+  width: 100%;
+  height: 480px;
+  border-radius: 1.25rem;
+  z-index: 10;
+}

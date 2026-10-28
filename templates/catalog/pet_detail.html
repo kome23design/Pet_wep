@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ pet.name }} &bull; {{ pet.breed.name }} (${{ pet.price|floatformat:0 }}) | Prestige Paws NYC{% endblock %}
+{% block meta_description %}{{ pet.name }} is a healthy, ethically reared {{ pet.breed.name }} puppy available at Prestige Paws NYC. {{ pet.description|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+<div class="bg-cream-dark py-6 border-b border-[#DFD5C6]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <nav class="text-xs text-stone-500 flex items-center gap-1.5">
+      <a href="{% url 'pages:home' %}" class="hover:underline">Home</a>
+      <span>/</span>
+      <a href="{% url 'catalog:pet_list' %}" class="hover:underline">Available Puppies</a>
+      <span>/</span>
+      <a href="{% url 'catalog:pet_list' %}?breed={{ pet.breed.slug }}" class="hover:underline">{{ pet.breed.name }}</a>
+      <span>/</span>
+      <span class="text-forest font-medium">{{ pet.name }}</span>
+    </nav>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+    
+    <!-- LEFT: IMAGE GALLERY & EXTENSIVE HEALTH/GENETICS DOSSIER -->
+    <div class="lg:col-span-7 space-y-6">
+      
+      <!-- Main Image Display -->
+      <div class="relative bg-white rounded-3xl overflow-hidden border border-stone-200 aspect-[4/3] shadow-sm">
+        <img id="main-gallery-img" 
+             src="{{ pet.primary_image.url|default:'/static/images/placeholder_puppy.svg' }}" 
+             alt="{{ pet.name }} - {{ pet.breed.name }}" 
+             class="w-full h-full object-cover transition-opacity duration-300"
+             onerror="this.onerror=null; this.src='{% static 'images/placeholder_puppy.svg' %}';">
+
+        <!-- Status Badges -->
+        <div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
+          {% if pet.status == 'available' %}
+            <span class="bg-emerald-800 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
+              <i class="fa-solid fa-circle-check mr-1"></i>Available for Placement
+            </span>
+          {% elif pet.status == 'reserved' %}
+            <span class="bg-amber-600 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
+              <i class="fa-solid fa-lock mr-1"></i>Reserved (Checkout In Progress)
+            </span>
+          {% elif pet.status == 'sold' %}
+            <span class="bg-stone-700 text-stone-200 text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
+              <i class="fa-solid fa-heart mr-1"></i>Placed in Forever Home
+            </span>
+          {% endif %}
+          
+          {% if pet.is_featured %}
+            <span class="bg-gold text-[#0F2319] text-xs font-bold px-2.5 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
+              Featured Atelier
+            </span>
+          {% endif %}
+        </div>
+
+        <!-- Wishlist Button -->
+        <a href="{% url 'accounts:wishlist_toggle' pet.id %}" 
+           class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-stone-700 hover:text-rose-600 flex items-center justify-center shadow-md transition-all z-10"
+           title="Save to Wishlist">
+          <i class="fa-{% if is_in_wishlist %}solid text-rose-600{% else %}regular{% endif %} fa-heart text-base"></i>
+        </a>
+
+        <!-- Reference Tag -->
+        <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-stone-300 text-xs font-mono px-3 py-1 rounded">
+          Ref: {{ pet.reference_number }}
+        </div>
+      </div>
+
+      <!-- Thumbnails -->
+      {% if images.count > 1 %}
+        <div class="grid grid-cols-4 sm:grid-cols-6 gap-3">
+          {% for img in images %}
+            <button onclick="document.getElementById('main-gallery-img').src='{{ img.url }}'" 
+                    class="aspect-square rounded-xl overflow-hidden border-2 border-stone-200 hover:border-gold focus:border-gold transition-colors focus:outline-none bg-stone-100">
+              <img src="{{ img.url }}" alt="{{ pet.name }}" class="w-full h-full object-cover">
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <!-- EXTENSIVE PERSONALITY, SOCIALIZATION & TRAINING DOSSIER -->
+      <div class="bg-white p-7 rounded-3xl border border-stone-200 shadow-sm space-y-6">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+          <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2">
+            <i class="fa-solid fa-paw text-gold"></i> Developmental &amp; Behavioral Profile
+          </h3>
+          <span class="badge-gold text-xs">Puppy Culture Protocol</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <div class="p-3.5 bg-cream rounded-xl border border-stone-200">
+            <span class="text-stone-400 font-bold block uppercase text-[10px]">Temperament Rating</span>
+            <span class="font-bold text-forest text-sm mt-0.5 block">Affectionate &bull; Calm</span>
+            <span class="text-stone-500 text-[10px]">Gentle lap snuggler with playful curiosity</span>
+          </div>
+          <div class="p-3.5 bg-cream rounded-xl border border-stone-200">
+            <span class="text-stone-400 font-bold block uppercase text-[10px]">Crate &amp; House Training</span>
+            <span class="font-bold text-forest text-sm mt-0.5 block">Nursery Level 2</span>
+            <span class="text-stone-500 text-[10px]">Familiar with grass pads &amp; sleep crates</span>
+          </div>
+          <div class="p-3.5 bg-cream rounded-xl border border-stone-200">
+            <span class="text-stone-400 font-bold block uppercase text-[10px]">Socialization Score</span>
+            <span class="font-bold text-forest text-sm mt-0.5 block">Advanced ENS</span>
+            <span class="text-stone-500 text-[10px]">Desensitized to domestic sounds &amp; handling</span>
+          </div>
+        </div>
+
+        <div class="space-y-3 text-xs text-stone-700 leading-relaxed">
+          <h4 class="font-bold text-forest uppercase tracking-wider text-[11px]">Nursery Notes from Head Caretaker:</h4>
+          <p class="font-light">
+            {{ pet.name }} has exhibited exemplary calm confidence throughout early neurological stimulation (ENS) exercises from days 3 through 16. Comfortable with paw manipulation, dental checks, and grooming table desensitization. Shows wonderful affection toward human caretakers and responds promptly to soft verbal praise.
+          </p>
+        </div>
+
+        <div class="pt-4 border-t border-stone-100 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-stone-600">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+            <span>Bathing &amp; Blow Dry</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+            <span>Nail Clipping Familiar</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+            <span>Leash Harness Introduced</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+            <span>Sound Desensitized</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- VETERINARY & CLINICAL HEALTH CREDENTIALS DOSSIER -->
+      <div class="bg-white p-7 rounded-3xl border border-stone-200 shadow-sm space-y-6">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+          <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2">
+            <i class="fa-solid fa-file-medical text-gold"></i> Certified Veterinary Dossier
+          </h3>
+          <span class="badge-gold text-xs">USDA Standard Certified</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 bg-cream rounded-xl border border-stone-200">
+            <span class="text-stone-400 font-bold block uppercase text-[10px]">Universal Microchip ID</span>
+            <span class="font-mono text-sm font-bold text-forest mt-0.5 block">{{ pet.microchip_id|default:"ISO-98514100-NYC" }}</span>
+            <span class="text-stone-500 text-[10px]">Pre-registered with 24/7 Universal Pet Recovery Database</span>
+          </div>
+
+          <div class="p-4 bg-cream rounded-xl border border-stone-200">
+            <span class="text-stone-400 font-bold block uppercase text-[10px]">USDA Health Certificate</span>
+            <span class="font-mono text-sm font-bold text-forest mt-0.5 block">{{ pet.veterinary_health_certificate_number }}</span>
+            <span class="text-stone-500 text-[10px]">Official APHIS Form 7001 issued within 5 days of transit</span>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <h4 class="font-bold text-xs uppercase tracking-wider text-forest">Vaccination &amp; Preventative Schedule:</h4>
+          <p class="text-xs text-stone-600 bg-cream p-4 rounded-xl border border-stone-200 leading-relaxed font-light">
+            <i class="fa-solid fa-syringe text-emerald-600 mr-1.5"></i> {{ pet.vaccination_summary }}
+          </p>
+        </div>
+
+        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-xs text-emerald-950 space-y-1">
+          <span class="font-bold flex items-center gap-1.5 text-emerald-900">
+            <i class="fa-solid fa-shield-heart text-emerald-600"></i> Prestige Paws 10-Year Genetic Warranty Covenant
+          </span>
+          <p class="text-emerald-900 font-light leading-relaxed">
+            Covers all hereditary cardiac defects, severe degenerative myelopathy, congenital renal failure, and inherited eye disorders. We stand unconditionally behind the constitutional health of our companions.
+          </p>
+        </div>
+      </div>
+
+      <!-- INCLUSION PACKAGE DETAILS -->
+      <div class="bg-[#12271C] text-white p-7 rounded-3xl border border-forest-800 space-y-4">
+        <h3 class="font-serif text-2xl font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-gift text-gold"></i> Included in {{ pet.name }}'s Welcome Package
+        </h3>
+        <p class="text-stone-300 text-xs leading-relaxed font-light">
+          Everything your puppy needs for a seamless and joyous arrival into your home:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-stone-300 pt-2">
+          <div class="flex items-center gap-2"><i class="fa-solid fa-check text-gold"></i> Signed USDA-APHIS Health Certificate</div>
+          <div class="flex items-center gap-2"><i class="fa-solid fa-check text-gold"></i> 10-Year Genetic Warranty Contract</div>
+          <div class="flex items-center gap-2"><i class="fa-solid fa-check text-gold"></i> Lifetime Microchip ID with Transfer Form</div>
+          <div class="flex items-center gap-2"><i class="fa-solid fa-check text-gold"></i> Deluxe Airline-Approved Sherpa Travel Carrier</div>
+          <div class="flex items-center gap-2"><i class="fa-solid fa-check text-gold"></i> Snuggle Blanket with Mother's Scent</div>
+          <div class="flex items-center gap-2"><i class="fa-solid fa-check text-gold"></i> 30-Day Supply of Premium Holistic Puppy Food</div>
+          <div class="flex items-center gap-2"><i class="fa-solid fa-check text-gold"></i> Pediatric Health &amp; Vaccination Passport</div>
+          <div class="flex items-center gap-2"><i class="fa-solid fa-check text-gold"></i> 24/7 Concierge Hotline for Nutrition &amp; Care</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: DETAILS & RESERVATION CALL TO ACTION -->
+    <div class="lg:col-span-5 space-y-6">
+      
+      <!-- Top Title Box -->
+      <div class="bg-white p-7 rounded-3xl border border-stone-200 shadow-sm space-y-5 sticky top-24">
+        <div class="flex items-center justify-between text-xs text-stone-500">
+          <span class="badge-gold">{{ pet.breed.name }}</span>
+          <span class="text-stone-400 font-mono">{{ pet.reference_number }}</span>
+        </div>
+
+        <div>
+          <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest leading-tight">{{ pet.name }}</h1>
+          <p class="text-xs text-gold-dark font-medium mt-1">Prestige Paws Certified Companion Puppy &bull; Flagship Atelier</p>
+        </div>
+
+        <!-- Price Display -->
+        <div class="p-4 bg-cream rounded-2xl border border-stone-200 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] text-stone-400 block uppercase font-bold">Placement Fee</span>
+            <span class="font-serif text-3xl font-bold text-forest">${{ pet.price|floatformat:2 }}</span>
+            <span class="text-xs text-stone-500 font-sans ml-1">USD</span>
+          </div>
+          <div class="text-right text-xs text-stone-500">
+            <span class="text-emerald-700 font-semibold block"><i class="fa-solid fa-shield-check"></i> 10-Yr Warranty</span>
+            <span>+ Flat $250 Chaperoned Delivery</span>
+          </div>
+        </div>
+
+        <!-- Key Traits Table -->
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="border border-stone-200 p-3 rounded-xl bg-stone-50/50">
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Age</span>
+            <span class="font-semibold text-forest mt-0.5 block">{{ pet.age_display }}</span>
+          </div>
+          <div class="border border-stone-200 p-3 rounded-xl bg-stone-50/50">
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Gender</span>
+            <span class="font-semibold text-forest mt-0.5 block capitalize">{{ pet.get_sex_display }}</span>
+          </div>
+          <div class="border border-stone-200 p-3 rounded-xl bg-stone-50/50">
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Coat Color</span>
+            <span class="font-semibold text-forest mt-0.5 block">{{ pet.coat_color }}</span>
+          </div>
+          <div class="border border-stone-200 p-3 rounded-xl bg-stone-50/50">
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Expected Adult Size</span>
+            <span class="font-semibold text-forest mt-0.5 block">{{ pet.expected_adult_size }}</span>
+          </div>
+          <div class="border border-stone-200 p-3 rounded-xl bg-stone-50/50 col-span-2">
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Nursery Origin</span>
+            <span class="font-semibold text-forest mt-0.5 block">{{ pet.breeder_atelier_origin }}</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="pt-2 space-y-3">
+          {% if pet.is_purchasable %}
+            <a href="{% url 'cart:add_to_cart' pet.id %}" class="btn-primary w-full py-4 text-base shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+              <i class="fa-solid fa-bag-shopping"></i>
+              <span>Reserve {{ pet.name }} Now</span>
+            </a>
+          {% else %}
+            <button disabled class="w-full py-3.5 rounded-full bg-stone-200 text-stone-500 font-medium text-sm cursor-not-allowed">
+              Currently {{ pet.get_status_display }}
+            </button>
+          {% endif %}
+
+          <a href="{% url 'pages:contact' %}?pet_ref={{ pet.reference_number }}" class="btn-secondary w-full py-3 text-xs block text-center">
+            <i class="fa-regular fa-calendar-check mr-1.5"></i> Schedule Private Viewing at NYC Atelier
+          </a>
+        </div>
+
+        <!-- Trust Features -->
+        <div class="border-t border-stone-100 pt-4 space-y-2.5 text-xs text-stone-600">
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-plane-arrival text-emerald-700 text-sm"></i>
+            <span>Chaperoned door-to-door hand delivery nationwide</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-shield-halved text-gold text-sm"></i>
+            <span>10-Year Genetic Health Warranty included in writing</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-heart text-rose-600 text-sm"></i>
+            <span>Lifetime re-homing covenant &bull; Zero shelter policy</span>
+          </div>
+        </div>
+
+        <!-- Biography Box -->
+        <div class="border-t border-stone-100 pt-4 space-y-2">
+          <h4 class="font-serif text-lg font-bold text-forest">About {{ pet.name }}</h4>
+          <p class="text-stone-600 text-xs leading-relaxed font-light">
+            {{ pet.description }}
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- REVIEWS FOR THIS BREED/PET -->
+  {% if reviews %}
+    <div class="mt-16 pt-12 border-t border-stone-200">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <span class="badge-gold">Verified Client Experiences</span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-forest mt-1">Client Reviews for {{ pet.breed.name }}</h2>
+        </div>
+        <a href="{% url 'reviews:write_review' %}?pet_id={{ pet.id }}" class="btn-secondary text-xs py-2 px-4">
+          <i class="fa-solid fa-pen mr-1"></i> Write a Review
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for review in reviews %}
+          <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="text-amber-500 text-xs">
+                {% for _ in review.stars_range %}<i class="fa-solid fa-star"></i>{% endfor %}
+              </div>
+              {% if review.is_verified_purchase %}
+                <span class="badge-forest text-[9px]"><i class="fa-solid fa-circle-check mr-1"></i>Verified Adopter</span>
+              {% endif %}
+            </div>
+            <h4 class="font-serif text-lg font-bold text-forest">&ldquo;{{ review.headline }}&rdquo;</h4>
+            <p class="text-xs text-stone-600 leading-relaxed italic">&ldquo;{{ review.comment }}&rdquo;</p>
+            <div class="text-[10px] text-stone-400 pt-3 border-t border-stone-100 flex justify-between">
+              <span>{{ review.customer.get_full_name|default:review.customer.username }} ({{ review.adopter_location }})</span>
+              <span>{{ review.created_at|date:"M d, Y" }}</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- RELATED AVAILABLE PUPPIES -->
+  {% if related_pets %}
+    <div class="mt-16 pt-12 border-t border-stone-200">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <span class="badge-gold">From Our Nursery</span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-forest mt-1">Other Available Nursery Puppies</h2>
+        </div>
+        <a href="{% url 'catalog:pet_list' %}" class="text-xs text-forest hover:text-gold-dark font-medium">View All Puppies &rarr;</a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for r in related_pets %}
+          {% include 'components/pet_card.html' with pet=r %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

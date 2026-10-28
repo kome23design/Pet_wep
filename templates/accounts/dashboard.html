@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Client Dashboard | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-cream-dark py-8 border-b border-[#DFD5C6]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <span class="badge-gold text-[10px]">Private Client Suite</span>
+        <h1 class="font-serif text-3xl sm:text-4xl font-bold text-forest mt-1">
+          Welcome, {{ user.first_name|default:user.username }}
+        </h1>
+        <p class="text-xs text-stone-500">Member since {{ user.date_joined|date:"F Y" }} &bull; Role: {{ user.get_role_display }}</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="{% url 'accounts:profile' %}" class="btn-secondary text-xs py-2 px-4">
+          <i class="fa-regular fa-user mr-1"></i> Edit Profile
+        </a>
+        <a href="{% url 'accounts:addresses' %}" class="btn-secondary text-xs py-2 px-4">
+          <i class="fa-solid fa-map-location-dot mr-1"></i> Address Book
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10">
+  
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    
+    <!-- LEFT: RECENT ORDERS & PLACEMENTS -->
+    <div class="lg:col-span-8 space-y-8">
+      
+      <!-- Orders Section -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-5">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+          <h3 class="font-serif text-2xl font-bold text-forest">Recent Companion Placements</h3>
+          <a href="{% url 'orders:order_history' %}" class="text-xs text-gold-dark font-medium hover:underline">View All Orders ({{ total_orders_count }}) &rarr;</a>
+        </div>
+
+        {% if orders %}
+          <div class="space-y-4">
+            {% for order in orders %}
+              <div class="p-4 bg-cream rounded-xl border border-stone-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+                <div>
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="font-mono font-bold text-forest text-sm">#{{ order.order_number }}</span>
+                    <span class="badge-gold text-[9px]">{{ order.get_order_status_display }}</span>
+                  </div>
+                  <p class="font-bold text-stone-800">{{ order.items.first.pet_name }} &bull; {{ order.items.first.pet_breed_name }}</p>
+                  <p class="text-stone-500">{{ order.created_at|date:"M d, Y" }} &bull; Destination: {{ order.delivery_city }}, {{ order.delivery_state }}</p>
+                </div>
+
+                <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-0 border-stone-200/60 pt-2 sm:pt-0">
+                  <span class="font-serif text-xl font-bold text-forest">${{ order.total_amount|floatformat:2 }}</span>
+                  <div class="flex gap-2">
+                    <a href="{% url 'orders:order_detail' order.order_number %}" class="btn-primary text-[11px] py-1.5 px-3">
+                      View Order Dossier
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text-center py-8 text-stone-500 text-xs space-y-2">
+            <p>You have not reserved any companion puppies yet.</p>
+            <a href="{% url 'catalog:pet_list' %}" class="btn-primary text-xs py-2 px-4 inline-block">Browse Available Puppies</a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Saved Wishlist Highlights -->
+      {% if wishlist_pets %}
+        <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+            <h3 class="font-serif text-2xl font-bold text-forest">Saved in Your Wishlist</h3>
+            <a href="{% url 'accounts:wishlist' %}" class="text-xs text-gold-dark font-medium hover:underline">View All &rarr;</a>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {% for pet in wishlist_pets|slice:":3" %}
+              <div class="border border-stone-200 rounded-xl p-3 bg-cream text-xs space-y-2">
+                <img src="{{ pet.primary_image.url|default:'/static/images/placeholder_puppy.svg' }}" alt="{{ pet.name }}" class="w-full aspect-[4/3] object-cover rounded-lg">
+                <h4 class="font-serif text-lg font-bold text-forest">{{ pet.name }}</h4>
+                <p class="text-stone-500">{{ pet.breed.name }} &bull; ${{ pet.price|floatformat:0 }}</p>
+                <a href="{{ pet.get_absolute_url }}" class="btn-primary w-full text-[10px] py-1 justify-center block text-center">View Profile</a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+
+    <!-- RIGHT: CLIENT SUMMARY & ATELIER ASSURANCES -->
+    <div class="lg:col-span-4 space-y-6">
+      
+      <!-- Profile Card -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-3 text-xs">
+        <h3 class="font-serif text-xl font-bold text-forest border-b border-stone-100 pb-2">Client Details</h3>
+        <p class="font-semibold text-stone-800">{{ user.get_full_name|default:user.username }}</p>
+        <p class="text-stone-500"><i class="fa-regular fa-envelope mr-1 text-gold"></i> {{ user.email }}</p>
+        {% if user.profile.phone_number %}
+          <p class="text-stone-500"><i class="fa-solid fa-phone mr-1 text-gold"></i> {{ user.profile.phone_number }}</p>
+        {% endif %}
+        
+        <div class="pt-2">
+          <a href="{% url 'accounts:profile' %}" class="text-xs text-gold-dark font-semibold hover:underline">
+            Manage Client Profile &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Primary Residence Card -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-3 text-xs">
+        <h3 class="font-serif text-xl font-bold text-forest border-b border-stone-100 pb-2">Primary Residence</h3>
+        {% if default_address %}
+          <p class="font-bold text-forest">{{ default_address.recipient_name }}</p>
+          <p class="text-stone-600">{{ default_address.full_address }}</p>
+        {% else %}
+          <p class="text-stone-400 italic">No primary residence set.</p>
+        {% endif %}
+        <div class="pt-2">
+          <a href="{% url 'accounts:addresses' %}" class="text-xs text-gold-dark font-semibold hover:underline">
+            Manage Saved Residences &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Atelier Concierge Desk -->
+      <div class="bg-[#173324] text-white p-6 rounded-2xl border border-forest-800 space-y-3 text-xs">
+        <h4 class="font-serif text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-headset text-gold"></i> VIP Client Concierge
+        </h4>
+        <p class="text-stone-300 leading-relaxed">
+          Need assistance with puppy preparation, veterinary documentation, or travel scheduling? Our Manhattan concierge desk is available 7 days a week.
+        </p>
+        <div class="pt-2 space-y-1 text-gold font-medium">
+          <p><i class="fa-solid fa-phone mr-1.5"></i> (212) 555-PAWS</p>
+          <p><i class="fa-regular fa-envelope mr-1.5"></i> concierge@prestigepaws.nyc</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}

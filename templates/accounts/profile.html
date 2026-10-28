@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Client Profile | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-cream-dark py-8 border-b border-[#DFD5C6]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <nav class="text-xs text-stone-500 mb-1 flex items-center gap-1.5">
+      <a href="{% url 'pages:home' %}" class="hover:underline">Home</a>
+      <span>/</span>
+      <a href="{% url 'accounts:dashboard' %}" class="hover:underline">Dashboard</a>
+      <span>/</span>
+      <span class="text-forest font-medium">Edit Profile</span>
+    </nav>
+    <h1 class="font-serif text-3xl font-bold text-forest">Edit Client Profile &amp; Preferences</h1>
+  </div>
+</div>
+
+<div class="max-w-2xl mx-auto px-4 sm:px-8 py-10">
+  <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm space-y-6">
+    <form method="POST" action="{% url 'accounts:profile' %}" class="space-y-4 text-xs">
+      {% csrf_token %}
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">First Name</label>
+          {{ form.first_name }}
+        </div>
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Last Name</label>
+          {{ form.last_name }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Email Address</label>
+          {{ form.email }}
+        </div>
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Phone Number</label>
+          {{ form.phone_number }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-stone-100">
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Preferred Contact Channel</label>
+          {{ form.preferred_contact_method }}
+        </div>
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Residence Type</label>
+          {{ form.residence_type }}
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Special Care / Delivery Notes</label>
+        {{ form.special_care_notes }}
+      </div>
+
+      <div class="space-y-2 pt-2 border-t border-stone-100">
+        <label class="flex items-center gap-2 cursor-pointer">
+          {{ form.has_fenced_yard }}
+          <span class="text-stone-700">Property includes secure yard / terrace</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          {{ form.has_experience_with_breed }}
+          <span class="text-stone-700">Prior experience with toy/companion dog breeds</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          {{ form.newsletter_subscribed }}
+          <span class="text-stone-700">Subscribed to private advance nursery release circular</span>
+        </label>
+      </div>
+
+      <div class="pt-4 flex items-center gap-3">
+        <button type="submit" class="btn-primary py-3 px-6 text-xs font-semibold">
+          Save Profile Changes
+        </button>
+        <a href="{% url 'accounts:dashboard' %}" class="text-stone-400 hover:text-stone-700">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

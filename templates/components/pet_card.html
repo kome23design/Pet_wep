@@ -1,0 +1,96 @@
+{% load static %}
+<div class="atelier-card flex flex-col h-full group relative">
+  <!-- Image Container -->
+  <div class="relative overflow-hidden aspect-[4/3] bg-stone-100">
+    <a href="{{ pet.get_absolute_url }}" class="block w-full h-full">
+      <img src="{{ pet.primary_image.url|default:'/static/images/placeholder_puppy.svg' }}" 
+           alt="{{ pet.name }} - {{ pet.breed.name }}" 
+           class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+           loading="lazy"
+           onerror="this.onerror=null; this.src='{% static 'images/placeholder_puppy.svg' %}';">
+    </a>
+
+    <!-- Top Badges -->
+    <div class="absolute top-3 left-3 flex flex-wrap gap-1.5 items-center z-10">
+      {% if pet.status == 'available' %}
+        <span class="bg-emerald-800 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
+          Available
+        </span>
+      {% elif pet.status == 'reserved' %}
+        <span class="bg-amber-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
+          Reserved
+        </span>
+      {% elif pet.status == 'sold' %}
+        <span class="bg-stone-700 text-stone-200 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
+          Placed
+        </span>
+      {% endif %}
+      
+      {% if pet.is_featured %}
+        <span class="bg-gold text-[#0F2319] text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider shadow-sm">
+          Featured
+        </span>
+      {% endif %}
+    </div>
+
+    <!-- Wishlist Button -->
+    <a href="{% url 'accounts:wishlist_toggle' pet.id %}" 
+       class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-stone-600 hover:text-rose-600 flex items-center justify-center shadow-md transition-all z-10"
+       title="Save to Wishlist">
+      <i class="fa-regular fa-heart text-sm"></i>
+    </a>
+
+    <!-- Reference Tag Overlay -->
+    <div class="absolute bottom-2 left-3 bg-black/60 backdrop-blur-sm text-stone-300 text-[10px] font-mono px-2 py-0.5 rounded">
+      Ref: {{ pet.reference_number }}
+    </div>
+  </div>
+
+  <!-- Content Details -->
+  <div class="p-5 flex flex-col flex-grow justify-between bg-white">
+    <div>
+      <div class="flex items-center justify-between text-xs text-stone-500 mb-1">
+        <span class="font-medium text-gold-dark uppercase tracking-wider">{{ pet.breed.name }}</span>
+        <span><i class="fa-solid fa-cake-candles mr-1 text-stone-400"></i>{{ pet.age_display }}</span>
+      </div>
+
+      <a href="{{ pet.get_absolute_url }}" class="block">
+        <h3 class="font-serif text-2xl font-bold text-forest group-hover:text-gold-dark transition-colors">{{ pet.name }}</h3>
+      </a>
+
+      <!-- Key Attributes -->
+      <div class="grid grid-cols-2 gap-2 mt-3 text-xs text-stone-600 bg-cream p-2.5 rounded-lg border border-stone-100">
+        <div class="flex items-center gap-1.5">
+          <i class="fa-solid {% if pet.sex == 'male' %}fa-mars text-blue-500{% else %}fa-venus text-pink-500{% endif %}"></i>
+          <span class="capitalize">{{ pet.get_sex_display }}</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i class="fa-solid fa-palette text-amber-600"></i>
+          <span class="truncate">{{ pet.coat_color }}</span>
+        </div>
+        <div class="flex items-center gap-1.5 col-span-2">
+          <i class="fa-solid fa-shield-cat text-forest"></i>
+          <span>USDA Certified &bull; 10-Yr Warranty</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing & Action -->
+    <div class="pt-4 mt-4 border-t border-stone-100 flex items-center justify-between">
+      <div>
+        <span class="text-[10px] text-stone-400 block uppercase font-medium">Placement Fee</span>
+        <span class="text-xl font-bold text-forest font-serif">${{ pet.price|floatformat:0 }} <span class="text-xs font-sans text-stone-500 font-normal">USD</span></span>
+      </div>
+
+      {% if pet.is_purchasable %}
+        <a href="{% url 'cart:add_to_cart' pet.id %}" class="btn-primary text-xs py-2 px-4 shadow-sm hover:shadow-md">
+          <i class="fa-solid fa-bag-shopping"></i> Reserve
+        </a>
+      {% else %}
+        <a href="{{ pet.get_absolute_url }}" class="btn-secondary text-xs py-2 px-4 opacity-75">
+          Details
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Our Manhattan Atelier &bull; Heritage &amp; Mission | Prestige Paws NYC{% endblock %}
+{% block meta_description %}Learn about the founding ethos, veterinary advisory board, and ethical partner nurseries behind Prestige Paws NYC, Manhattan's premier luxury pet placement atelier.{% endblock %}
+
+{% block content %}
+<!-- HEADER BANNER -->
+<div class="bg-cream-dark py-14 border-b border-[#DFD5C6]">
+  <div class="max-w-4xl mx-auto px-4 sm:px-8 text-center space-y-3">
+    <span class="badge-gold">Heritage &amp; Compassionate Stewardship</span>
+    <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest">The Prestige Paws Atelier</h1>
+    <p class="text-stone-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-light">
+      Founded in Manhattan, New York, Prestige Paws NYC was conceived to transform the companion adoption experience into an atelier of uncompromising ethics, veterinary transparency, and dedicated family care.
+    </p>
+  </div>
+</div>
+
+<div class="max-w-5xl mx-auto px-4 sm:px-8 py-16 space-y-16">
+  
+  <!-- STORY SECTION -->
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+    <div class="md:col-span-7 space-y-5">
+      <span class="badge-gold text-xs">Our Founding Ethos</span>
+      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-forest leading-tight">
+        A Reimagined Standard for Toy Companion Placement
+      </h2>
+      <p class="text-stone-600 text-xs sm:text-sm leading-relaxed font-light">
+        For decades, the commercial pet industry in the United States has suffered from a painful dichotomy: either opaque online brokers hiding substandard mass-breeding operations, or informal local classifieds lacking basic genetic screening and veterinary oversight.
+      </p>
+      <p class="text-stone-600 text-xs sm:text-sm leading-relaxed font-light">
+        Prestige Paws NYC was founded by canine geneticists and passionate animal welfare advocates to create a sanctuary of trust. We established a flagship Manhattan atelier at 450 Lexington Avenue where families can engage with fully vetted, ethically hand-reared companion puppies in a calm, hypoallergenic salon environment.
+      </p>
+      <p class="text-stone-600 text-xs sm:text-sm leading-relaxed font-light">
+        Every puppy in our program originates from an exclusive network of vetted, licensed partner nurseries that exceed all state and federal humane standards. We know every mother dog by name, enforce mandatory maternal rest periods, and raise our litters with the scientifically validated Puppy Culture Early Neurological Stimulation (ENS) protocol.
+      </p>
+    </div>
+
+    <div class="md:col-span-5 relative">
+      <div class="relative mx-auto max-w-sm">
+        <div class="absolute -inset-3 bg-gradient-to-tr from-gold/30 to-forest/20 rounded-3xl transform -rotate-1"></div>
+        <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80" 
+             alt="Prestige Paws Atelier" 
+             class="relative rounded-2xl shadow-lg border border-stone-200 object-cover w-full aspect-[4/5]"
+             onerror="this.onerror=null; this.src='{% static 'images/placeholder_puppy.svg' %}';">
+      </div>
+    </div>
+  </div>
+
+  <!-- FOUR PILLARS OF EXCELLENCE -->
+  <div class="space-y-8">
+    <div class="text-center max-w-xl mx-auto">
+      <span class="badge-gold">Guiding Principles</span>
+      <h3 class="font-serif text-3xl font-bold text-forest mt-1">The 4 Pillars of Our Atelier</h3>
+      <p class="text-stone-500 text-xs mt-1">Principles that guide every placement decision we make.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-xs">
+      
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-3">
+        <div class="w-12 h-12 rounded-xl bg-forest/10 text-forest flex items-center justify-center text-xl font-bold">
+          <i class="fa-solid fa-shield-cat text-gold"></i>
+        </div>
+        <h4 class="font-serif text-lg font-bold text-forest">Zero-Mill Covenant</h4>
+        <p class="text-stone-500 leading-relaxed font-light">
+          We strictly refuse high-volume commercial mills. Partner nurseries must pass unannounced bi-annual inspections, provide indoor climate-controlled spaces, and provide outdoor enrichment runs.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-3">
+        <div class="w-12 h-12 rounded-xl bg-forest/10 text-forest flex items-center justify-center text-xl font-bold">
+          <i class="fa-solid fa-dna text-gold"></i>
+        </div>
+        <h4 class="font-serif text-lg font-bold text-forest">Genetic Integrity</h4>
+        <p class="text-stone-500 leading-relaxed font-light">
+          Sire and dam genetics are screened via multi-panel DNA testing (Paw Print Genetics, Embark) and Orthopedic Foundation for Animals (OFA) clearances before any breeding pairing is approved.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-3">
+        <div class="w-12 h-12 rounded-xl bg-forest/10 text-forest flex items-center justify-center text-xl font-bold">
+          <i class="fa-solid fa-user-doctor text-gold"></i>
+        </div>
+        <h4 class="font-serif text-lg font-bold text-forest">Veterinary Oversight</h4>
+        <p class="text-stone-500 leading-relaxed font-light">
+          Pediatric clinical exams, complete core DHPP vaccination series, universal 15-digit ISO microchip registration, and official USDA-APHIS 7001 interstate certificates accompany every companion.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-3">
+        <div class="w-12 h-12 rounded-xl bg-forest/10 text-forest flex items-center justify-center text-xl font-bold">
+          <i class="fa-solid fa-heart-circle-check text-gold"></i>
+        </div>
+        <h4 class="font-serif text-lg font-bold text-forest">Lifetime Rehoming</h4>
+        <p class="text-stone-500 leading-relaxed font-light">
+          If unforeseen life changes prevent an adopter from continuing care, Prestige Paws NYC takes the companion back into our private network unconditionally. No pet of ours ever enters a municipal shelter.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VETERINARY ADVISORY BOARD -->
+  <div class="bg-white p-8 sm:p-10 rounded-3xl border border-stone-200 shadow-sm space-y-8">
+    <div class="border-b border-stone-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div>
+        <span class="badge-gold text-xs">Clinical Excellence</span>
+        <h3 class="font-serif text-2xl sm:text-3xl font-bold text-forest mt-1">Our Veterinary &amp; Welfare Advisory Board</h3>
+      </div>
+      <span class="text-xs text-stone-500">Board-Certified Oversight</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+      <div class="p-5 bg-cream rounded-2xl border border-stone-200 space-y-2">
+        <strong class="font-serif text-lg text-forest block">Dr. Eleanor Vance, DVM</strong>
+        <span class="text-gold-dark font-medium text-[11px] block">Director of Pediatric Health</span>
+        <p class="text-stone-600 leading-relaxed font-light">
+          Graduate of Cornell University College of Veterinary Medicine with 16 years specializing in neonatal canine health, congenital cardiac screening, and interstate travel clearance.
+        </p>
+      </div>
+
+      <div class="p-5 bg-cream rounded-2xl border border-stone-200 space-y-2">
+        <strong class="font-serif text-lg text-forest block">Marcus Sterling, MS, PhD</strong>
+        <span class="text-gold-dark font-medium text-[11px] block">Senior Canine Geneticist</span>
+        <p class="text-stone-600 leading-relaxed font-light">
+          Genetic researcher focused on toy breed longevity, coat dander composition in Poodle crossbreeds, and eliminating hereditary patellar luxation markers.
+        </p>
+      </div>
+
+      <div class="p-5 bg-cream rounded-2xl border border-stone-200 space-y-2">
+        <strong class="font-serif text-lg text-forest block">Chloe Davenport, CPDT-KA</strong>
+        <span class="text-gold-dark font-medium text-[11px] block">Lead Early Behavioral Specialist</span>
+        <p class="text-stone-600 leading-relaxed font-light">
+          Certified professional dog trainer leading our early neurological stimulation (ENS), litter habituation, crate desensitization, and puppy placement match assessments.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANHATTAN FLAGSHIP PRIVATE VIEWING SUITE -->
+  <div class="bg-[#173324] text-white p-8 sm:p-10 rounded-3xl border border-forest-800 space-y-6">
+    <div class="max-w-2xl">
+      <span class="text-gold text-xs uppercase font-bold tracking-widest">Manhattan Flagship Atelier</span>
+      <h3 class="font-serif text-3xl font-bold text-white mt-1">Private Consultations at 450 Lexington Avenue</h3>
+      <p class="text-stone-300 text-xs sm:text-sm mt-2 leading-relaxed font-light">
+        Located in the heart of Midtown Manhattan near Grand Central Terminal, our private viewing suite offers a quiet, hypoallergenic sanctuary for prospective adopters to meet puppies in a calm, stress-free environment.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2 border-t border-forest-800 text-xs text-stone-300">
+      <div class="space-y-1">
+        <strong class="text-gold font-bold block text-sm">Quiet Private Salon</strong>
+        <p class="leading-relaxed font-light">Individual appointments ensure puppies are relaxed and receive one-on-one gentle interaction without crowd stress.</p>
+      </div>
+      <div class="space-y-1">
+        <strong class="text-gold font-bold block text-sm">Allergy Testing Session</strong>
+        <p class="leading-relaxed font-light">Spend 45 minutes in our sanitized suite to confirm your family's personal sensitivity to hypoallergenic Maltipoo or Maltese coats.</p>
+      </div>
+      <div class="space-y-1">
+        <strong class="text-gold font-bold block text-sm">Concierge Matching</strong>
+        <p class="leading-relaxed font-light">Discuss your schedule, apartment size, children, and lifestyle with our placement advisors to find your ideal companion.</p>
+      </div>
+    </div>
+
+    <div class="pt-4 flex flex-wrap gap-4">
+      <a href="{% url 'pages:contact' %}?subject=private_viewing" class="btn-gold text-xs py-3 px-6 shadow-sm">
+        Schedule Private Viewing Appointment
+      </a>
+      <a href="{% url 'catalog:pet_list' %}" class="btn-secondary bg-white text-forest border-white text-xs py-3 px-6">
+        Explore Current Nursery Litters
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

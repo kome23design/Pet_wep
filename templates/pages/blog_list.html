@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}The Canine Atelier Journal &amp; Puppy Care Blog | Prestige Paws NYC{% endblock %}
+{% block meta_description %}Authoritative canine health, hypoallergenic grooming guides, pediatric nutrition, and early neurological development insights from our Manhattan veterinary advisory board.{% endblock %}
+
+{% block content %}
+<!-- HEADER HERO -->
+<div class="bg-gradient-to-b from-cream to-cream-dark py-14 border-b border-[#DFD5C6]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <nav class="text-xs text-stone-500 mb-3 flex items-center gap-1.5">
+      <a href="{% url 'pages:home' %}" class="hover:underline">Home</a>
+      <span>/</span>
+      <span class="text-forest font-medium">Journal &amp; Blog</span>
+    </nav>
+    <div class="max-w-3xl">
+      <span class="badge-gold">Veterinary &amp; Puppy Care Journal</span>
+      <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest mt-2">The Canine Atelier Journal</h1>
+      <p class="text-stone-600 text-sm sm:text-base mt-3 leading-relaxed">
+        Expert veterinary perspectives, pediatric canine development blueprints, hypoallergenic coat genetics, and practical urban puppy parenting guidelines published by our New York veterinary and behavioral advisory team.
+      </p>
+    </div>
+
+    <!-- CATEGORY PILLS & SEARCH BAR -->
+    <div class="mt-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="{% url 'pages:blog_list' %}" class="px-4 py-2 rounded-full text-xs font-semibold transition-all {% if not selected_category %}bg-forest text-gold shadow-sm{% else %}bg-white text-stone-700 hover:bg-cream border border-stone-200{% endif %}">
+          All Articles ({{ total_count }})
+        </a>
+        {% for cat in categories %}
+          <a href="{% url 'pages:blog_list' %}?category={{ cat.slug }}" class="px-4 py-2 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 {% if selected_category.slug == cat.slug %}bg-forest text-gold shadow-sm{% else %}bg-white text-stone-700 hover:bg-cream border border-stone-200{% endif %}">
+            <span>{{ cat.name }}</span>
+            <span class="text-[10px] opacity-75">({{ cat.post_count }})</span>
+          </a>
+        {% endfor %}
+      </div>
+
+      <!-- Search Form -->
+      <form method="GET" action="{% url 'pages:blog_list' %}" class="relative w-full md:w-72">
+        {% if selected_category %}
+          <input type="hidden" name="category" value="{{ selected_category.slug }}">
+        {% endif %}
+        <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Search articles, care, health..." class="w-full bg-white text-xs rounded-full py-2.5 pl-4 pr-10 border border-stone-200 focus:outline-none focus:ring-1 focus:ring-forest shadow-xs">
+        <button type="submit" class="absolute right-3.5 top-2.5 text-stone-400 hover:text-forest text-xs">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-12">
+  <!-- ACTIVE SEARCH / FILTER NOTICE -->
+  {% if search_query or selected_category %}
+    <div class="mb-8 p-4 bg-white rounded-2xl border border-stone-200 flex items-center justify-between gap-4 shadow-xs text-xs">
+      <div class="flex items-center gap-2 text-stone-600">
+        <i class="fa-solid fa-filter text-gold-dark"></i>
+        <span>Filtered by:</span>
+        {% if selected_category %}
+          <span class="font-bold text-forest bg-cream px-2.5 py-1 rounded-md border border-stone-200">Category: {{ selected_category.name }}</span>
+        {% endif %}
+        {% if search_query %}
+          <span class="font-bold text-forest bg-cream px-2.5 py-1 rounded-md border border-stone-200">Keyword: &ldquo;{{ search_query }}&rdquo;</span>
+        {% endif %}
+      </div>
+      <a href="{% url 'pages:blog_list' %}" class="text-stone-400 hover:text-forest underline">Clear Filter</a>
+    </div>
+  {% endif %}
+
+  <!-- FEATURED ARTICLE HERO (Show when on page 1 without filters) -->
+  {% if featured_post and not search_query and not selected_category and page_obj.number == 1 %}
+    <div class="mb-14 bg-white rounded-3xl border border-stone-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      <div class="grid grid-cols-1 lg:grid-cols-12">
+        <div class="lg:col-span-7 relative h-72 sm:h-96 lg:h-auto overflow-hidden bg-forest/5">
+          <img src="{{ featured_post.cover_url }}" alt="{{ featured_post.title }}" class="w-full h-full object-cover">
+          <div class="absolute top-4 left-4">
+            <span class="badge-gold shadow-md">Featured Masterguide</span>
+          </div>
+        </div>
+        <div class="lg:col-span-5 p-8 sm:p-10 flex flex-col justify-between space-y-6">
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 text-xs text-stone-400">
+              <span class="font-bold text-gold-dark uppercase tracking-wider">{{ featured_post.category.name|default:'Veterinary Guide' }}</span>
+              <span>&bull;</span>
+              <span>{{ featured_post.read_time }}</span>
+            </div>
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold text-forest leading-snug hover:text-gold-dark transition-colors">
+              <a href="{{ featured_post.get_absolute_url }}">{{ featured_post.title }}</a>
+            </h2>
+            <p class="text-stone-600 text-xs sm:text-sm leading-relaxed line-clamp-4">
+              {{ featured_post.excerpt }}
+            </p>
+          </div>
+          <div class="pt-4 border-t border-stone-100 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-full bg-forest text-gold flex items-center justify-center font-serif font-bold text-xs">
+                EV
+              </div>
+              <div class="text-[11px]">
+                <span class="font-bold text-forest block">{{ featured_post.author }}</span>
+                <span class="text-stone-400 block">{{ featured_post.author_title }}</span>
+              </div>
+            </div>
+            <a href="{{ featured_post.get_absolute_url }}" class="btn-primary text-xs py-2 px-4 flex items-center gap-1.5">
+              <span>Read Full Article</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- ARTICLE GRID -->
+  <div class="flex items-center justify-between mb-8 pb-3 border-b border-stone-200">
+    <h2 class="font-serif text-2xl font-bold text-forest">
+      {% if selected_category %}{{ selected_category.name }} Articles{% elif search_query %}Search Results ({{ total_count }}){% else %}Latest Journal Entries{% endif %}
+    </h2>
+    <span class="text-xs text-stone-500">{{ total_count }} total publication{{ total_count|pluralize }}</span>
+  </div>
+
+  {% if posts %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for post in posts %}
+        <article class="bg-white rounded-3xl border border-stone-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+          <div>
+            <div class="relative h-56 overflow-hidden bg-forest/5">
+              <img src="{{ post.cover_url }}" alt="{{ post.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute top-3 left-3 flex items-center gap-1.5">
+                {% if post.category %}
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/95 text-forest backdrop-blur-xs shadow-xs">
+                    {{ post.category.name }}
+                  </span>
+                {% endif %}
+                {% if post.is_featured %}
+                  <span class="badge-gold text-[9px]">Editor's Pick</span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="p-6 space-y-3">
+              <div class="flex items-center gap-2 text-[11px] text-stone-400">
+                <i class="fa-regular fa-clock text-gold"></i>
+                <span>{{ post.read_time }}</span>
+                <span>&bull;</span>
+                <span>{{ post.published_at|date:"M d, Y" }}</span>
+              </div>
+              <h3 class="font-serif text-xl font-bold text-forest group-hover:text-gold-dark transition-colors leading-snug">
+                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+              </h3>
+              <p class="text-stone-600 text-xs leading-relaxed line-clamp-3">
+                {{ post.excerpt }}
+              </p>
+            </div>
+          </div>
+
+          <div class="px-6 pb-6 pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
+            <div class="text-[11px]">
+              <span class="font-semibold text-forest block truncate">{{ post.author }}</span>
+              <span class="text-stone-400 text-[10px] block truncate">{{ post.author_title }}</span>
+            </div>
+            <a href="{{ post.get_absolute_url }}" class="text-forest font-bold hover:text-gold-dark flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              <span>Read</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <!-- PAGINATION -->
+    {% if page_obj.has_other_pages %}
+      <div class="mt-12 flex items-center justify-center gap-2 text-xs">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3.5 py-2 rounded-xl border border-stone-300 bg-white text-forest hover:bg-cream">
+            &larr; Previous
+          </a>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <span class="px-3.5 py-2 rounded-xl bg-forest text-gold font-bold">{{ num }}</span>
+          {% else %}
+            <a href="?page={{ num }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3.5 py-2 rounded-xl border border-stone-300 bg-white text-forest hover:bg-cream">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3.5 py-2 rounded-xl border border-stone-300 bg-white text-forest hover:bg-cream">
+            Next &rarr;
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+  {% else %}
+    <div class="bg-white p-12 text-center rounded-3xl border border-stone-200 shadow-sm max-w-md mx-auto space-y-4">
+      <div class="w-16 h-16 rounded-full bg-cream text-stone-400 flex items-center justify-center mx-auto text-2xl">
+        <i class="fa-solid fa-feather"></i>
+      </div>
+      <h3 class="font-serif text-2xl font-bold text-forest">No Articles Found</h3>
+      <p class="text-stone-500 text-xs leading-relaxed">
+        We could not find any journal articles matching your current filter. Explore all publications or submit a care question to our veterinary team.
+      </p>
+      <a href="{% url 'pages:blog_list' %}" class="btn-primary text-xs py-2.5 px-6 inline-block">View All Articles</a>
+    </div>
+  {% endif %}
+
+  <!-- BOTTOM NEWSLETTER CTA -->
+  <div class="mt-16 bg-[#0F2319] text-[#FAF8F5] p-8 sm:p-12 rounded-3xl border border-forest-800 shadow-md">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div class="lg:col-span-8 space-y-2">
+        <span class="badge-gold text-[10px]">Private Veterinary Dispatch</span>
+        <h3 class="font-serif text-2xl sm:text-3xl font-bold text-white">Subscribe to the Canine Atelier Journal</h3>
+        <p class="text-stone-400 text-xs sm:text-sm leading-relaxed max-w-xl">
+          Receive monthly pediatric care blueprints, new litter announcements, allergen management guides, and invitation-only private viewing salon notices.
+        </p>
+      </div>
+      <div class="lg:col-span-4">
+        <form class="newsletter-form space-y-2">
+          <input type="email" name="email" required placeholder="Enter your email address" class="w-full bg-forest-900 text-white placeholder-stone-400 text-xs rounded-xl py-3 px-4 border border-forest-700 focus:outline-none focus:border-gold">
+          <button type="submit" class="btn-primary w-full text-xs py-3 justify-center">Join VIP Journal</button>
+          <div class="newsletter-feedback text-xs"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

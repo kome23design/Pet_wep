@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ action }} Delivery Residence | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-4 py-12">
+  <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm space-y-6">
+    <div class="border-b border-stone-100 pb-3">
+      <span class="badge-gold text-[10px]">Address Management</span>
+      <h1 class="font-serif text-3xl font-bold text-forest mt-1">{{ action }} Delivery Residence</h1>
+    </div>
+
+    <form method="POST" class="space-y-4 text-xs">
+      {% csrf_token %}
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Residence Label *</label>
+        {{ form.address_label }}
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Recipient Name *</label>
+        {{ form.recipient_name }}
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Street Address *</label>
+        {{ form.street_address }}
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Apartment, Suite, Unit</label>
+        {{ form.apartment_suite }}
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">City *</label>
+          {{ form.city }}
+        </div>
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">State *</label>
+          {{ form.state }}
+        </div>
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">ZIP Code *</label>
+          {{ form.postal_code }}
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Access Guidelines &amp; Elevator Notes</label>
+        {{ form.delivery_instructions }}
+      </div>
+
+      <div class="pt-2">
+        <label class="flex items-center gap-2 cursor-pointer">
+          {{ form.is_default }}
+          <span class="font-bold text-forest">Set as primary default residence</span>
+        </label>
+      </div>
+
+      <div class="pt-4 flex items-center gap-3">
+        <button type="submit" class="btn-primary py-2.5 px-6 text-xs font-semibold">
+          Save Residence
+        </button>
+        <a href="{% url 'accounts:addresses' %}" class="text-stone-400 hover:text-stone-700">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

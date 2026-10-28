@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Saved Delivery Residences | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-cream-dark py-8 border-b border-[#DFD5C6]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <nav class="text-xs text-stone-500 mb-1 flex items-center gap-1.5">
+          <a href="{% url 'pages:home' %}" class="hover:underline">Home</a>
+          <span>/</span>
+          <a href="{% url 'accounts:dashboard' %}" class="hover:underline">Dashboard</a>
+          <span>/</span>
+          <span class="text-forest font-medium">Addresses</span>
+        </nav>
+        <h1 class="font-serif text-3xl font-bold text-forest">Saved Delivery Residences</h1>
+      </div>
+      <a href="{% url 'accounts:address_add' %}" class="btn-primary text-xs py-2 px-4">
+        <i class="fa-solid fa-plus mr-1"></i> Add Residence
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10">
+  {% if addresses %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for addr in addresses %}
+        <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs flex flex-col justify-between text-xs space-y-3">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-bold text-forest text-sm">{{ addr.address_label }}</span>
+              {% if addr.is_default %}
+                <span class="badge-gold text-[9px]">Default Residence</span>
+              {% endif %}
+            </div>
+            <p class="font-semibold text-stone-700">{{ addr.recipient_name }}</p>
+            <p class="text-stone-600">{{ addr.street_address }} {% if addr.apartment_suite %}{{ addr.apartment_suite }}{% endif %}</p>
+            <p class="text-stone-500">{{ addr.city }}, {{ addr.state }} {{ addr.postal_code }} &bull; {{ addr.country }}</p>
+            {% if addr.delivery_instructions %}
+              <div class="mt-2 bg-cream p-2.5 rounded-lg border border-stone-200 text-stone-500 text-[11px]">
+                <strong class="text-stone-600 block">Courier Access Notes:</strong>
+                {{ addr.delivery_instructions }}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="pt-3 border-t border-stone-100 flex items-center gap-3">
+            <a href="{% url 'accounts:address_edit' addr.pk %}" class="text-forest font-semibold hover:text-gold-dark">
+              <i class="fa-solid fa-pen text-[10px] mr-1"></i> Edit
+            </a>
+            <span class="text-stone-300">|</span>
+            <a href="{% url 'accounts:address_delete' addr.pk %}" class="text-rose-600 hover:text-rose-800">
+              <i class="fa-solid fa-trash-can text-[10px] mr-1"></i> Remove
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="bg-white p-12 text-center rounded-2xl border border-stone-200 shadow-sm max-w-md mx-auto space-y-4">
+      <div class="w-16 h-16 rounded-full bg-cream text-stone-400 flex items-center justify-center mx-auto text-2xl">
+        <i class="fa-solid fa-map-location-dot"></i>
+      </div>
+      <h3 class="font-serif text-2xl font-bold text-forest">No Saved Residences</h3>
+      <p class="text-stone-500 text-xs">Add your delivery addresses for seamless companion travel checkout.</p>
+      <a href="{% url 'accounts:address_add' %}" class="btn-primary text-xs py-2 px-5 inline-block">
+        + Add New Residence
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

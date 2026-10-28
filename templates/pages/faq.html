@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Frequently Asked Questions &bull; Knowledge Base | Prestige Paws NYC{% endblock %}
+{% block meta_description %}Exhaustive answers to all questions regarding our pet reservation process, 10-year genetic health warranty, chaperoned hand-delivery, hypoallergenic grooming, and post-adoption care.{% endblock %}
+
+{% block content %}
+<!-- HEADER BANNER -->
+<div class="bg-cream-dark py-14 border-b border-[#DFD5C6]">
+  <div class="max-w-4xl mx-auto px-4 sm:px-8 text-center space-y-3">
+    <span class="badge-gold">Knowledge Base &amp; Concierge Guidance</span>
+    <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest">Frequently Asked Questions</h1>
+    <p class="text-stone-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-light">
+      Everything you need to know about reserving a companion, our clinical health warranties, nationwide hand-delivery, and lifelong family support.
+    </p>
+  </div>
+</div>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-8 py-16 space-y-16">
+  
+  <!-- QUICK NAVIGATION PILLS -->
+  <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-stone-200">
+    <a href="#adoption" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-forest text-gold shadow-xs whitespace-nowrap">Adoption &amp; Reservation</a>
+    <a href="#breeds" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-forest border border-stone-200 hover:border-gold whitespace-nowrap">Breeds &amp; Allergies</a>
+    <a href="#health" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-forest border border-stone-200 hover:border-gold whitespace-nowrap">10-Year Health Warranty</a>
+    <a href="#delivery" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-forest border border-stone-200 hover:border-gold whitespace-nowrap">Companion Delivery</a>
+    <a href="#support" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-forest border border-stone-200 hover:border-gold whitespace-nowrap">Lifetime Care</a>
+  </div>
+
+  <!-- SECTION 1: ADOPTION & RESERVATION -->
+  <div id="adoption" class="space-y-6 scroll-mt-24">
+    <div class="border-b border-stone-200 pb-3 flex items-center justify-between">
+      <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2.5">
+        <i class="fa-solid fa-file-signature text-gold"></i> 1. Adoption &amp; Reservation Process
+      </h3>
+      <span class="badge-gold text-xs">Atelier Protocol</span>
+    </div>
+
+    <div class="space-y-4">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">How does the reservation process work?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          When you select an available companion online, our database-level transaction lock immediately secures the puppy, transitioning their status from <em>Available</em> to <em>Reserved</em>. You can place your deposit or full payment securely through our Stripe-encrypted checkout. Following confirmation, our concierge desk contacts you within 24 hours to coordinate pre-travel veterinary inspection and schedule your delivery window.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">Can multiple people accidentally purchase the same puppy?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          No. Living companions are singular, unique beings. Our backend database enforces atomic row locking (<code>select_for_update</code>) during checkout. Once a customer enters the payment confirmation phase, no other user can add that specific animal to their cart or finalize a purchase.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">Can I meet the puppy in person before finalizing adoption?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          Yes. Prospective adopters in the New York metropolitan area may book a private viewing consultation at our Manhattan atelier located at 450 Lexington Avenue. For clients residing out of state, our concierge provides private one-on-one live video appointments where you can watch the puppy interact with toys, walk, and engage with caretakers in real time.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">What is the minimum age at which a puppy can go home?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          In strict compliance with veterinary guidelines and Federal animal welfare statutes, no puppy is placed prior to completing eight (8) full weeks of age. Many of our toy companions remain in nursery care through 10 to 12 weeks to ensure optimal pediatric development, maternal weaning, and early house manners.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: BREEDS & ALLERGIES -->
+  <div id="breeds" class="space-y-6 scroll-mt-24">
+    <div class="border-b border-stone-200 pb-3 flex items-center justify-between">
+      <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2.5">
+        <i class="fa-solid fa-dna text-gold"></i> 2. Breeds, Temperament &amp; Hypoallergenic Care
+      </h3>
+      <span class="badge-gold text-xs">Maltipoo &amp; Maltese</span>
+    </div>
+
+    <div class="space-y-4">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">Are Maltipoos and Maltese truly hypoallergenic?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          Both breeds possess hair rather than fur, meaning they lack the dense shedding undercoat that disperses dry dander into indoor air. While no dog is 100% allergenic-free (since saliva and skin cells carry small amounts of Can f 1 protein), Maltipoos and Maltese are widely regarded by canine immunologists as the most allergy-friendly companions available. Families with mild-to-moderate dog allergies routinely experience zero symptoms.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">What is the difference between a Maltipoo and a Maltese?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          The Maltese is a purebred ancient toy companion with a silky snow-white coat, gentle regal demeanor, and an adult weight typically between 4 and 7 lbs. The Maltipoo is a purposeful designer hybrid of a Maltese and a Toy Poodle, known for wavy or curly teddy-bear fleece coats in apricot, champagne, or cream, acute intelligence, and slightly higher athletic energy.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">How often do these breeds require grooming?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          Because their hair continuously grows like human hair, daily 3-to-5 minute brushing with a slicker brush and metal greyhound comb is recommended to prevent tangles. Professional grooming (a bath, sanitary trim, and puppy cut) is typically scheduled every 6 to 8 weeks.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: 10-YEAR HEALTH WARRANTY -->
+  <div id="health" class="space-y-6 scroll-mt-24">
+    <div class="border-b border-stone-200 pb-3 flex items-center justify-between">
+      <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2.5">
+        <i class="fa-solid fa-shield-heart text-gold"></i> 3. Health Standards &amp; 10-Year Warranty
+      </h3>
+      <span class="badge-gold text-xs">Veterinary Guarantee</span>
+    </div>
+
+    <div class="space-y-4">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">What does the 10-Year Genetic Warranty cover?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          Our warranty covers all life-threatening hereditary and congenital defects, including congenital heart disease (subaortic stenosis, PDA), severe hip/elbow dysplasia, degenerative myelopathy (DM), hereditary blindness (PRA), and congenital organ failure (such as portosystemic liver shunts). If confirmed by a veterinary specialist, we provide financial reimbursement or medical allowances.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">What vaccines will my puppy have received upon arrival?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          Your puppy will arrive with age-appropriate core vaccinations (DHPP: Canine Distemper, Infectious Hepatitis, Parvovirus, Parainfluenza), intranasal Bordetella, and a complete pediatric deworming schedule. All dates and manufacturer lot numbers are recorded in your included official health passport.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">Is the microchip pre-registered?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          Yes. Every puppy is implanted with an ISO standard 15-digit microchip readable by all international veterinary scanners. The registration in the universal 24/7 pet recovery database is pre-paid for lifetime protection with zero recurring annual fees.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: CHAPERONED HAND-DELIVERY -->
+  <div id="delivery" class="space-y-6 scroll-mt-24">
+    <div class="border-b border-stone-200 pb-3 flex items-center justify-between">
+      <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2.5">
+        <i class="fa-solid fa-plane-arrival text-gold"></i> 4. Chaperoned Hand-Delivery Logistics
+      </h3>
+      <span class="badge-gold text-xs">Nationwide Chaperoned</span>
+    </div>
+
+    <div class="space-y-4">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">How does chaperoned hand-delivery work?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          We categorically never ship animals in airline cargo. For long-distance placements, a certified flight nanny travels with your puppy in-cabin under passenger seating, ensuring continuous comfort and hydration. For regional placements, our dedicated Mercedes-Benz Sprinter vans provide climate-controlled 70°F travel with mandatory 3-hour comfort stops. The chaperone personally hands your puppy directly to you at your residence.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">How much does delivery cost?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          We maintain a transparent flat fee of <strong>$250.00 USD</strong> for chaperoned companion delivery across all contiguous United States. This flat fee covers the chaperone, airline pet in-cabin ticketing or Mercedes Sprinter transit, sanitized travel crate, and nursery welcome kit.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">What happens if severe weather occurs on delivery day?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          Animal welfare is our paramount covenant. If extreme blizzards, ground frost advisories, or high temperatures exceeding 85°F develop along the transit corridor, travel is rescheduled automatically to ensure zero risk to puppy health. Our concierge coordinates alternative dates immediately.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: LIFETIME CARE & SUPPORT -->
+  <div id="support" class="space-y-6 scroll-mt-24">
+    <div class="border-b border-stone-200 pb-3 flex items-center justify-between">
+      <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2.5">
+        <i class="fa-solid fa-headset text-gold"></i> 5. Lifelong Support &amp; Rehoming Covenant
+      </h3>
+      <span class="badge-gold text-xs">Lifetime Care</span>
+    </div>
+
+    <div class="space-y-4">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">What support do you provide after my puppy arrives?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          Our placement relationship is lifelong. Adopters receive direct access to our Manhattan concierge desk for ongoing guidance regarding pediatric nutrition, teething, crate training, grooming recommendations, and socialization advice.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h4 class="font-serif text-lg font-bold text-forest">What is your lifetime rehoming policy?</h4>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+          If unforeseen life changes (such as illness, divorce, or relocation) prevent an adopter from continuing care at any point in the dog's life, Prestige Paws guarantees to take the dog back into our private network unconditionally. No Prestige Paws dog ever enters a shelter.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCIERGE HELP CARD -->
+  <div class="bg-cream p-8 sm:p-10 rounded-3xl border border-stone-200 text-center space-y-4">
+    <h3 class="font-serif text-3xl font-bold text-forest">Have an In-Depth or Specific Inquiry?</h3>
+    <p class="text-stone-600 text-xs sm:text-sm max-w-lg mx-auto leading-relaxed font-light">
+      Our Manhattan Concierge Directorate is available to discuss lineage records, private atelier viewings, and personalized adoption arrangements.
+    </p>
+    <div class="pt-2 flex flex-wrap items-center justify-center gap-4">
+      <a href="{% url 'pages:contact' %}" class="btn-primary text-xs py-3 px-8 shadow-sm">
+        Contact Placement Concierge
+      </a>
+      <a href="tel:2125557297" class="btn-secondary text-xs py-3 px-8">
+        <i class="fa-solid fa-phone mr-1.5 text-gold"></i> Call (212) 555-PAWS
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

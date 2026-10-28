@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}System Error (500) | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto px-4 py-20 text-center space-y-6">
+  <div class="bg-white p-10 rounded-3xl border border-stone-200 shadow-sm space-y-4">
+    <div class="w-20 h-20 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto text-3xl font-serif font-bold">
+      500
+    </div>
+    <h1 class="font-serif text-3xl font-bold text-forest">Internal System Interruption</h1>
+    <p class="text-xs text-stone-500 leading-relaxed">
+      Our technical team has been notified. Our atelier systems are being restored. Please try again shortly or contact concierge directly.
+    </p>
+    <div class="pt-4 flex flex-col gap-2">
+      <a href="{% url 'pages:home' %}" class="btn-primary text-xs py-2.5 px-6 justify-center">
+        Return to Home Page
+      </a>
+      <a href="{% url 'pages:contact' %}" class="btn-secondary text-xs py-2 px-6 justify-center">
+        Contact Concierge Desk
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

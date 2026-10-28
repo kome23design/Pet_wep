@@ -1,0 +1,464 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ site_settings.business_name|default:"Prestige Paws NYC" }} &bull; Premier Luxury Pet Placement Atelier{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}New York City's premier luxury pet placement atelier. Ethically hand-reared Maltipoo and Maltese puppies with certified veterinary health credentials and chaperoned delivery across the USA.{% endblock %}">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="{% block og_title %}Prestige Paws NYC - Luxury Pet Placement Atelier{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Ethically hand-reared Maltipoo & Maltese puppies with chaperoned US home delivery and 10-year health warranty.{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="{% static 'images/placeholder_puppy.svg' %}">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: {
+              DEFAULT: '#1B3B2B',
+              50: '#F2F6F4',
+              100: '#E1ECE6',
+              800: '#142C20',
+              900: '#0B1811',
+            },
+            cream: {
+              DEFAULT: '#FAF8F5',
+              dark: '#F3EDE4',
+              surface: '#F8F4EC',
+            },
+            gold: {
+              DEFAULT: '#D4AF37',
+              light: '#F4E7BD',
+              dark: '#A68318',
+            },
+            beige: '#EFE8DC',
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts & Font Awesome 6 Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-[#FAF8F5] text-[#242E28] antialiased flex flex-col min-h-screen">
+
+  <!-- DEMO DISCLAIMER NOTICE -->
+  <div class="bg-amber-100 border-b border-amber-300 text-amber-900 px-4 py-1.5 text-xs text-center font-medium flex items-center justify-center gap-2">
+    <span class="inline-block px-1.5 py-0.5 bg-amber-200 text-amber-900 rounded font-bold uppercase tracking-wider text-[10px]">DEMO SYSTEM</span>
+    <span>Prestige Paws NYC is a demonstration luxury pet placement platform. All sample inventory, records, and credentials represent mock demo content.</span>
+  </div>
+
+  <!-- TOP VIP CONCIERGE BAR -->
+  <div class="bg-[#0F2319] text-[#E1ECE6] text-xs py-2 px-4 sm:px-8 border-b border-forest-800">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div class="flex items-center gap-4">
+        <span><i class="fa-solid fa-location-dot text-gold mr-1"></i> {{ site_settings.address|default:"450 Lexington Avenue, Suite 1800, New York, NY 10017" }}</span>
+        <span class="hidden md:inline text-forest-500">|</span>
+        <span class="hidden md:inline"><i class="fa-regular fa-clock text-gold mr-1"></i> Mon - Sat: 9:00 AM - 7:00 PM EST | Sun: By Private Appointment</span>
+      </div>
+      <div class="flex items-center gap-5">
+        <a href="tel:2125557297" class="hover:text-gold transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-phone text-gold"></i> {{ site_settings.phone|default:"(212) 555-PAWS" }}
+        </a>
+        <a href="mailto:{{ site_settings.email|default:'concierge@prestigepaws.nyc' }}" class="hover:text-gold transition-colors hidden sm:inline flex items-center gap-1.5">
+          <i class="fa-regular fa-envelope text-gold"></i> Concierge Desk
+        </a>
+        <span class="text-gold font-medium flex items-center gap-1.5">
+          <i class="fa-solid fa-plane-arrival text-gold text-xs"></i> Nationwide Chaperoned Delivery
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN NAVIGATION HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#DFD5C6]/60 shadow-sm transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      
+      <!-- BRAND LOGO -->
+      <a href="{% url 'pages:home' %}" class="flex items-center gap-3 group">
+        <img src="{% static 'images/placeholder_puppy.svg' %}" alt="Prestige Paws NYC Logo" class="w-10 h-10 object-contain rounded-full border border-gold/40 shadow-sm group-hover:scale-105 transition-transform">
+        <div>
+          <span class="font-serif text-2xl font-bold tracking-tight text-forest block leading-none">PRESTIGE PAWS</span>
+          <span class="text-[9px] font-semibold tracking-widest text-gold uppercase block mt-0.5">NEW YORK ATELIER</span>
+        </div>
+      </a>
+
+      <!-- DESKTOP NAV LINKS (Linear single-line titles with dynamic active state indicator) -->
+      <nav class="hidden lg:flex items-center gap-1.5 xl:gap-2.5 text-sm font-medium whitespace-nowrap">
+        <!-- Home -->
+        {% if request.resolver_match.url_name == 'home' and request.resolver_match.app_name == 'pages' %}
+          <a href="{% url 'pages:home' %}" class="bg-forest text-gold font-semibold px-3.5 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold inline-block"></span>
+            <span>Home</span>
+          </a>
+        {% else %}
+          <a href="{% url 'pages:home' %}" class="text-forest/80 hover:text-forest hover:bg-stone-100/80 px-3 py-1.5 rounded-full transition-all">Home</a>
+        {% endif %}
+
+        <!-- Shop -->
+        {% if request.resolver_match.app_name == 'catalog' %}
+          <a href="{% url 'catalog:pet_list' %}" class="bg-forest text-gold font-semibold px-3.5 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 transition-all">
+            <i class="fa-solid fa-paw text-gold text-xs"></i>
+            <span>Shop</span>
+          </a>
+        {% else %}
+          <a href="{% url 'catalog:pet_list' %}" class="text-forest/80 hover:text-forest hover:bg-stone-100/80 px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-paw text-stone-400 text-xs"></i>
+            <span>Shop</span>
+          </a>
+        {% endif %}
+
+        <!-- Welfare -->
+        {% if request.resolver_match.url_name == 'welfare_standards' or request.resolver_match.url_name == 'adoption_info' or request.resolver_match.url_name == 'health_policy' %}
+          <a href="{% url 'pages:welfare_standards' %}" class="bg-forest text-gold font-semibold px-3.5 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold inline-block"></span>
+            <span>Welfare</span>
+          </a>
+        {% else %}
+          <a href="{% url 'pages:welfare_standards' %}" class="text-forest/80 hover:text-forest hover:bg-stone-100/80 px-3 py-1.5 rounded-full transition-all">Welfare</a>
+        {% endif %}
+
+        <!-- Blog -->
+        {% if request.resolver_match.url_name == 'blog_list' or request.resolver_match.url_name == 'blog_detail' %}
+          <a href="{% url 'pages:blog_list' %}" class="bg-forest text-gold font-semibold px-3.5 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold inline-block"></span>
+            <span>Blog</span>
+          </a>
+        {% else %}
+          <a href="{% url 'pages:blog_list' %}" class="text-forest/80 hover:text-forest hover:bg-stone-100/80 px-3 py-1.5 rounded-full transition-all">Blog</a>
+        {% endif %}
+
+        <!-- Review -->
+        {% if request.resolver_match.app_name == 'reviews' %}
+          <a href="{% url 'reviews:review_list' %}" class="bg-forest text-gold font-semibold px-3.5 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold inline-block"></span>
+            <span>Review</span>
+          </a>
+        {% else %}
+          <a href="{% url 'reviews:review_list' %}" class="text-forest/80 hover:text-forest hover:bg-stone-100/80 px-3 py-1.5 rounded-full transition-all">Review</a>
+        {% endif %}
+
+        <!-- About -->
+        {% if request.resolver_match.url_name == 'about' or request.resolver_match.url_name == 'gallery' %}
+          <a href="{% url 'pages:about' %}" class="bg-forest text-gold font-semibold px-3.5 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold inline-block"></span>
+            <span>About</span>
+          </a>
+        {% else %}
+          <a href="{% url 'pages:about' %}" class="text-forest/80 hover:text-forest hover:bg-stone-100/80 px-3 py-1.5 rounded-full transition-all">About</a>
+        {% endif %}
+
+        <!-- FAQ -->
+        {% if request.resolver_match.url_name == 'faq' %}
+          <a href="{% url 'pages:faq' %}" class="bg-forest text-gold font-semibold px-3.5 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold inline-block"></span>
+            <span>FAQ</span>
+          </a>
+        {% else %}
+          <a href="{% url 'pages:faq' %}" class="text-forest/80 hover:text-forest hover:bg-stone-100/80 px-3 py-1.5 rounded-full transition-all">FAQ</a>
+        {% endif %}
+
+        <!-- Contact -->
+        {% if request.resolver_match.url_name == 'contact' %}
+          <a href="{% url 'pages:contact' %}" class="bg-forest text-gold font-semibold px-3.5 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold inline-block"></span>
+            <span>Contact</span>
+          </a>
+        {% else %}
+          <a href="{% url 'pages:contact' %}" class="text-forest/80 hover:text-forest hover:bg-stone-100/80 px-3 py-1.5 rounded-full transition-all">Contact</a>
+        {% endif %}
+      </nav>
+
+      <!-- RIGHT ACTIONS & USER MENU -->
+      <div class="flex items-center gap-3">
+        <!-- Search -->
+        <form action="{% url 'catalog:search' %}" method="GET" class="hidden md:flex items-center relative">
+          <input type="text" name="q" placeholder="Search puppies..." class="bg-cream-dark text-xs rounded-full py-1.5 pl-3.5 pr-8 focus:outline-none focus:ring-1 focus:ring-forest w-32 xl:w-44 placeholder-stone-400">
+          <button type="submit" class="absolute right-2.5 text-stone-400 hover:text-forest text-xs">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </form>
+
+        <!-- Wishlist -->
+        <a href="{% url 'accounts:wishlist' %}" title="Saved Wishlist" class="{% if request.resolver_match.url_name == 'wishlist' %}text-rose-600 bg-rose-50 ring-1 ring-rose-300{% else %}text-stone-600 hover:text-rose-600 hover:bg-stone-100/70{% endif %} transition-all relative p-2 rounded-full">
+          <i class="{% if request.resolver_match.url_name == 'wishlist' %}fa-solid{% else %}fa-regular{% endif %} fa-heart text-base"></i>
+        </a>
+
+        <!-- Cart Badge -->
+        <a href="{% url 'cart:view_cart' %}" title="Reservation Cart" class="{% if request.resolver_match.app_name == 'cart' or request.resolver_match.url_name == 'view_cart' %}text-gold-dark bg-amber-50 ring-1 ring-gold/50{% else %}text-forest hover:text-gold hover:bg-stone-100/70{% endif %} transition-all relative p-2 rounded-full">
+          <i class="fa-solid fa-bag-shopping text-base"></i>
+          {% if cart_item_count > 0 %}
+            <span class="absolute -top-1 -right-1 bg-gold text-[#0F2319] font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
+              {{ cart_item_count }}
+            </span>
+          {% endif %}
+        </a>
+
+        <!-- Client Account Dropdown -->
+        <div class="nav-dropdown relative">
+          {% if user.is_authenticated %}
+            <button class="flex items-center gap-2 p-1 text-forest hover:text-gold transition-colors text-sm font-medium">
+              <span class="w-8 h-8 rounded-full bg-forest text-gold flex items-center justify-center font-bold text-xs uppercase border border-gold/50">
+                {{ user.first_name|default:user.username|slice:":1" }}
+              </span>
+              <span class="hidden md:inline">{{ user.first_name|default:user.username }}</span>
+              <i class="fa-solid fa-chevron-down text-[10px]"></i>
+            </button>
+            <div class="nav-dropdown-menu right-0 left-auto w-56">
+              <div class="px-4 py-2 border-b border-stone-100 bg-cream">
+                <p class="text-xs text-stone-500">Signed in as</p>
+                <p class="text-sm font-semibold text-forest truncate">{{ user.get_full_name|default:user.username }}</p>
+                <span class="badge-gold text-[9px] mt-1">{{ user.get_role_display }}</span>
+              </div>
+              <a href="{% url 'accounts:dashboard' %}" class="block px-4 py-2 text-sm text-forest hover:bg-cream-dark"><i class="fa-solid fa-gauge-high mr-2 text-stone-400"></i>Client Dashboard</a>
+              <a href="{% url 'orders:order_history' %}" class="block px-4 py-2 text-sm text-forest hover:bg-cream-dark"><i class="fa-solid fa-box mr-2 text-stone-400"></i>Order &amp; Placement History</a>
+              <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-sm text-forest hover:bg-cream-dark"><i class="fa-regular fa-user mr-2 text-stone-400"></i>Client Profile</a>
+              <a href="{% url 'accounts:addresses' %}" class="block px-4 py-2 text-sm text-forest hover:bg-cream-dark"><i class="fa-solid fa-map-location-dot mr-2 text-stone-400"></i>Saved Residences</a>
+              
+              {% if user.is_store_staff or user.is_superuser %}
+                <div class="border-t border-stone-100 my-1"></div>
+                <a href="{% url 'admin_dashboard:overview' %}" class="block px-4 py-2 text-sm text-gold-dark hover:bg-amber-50 font-medium"><i class="fa-solid fa-shield-halved mr-2"></i>Executive Portal</a>
+              {% endif %}
+              
+              <div class="border-t border-stone-100 my-1"></div>
+              <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-sm text-rose-700 hover:bg-rose-50"><i class="fa-solid fa-arrow-right-from-bracket mr-2"></i>Sign Out</a>
+            </div>
+          {% else %}
+            <a href="{% url 'accounts:login' %}" class="btn-primary text-xs py-1.5 px-4">
+              <i class="fa-regular fa-user"></i> Sign In
+            </a>
+          {% endif %}
+        </div>
+
+        <!-- Mobile Menu Hamburger -->
+        <button id="mobile-menu-btn" class="lg:hidden text-forest text-xl p-1.5 focus:outline-none">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- MOBILE MENU DRAWER (With active indicators) -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-[#DFD5C6] px-4 py-4 space-y-2">
+      <form action="{% url 'catalog:search' %}" method="GET" class="flex items-center relative mb-3">
+        <input type="text" name="q" placeholder="Search puppies..." class="w-full bg-cream-dark text-sm rounded-lg py-2 pl-3 pr-8 focus:outline-none focus:ring-1 focus:ring-forest">
+        <button type="submit" class="absolute right-3 text-stone-400"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+
+      <!-- Home -->
+      {% if request.resolver_match.url_name == 'home' and request.resolver_match.app_name == 'pages' %}
+        <a href="{% url 'pages:home' %}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-forest text-gold font-bold shadow-sm">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-house text-xs"></i> Home</span>
+          <span class="text-[10px] uppercase tracking-wider bg-gold/20 text-gold px-2 py-0.5 rounded-full font-bold">Current</span>
+        </a>
+      {% else %}
+        <a href="{% url 'pages:home' %}" class="block text-forest font-medium px-3.5 py-2 rounded-lg hover:bg-cream-dark transition-colors">Home</a>
+      {% endif %}
+
+      <!-- Shop -->
+      {% if request.resolver_match.app_name == 'catalog' %}
+        <a href="{% url 'catalog:pet_list' %}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-forest text-gold font-bold shadow-sm">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-paw text-xs"></i> Shop Puppies</span>
+          <span class="text-[10px] uppercase tracking-wider bg-gold/20 text-gold px-2 py-0.5 rounded-full font-bold">Current</span>
+        </a>
+      {% else %}
+        <a href="{% url 'catalog:pet_list' %}" class="block text-forest font-medium px-3.5 py-2 rounded-lg hover:bg-cream-dark transition-colors flex items-center gap-2">
+          <i class="fa-solid fa-paw text-stone-400 text-xs"></i> Shop Puppies
+        </a>
+      {% endif %}
+
+      <!-- Welfare -->
+      {% if request.resolver_match.url_name == 'welfare_standards' or request.resolver_match.url_name == 'adoption_info' or request.resolver_match.url_name == 'health_policy' %}
+        <a href="{% url 'pages:welfare_standards' %}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-forest text-gold font-bold shadow-sm">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-shield-heart text-xs"></i> Welfare</span>
+          <span class="text-[10px] uppercase tracking-wider bg-gold/20 text-gold px-2 py-0.5 rounded-full font-bold">Current</span>
+        </a>
+      {% else %}
+        <a href="{% url 'pages:welfare_standards' %}" class="block text-forest font-medium px-3.5 py-2 rounded-lg hover:bg-cream-dark transition-colors">Welfare</a>
+      {% endif %}
+
+      <!-- Blog -->
+      {% if request.resolver_match.url_name == 'blog_list' or request.resolver_match.url_name == 'blog_detail' %}
+        <a href="{% url 'pages:blog_list' %}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-forest text-gold font-bold shadow-sm">
+          <span class="flex items-center gap-2"><i class="fa-regular fa-newspaper text-xs"></i> Canine Journal &amp; Blog</span>
+          <span class="text-[10px] uppercase tracking-wider bg-gold/20 text-gold px-2 py-0.5 rounded-full font-bold">Current</span>
+        </a>
+      {% else %}
+        <a href="{% url 'pages:blog_list' %}" class="block text-forest font-medium px-3.5 py-2 rounded-lg hover:bg-cream-dark transition-colors">Canine Journal &amp; Blog</a>
+      {% endif %}
+
+      <!-- Review -->
+      {% if request.resolver_match.app_name == 'reviews' %}
+        <a href="{% url 'reviews:review_list' %}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-forest text-gold font-bold shadow-sm">
+          <span class="flex items-center gap-2"><i class="fa-regular fa-star text-xs"></i> Review</span>
+          <span class="text-[10px] uppercase tracking-wider bg-gold/20 text-gold px-2 py-0.5 rounded-full font-bold">Current</span>
+        </a>
+      {% else %}
+        <a href="{% url 'reviews:review_list' %}" class="block text-forest font-medium px-3.5 py-2 rounded-lg hover:bg-cream-dark transition-colors">Review</a>
+      {% endif %}
+
+      <!-- About -->
+      {% if request.resolver_match.url_name == 'about' or request.resolver_match.url_name == 'gallery' %}
+        <a href="{% url 'pages:about' %}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-forest text-gold font-bold shadow-sm">
+          <span class="flex items-center gap-2"><i class="fa-regular fa-circle-question text-xs"></i> About</span>
+          <span class="text-[10px] uppercase tracking-wider bg-gold/20 text-gold px-2 py-0.5 rounded-full font-bold">Current</span>
+        </a>
+      {% else %}
+        <a href="{% url 'pages:about' %}" class="block text-forest font-medium px-3.5 py-2 rounded-lg hover:bg-cream-dark transition-colors">About</a>
+      {% endif %}
+
+      <!-- FAQ -->
+      {% if request.resolver_match.url_name == 'faq' %}
+        <a href="{% url 'pages:faq' %}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-forest text-gold font-bold shadow-sm">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-circle-info text-xs"></i> FAQ</span>
+          <span class="text-[10px] uppercase tracking-wider bg-gold/20 text-gold px-2 py-0.5 rounded-full font-bold">Current</span>
+        </a>
+      {% else %}
+        <a href="{% url 'pages:faq' %}" class="block text-forest font-medium px-3.5 py-2 rounded-lg hover:bg-cream-dark transition-colors">FAQ</a>
+      {% endif %}
+
+      <!-- Contact -->
+      {% if request.resolver_match.url_name == 'contact' %}
+        <a href="{% url 'pages:contact' %}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-forest text-gold font-bold shadow-sm">
+          <span class="flex items-center gap-2"><i class="fa-regular fa-paper-plane text-xs"></i> Contact</span>
+          <span class="text-[10px] uppercase tracking-wider bg-gold/20 text-gold px-2 py-0.5 rounded-full font-bold">Current</span>
+        </a>
+      {% else %}
+        <a href="{% url 'pages:contact' %}" class="block text-forest font-medium px-3.5 py-2 rounded-lg hover:bg-cream-dark transition-colors">Contact</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- DJANGO NOTIFICATION MESSAGES -->
+  {% if messages %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 mt-4 space-y-2">
+      {% for message in messages %}
+        <div class="alert-banner p-4 rounded-xl flex items-center justify-between gap-3 shadow-sm border {% if message.tags == 'error' %}bg-red-50 text-red-900 border-red-200{% elif message.tags == 'success' %}bg-emerald-50 text-emerald-900 border-emerald-200{% elif message.tags == 'warning' %}bg-amber-50 text-amber-900 border-amber-200{% else %}bg-blue-50 text-blue-900 border-blue-200{% endif %}">
+          <div class="flex items-center gap-3">
+            {% if message.tags == 'error' %}
+              <i class="fa-solid fa-circle-exclamation text-red-600 text-lg"></i>
+            {% elif message.tags == 'success' %}
+              <i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>
+            {% else %}
+              <i class="fa-solid fa-circle-info text-blue-600 text-lg"></i>
+            {% endif %}
+            <span class="text-sm font-medium">{{ message }}</span>
+          </div>
+          <button class="alert-close text-stone-400 hover:text-stone-700 text-sm">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- MAIN BODY CONTENT -->
+  <main class="flex-grow">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- LUXURY FOOTER -->
+  <footer class="bg-[#0F2319] text-[#FAF8F5] pt-16 pb-8 border-t border-forest-800 mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-forest-800">
+        
+        <!-- Brand & Atelier Column -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <img src="{% static 'images/placeholder_puppy.svg' %}" alt="Prestige Paws Logo" class="w-10 h-10 rounded-full border border-gold/40">
+            <div>
+              <span class="font-serif text-2xl font-bold tracking-tight text-white block">PRESTIGE PAWS</span>
+              <span class="text-[9px] font-semibold tracking-widest text-gold uppercase block">NEW YORK ATELIER</span>
+            </div>
+          </div>
+          <p class="text-stone-400 text-sm leading-relaxed max-w-sm">
+            {{ site_settings.tagline|default:"Manhattan's Premier Pet Placement & Chaperoned Delivery Atelier." }} Dedicated to supreme animal welfare, transparent lineage records, and bonded USDA-certified delivery nationwide.
+          </p>
+          <div class="space-y-1 text-xs text-stone-300">
+            <p><i class="fa-solid fa-location-dot text-gold mr-2"></i>{{ site_settings.address }}</p>
+            <p><i class="fa-solid fa-phone text-gold mr-2"></i>{{ site_settings.phone }}</p>
+            <p><i class="fa-regular fa-envelope text-gold mr-2"></i>{{ site_settings.email }}</p>
+          </div>
+        </div>
+
+        <!-- Collections & Puppies Column -->
+        <div>
+          <h4 class="font-serif text-lg font-semibold text-white mb-4 tracking-wide">Collections &amp; Breeds</h4>
+          <ul class="space-y-2.5 text-sm text-stone-300">
+            <li><a href="{% url 'catalog:pet_list' %}" class="hover:text-gold transition-colors font-medium">Shop All Puppies</a></li>
+            <li><a href="{% url 'catalog:pet_list' %}?breed=maltipoo" class="hover:text-gold transition-colors">Maltipoo Collection</a></li>
+            <li><a href="{% url 'catalog:pet_list' %}?breed=maltese" class="hover:text-gold transition-colors">Maltese Collection</a></li>
+            <li><a href="{% url 'catalog:pet_list' %}?lifestyle=hypoallergenic" class="hover:text-gold transition-colors">Hypoallergenic Puppies</a></li>
+            <li><a href="{% url 'pages:gallery' %}" class="hover:text-gold transition-colors">Puppy Portrait Gallery</a></li>
+          </ul>
+        </div>
+
+        <!-- Standards & Policies Column -->
+        <div>
+          <h4 class="font-serif text-lg font-semibold text-white mb-4 tracking-wide">Standards &amp; Policies</h4>
+          <ul class="space-y-2.5 text-sm text-stone-300">
+            <li><a href="{% url 'pages:welfare_standards' %}" class="hover:text-gold transition-colors">Animal Welfare Standards</a></li>
+            <li><a href="{% url 'pages:health_policy' %}" class="hover:text-gold transition-colors">10-Year Health Guarantee</a></li>
+            <li><a href="{% url 'pages:adoption_info' %}" class="hover:text-gold transition-colors">Puppy Preparation Guide</a></li>
+            <li><a href="{% url 'pages:blog_list' %}" class="hover:text-gold transition-colors">Canine Journal &amp; Blog</a></li>
+            <li><a href="{% url 'pages:faq' %}" class="hover:text-gold transition-colors">Frequently Asked Questions</a></li>
+            <li><a href="{% url 'pages:refund_policy' %}" class="hover:text-gold transition-colors">Refund &amp; Cancellation Policy</a></li>
+            <li><a href="{% url 'pages:privacy_policy' %}" class="hover:text-gold transition-colors">Privacy Policy</a></li>
+            <li><a href="{% url 'pages:terms_policy' %}" class="hover:text-gold transition-colors">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+
+        <!-- VIP Newsletter Column -->
+        <div>
+          <h4 class="font-serif text-lg font-semibold text-white mb-4 tracking-wide">Private VIP Circle</h4>
+          <p class="text-xs text-stone-400 mb-3 leading-relaxed">
+            Receive exclusive advance notices of upcoming Maltipoo and Maltese nursery litters before public placement.
+          </p>
+          <form class="newsletter-form space-y-2">
+            <input type="email" name="email" required placeholder="Enter your email" class="w-full bg-[#1A3828] text-white text-xs px-3.5 py-2 rounded-lg border border-forest-800 focus:outline-none focus:border-gold placeholder-stone-500">
+            <button type="submit" class="btn-gold w-full text-xs py-2">Join Private Circle</button>
+            <div class="newsletter-feedback text-xs"></div>
+          </form>
+          <div class="flex gap-4 text-stone-400 pt-4">
+            <a href="https://instagram.com" target="_blank" rel="noopener" class="hover:text-gold text-base" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://facebook.com" target="_blank" rel="noopener" class="hover:text-gold text-base" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://pinterest.com" target="_blank" rel="noopener" class="hover:text-gold text-base" aria-label="Pinterest"><i class="fa-brands fa-pinterest-p"></i></a>
+            <a href="https://wa.me/12125557297" target="_blank" rel="noopener" class="hover:text-emerald-400 text-base" aria-label="WhatsApp Concierge"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM LEGAL & DEMO NOTICE -->
+      <div class="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-stone-500 gap-4">
+        <p>&copy; {% now "Y" %} Prestige Paws NYC Atelier. All rights reserved. Demo luxury pet placement atelier &amp; chaperoned companion delivery across the USA.</p>
+        <p class="text-stone-400 text-center md:text-right">
+          Animal welfare is our paramount covenant. Transport subject to veterinary clearance and weather conditions.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JS -->
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

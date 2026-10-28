@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Confirmed &bull; {{ order.order_number }} | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-8 py-16">
+  
+  <!-- Success Banner Card -->
+  <div class="bg-white p-8 sm:p-12 rounded-3xl border border-stone-200 shadow-md text-center space-y-6">
+    <div class="w-20 h-20 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto text-3xl shadow-sm border border-emerald-200">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
+
+    <div>
+      <span class="badge-gold text-xs">Official Placement Confirmation</span>
+      <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest mt-2">
+        Congratulations on Your New Best Friend!
+      </h1>
+      <p class="text-stone-600 text-sm max-w-lg mx-auto mt-2 leading-relaxed">
+        Your reservation for <strong class="text-forest">{{ order.items.first.pet_name }}</strong> has been officially confirmed. Our clinical veterinary team has initiated pre-travel health clearance at our Manhattan Atelier.
+      </p>
+    </div>
+
+    <!-- Order Reference Pill -->
+    <div class="inline-flex flex-wrap items-center justify-center gap-4 bg-cream px-6 py-3 rounded-2xl border border-stone-200 text-xs font-mono">
+      <span>Order Number: <strong class="text-forest">{{ order.order_number }}</strong></span>
+      <span>&bull;</span>
+      <span>Status: <strong class="text-emerald-800 uppercase">{{ order.get_order_status_display }}</strong></span>
+      <span>&bull;</span>
+      <span>Payment: <strong class="text-emerald-800">{{ order.get_payment_status_display }}</strong></span>
+    </div>
+
+    <!-- CHAPERONED TRAVEL COORDINATION DOSSIER CARD -->
+    <div class="p-6 bg-[#163023] rounded-2xl text-[#FAF8F5] text-left border border-forest-800 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-forest-800">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-plane-arrival text-gold text-base"></i>
+          <span class="font-serif text-lg font-bold text-white">Chaperoned Companion Delivery Coordination</span>
+        </div>
+        <span class="badge-gold text-[10px]">Dedicated Chaperone</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-stone-300">
+        <div>
+          <span class="text-gold font-semibold block text-[10px] uppercase">1. Pre-Travel Clinical Exam</span>
+          <p class="mt-1 leading-relaxed">USDA licensed veterinarian nose-to-tail check, stool screen, and health certificate issuance.</p>
+        </div>
+        <div>
+          <span class="text-gold font-semibold block text-[10px] uppercase">2. Chaperoned Transit</span>
+          <p class="mt-1 leading-relaxed">In-cabin flight nanny or climate-controlled Sprinter with scheduled 3-hour comfort stops.</p>
+        </div>
+        <div>
+          <span class="text-gold font-semibold block text-[10px] uppercase">3. In-Home Handover</span>
+          <p class="mt-1 leading-relaxed">Direct front-door arrival, health dossier review, and nursery transition package transfer.</p>
+        </div>
+      </div>
+
+      <div class="pt-2 text-xs text-stone-300 border-t border-forest-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <span>Preferred Window: <strong>{{ order.preferred_delivery_window }}</strong> on <strong>{{ order.preferred_delivery_date|default:"Upcoming Scheduled Date" }}</strong></span>
+        <span class="text-gold">Our concierge will contact you 24 hours prior to dispatch</span>
+      </div>
+    </div>
+
+    <!-- Order Summary Grid -->
+    <div class="pt-6 border-t border-stone-100 grid grid-cols-1 md:grid-cols-2 gap-6 text-left text-xs">
+      <!-- Destination -->
+      <div class="p-5 bg-cream rounded-2xl border border-stone-200 space-y-2">
+        <h4 class="font-bold text-forest uppercase tracking-wider flex items-center gap-1.5">
+          <i class="fa-solid fa-location-dot text-gold"></i> Delivery Destination
+        </h4>
+        <p class="text-stone-700 font-semibold">{{ order.customer_name }}</p>
+        <p class="text-stone-600">{{ order.destination_display }}</p>
+        <p class="text-stone-500">Contact: {{ order.customer_phone }} &bull; {{ order.customer_email }}</p>
+        {% if order.delivery_notes %}
+          <p class="text-stone-500 italic mt-1 border-t border-stone-200/60 pt-1">Notes: {{ order.delivery_notes }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Financials -->
+      <div class="p-5 bg-cream rounded-2xl border border-stone-200 space-y-2">
+        <h4 class="font-bold text-forest uppercase tracking-wider flex items-center gap-1.5">
+          <i class="fa-solid fa-receipt text-gold"></i> Placement &amp; Travel Fee
+        </h4>
+        <div class="space-y-1 text-stone-600">
+          <div class="flex justify-between">
+            <span>Puppy Placement Subtotal:</span>
+            <span>${{ order.subtotal|floatformat:2 }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Chaperoned Travel Fee:</span>
+            <span>${{ order.delivery_fee|floatformat:2 }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Sales Tax:</span>
+            <span>${{ order.tax_amount|floatformat:2 }}</span>
+          </div>
+          <div class="flex justify-between font-bold text-forest pt-1 border-t border-stone-200 text-sm">
+            <span>Total Paid (USD):</span>
+            <span>${{ order.total_amount|floatformat:2 }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions Footer -->
+    <div class="pt-6 border-t border-stone-100 flex flex-wrap items-center justify-center gap-4 text-xs">
+      <a href="{% url 'orders:download_receipt' order.order_number %}" target="_blank" class="text-forest hover:text-gold-dark font-medium flex items-center gap-1">
+        <i class="fa-solid fa-print"></i> Printable Client Receipt / Invoice
+      </a>
+      <span class="text-stone-300">&bull;</span>
+      <a href="{% url 'orders:order_detail' order.order_number %}" class="text-forest hover:text-gold-dark font-medium">
+        View Order Details
+      </a>
+      <span class="text-stone-300">&bull;</span>
+      <a href="{% url 'accounts:dashboard' %}" class="text-forest hover:text-gold-dark font-medium">
+        Go to Client Dashboard
+      </a>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

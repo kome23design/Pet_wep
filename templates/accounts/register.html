@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Private Client Account | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-4 py-16">
+  
+  <div class="bg-white p-8 sm:p-10 rounded-3xl border border-stone-200 shadow-md space-y-6">
+    <div class="text-center space-y-1">
+      <span class="badge-gold text-[10px]">Client Registration</span>
+      <h1 class="font-serif text-3xl font-bold text-forest">Create Your Client Profile</h1>
+      <p class="text-stone-500 text-xs">Join our private network for advance puppy placement notices and live delivery telemetry.</p>
+    </div>
+
+    <form method="POST" action="{% url 'accounts:register' %}" class="space-y-4 text-xs">
+      {% csrf_token %}
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">First Name *</label>
+          {{ form.first_name }}
+          {% if form.first_name.errors %}<p class="text-red-600 mt-1">{{ form.first_name.errors.0 }}</p>{% endif %}
+        </div>
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Last Name *</label>
+          {{ form.last_name }}
+          {% if form.last_name.errors %}<p class="text-red-600 mt-1">{{ form.last_name.errors.0 }}</p>{% endif %}
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Username *</label>
+        {{ form.username }}
+        {% if form.username.errors %}<p class="text-red-600 mt-1">{{ form.username.errors.0 }}</p>{% endif %}
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Email Address *</label>
+          {{ form.email }}
+          {% if form.email.errors %}<p class="text-red-600 mt-1">{{ form.email.errors.0 }}</p>{% endif %}
+        </div>
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Phone Number (Optional)</label>
+          {{ form.phone_number }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Password *</label>
+          {{ form.password }}
+          {% if form.password.errors %}<p class="text-red-600 mt-1">{{ form.password.errors.0 }}</p>{% endif %}
+        </div>
+        <div>
+          <label class="block font-bold text-forest uppercase tracking-wider mb-1">Confirm Password *</label>
+          {{ form.confirm_password }}
+          {% if form.confirm_password.errors %}<p class="text-red-600 mt-1">{{ form.confirm_password.errors.0 }}</p>{% endif %}
+        </div>
+      </div>
+
+      <p class="text-[10px] text-stone-400 leading-relaxed pt-1">
+        By registering, you agree to receive order notifications and health warranty documents electronically.
+      </p>
+
+      <button type="submit" class="btn-primary w-full py-3.5 text-sm font-semibold justify-center shadow-md">
+        Create Client Account &rarr;
+      </button>
+    </form>
+
+    <div class="text-center pt-2 text-xs text-stone-500 border-t border-stone-100">
+      Already have an account? 
+      <a href="{% url 'accounts:login' %}" class="font-bold text-gold-dark hover:underline">Sign In</a>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

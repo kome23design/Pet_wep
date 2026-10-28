@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Manhattan Concierge Directorate &bull; Private Appointments | Prestige Paws NYC{% endblock %}
+{% block meta_description %}Speak with our Manhattan placement directors, inquire about nursery availability, schedule a private viewing at 450 Lexington Ave, or discuss chaperoned hand-delivery.{% endblock %}
+
+{% block content %}
+<!-- HEADER BANNER -->
+<div class="bg-cream-dark py-14 border-b border-[#DFD5C6]">
+  <div class="max-w-4xl mx-auto px-4 sm:px-8 text-center space-y-3">
+    <span class="badge-gold">Private Client Directorate</span>
+    <h1 class="font-serif text-4xl sm:text-5xl font-bold text-forest">Contact Prestige Paws NYC</h1>
+    <p class="text-stone-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-light">
+      Speak directly with our placement directors, inquire about current or upcoming nursery litters, or schedule a private showing at our Lexington Avenue atelier.
+    </p>
+  </div>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 sm:px-8 py-16 space-y-12">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+    
+    <!-- LEFT: CONTACT INFORMATION & ATELIER LOCATION -->
+    <div class="lg:col-span-5 space-y-6">
+      
+      <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm space-y-6">
+        <div>
+          <span class="badge-gold text-[10px]">Flagship Atelier</span>
+          <h3 class="font-serif text-2xl font-bold text-forest mt-1">Manhattan Headquarters</h3>
+          <p class="text-xs text-stone-500 mt-0.5">Prestige Paws NYC Luxury Placement Directorate</p>
+        </div>
+
+        <div class="space-y-4 text-xs text-stone-700">
+          <div class="flex items-start gap-3">
+            <i class="fa-solid fa-location-dot text-gold text-base mt-0.5 shrink-0"></i>
+            <div>
+              <strong class="block text-forest text-sm font-serif font-bold">Atelier Suite Address</strong>
+              <span class="text-stone-700">{{ site_settings.address|default:"450 Lexington Avenue, Suite 1800, New York, NY 10017" }}</span>
+              <span class="text-stone-400 block text-[10px] mt-0.5">Midtown East &bull; Grand Central Commercial Corridor</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <i class="fa-solid fa-phone text-gold text-base mt-0.5 shrink-0"></i>
+            <div>
+              <strong class="block text-forest text-sm font-serif font-bold">Direct Concierge Phone</strong>
+              <span class="text-stone-700">{{ site_settings.phone|default:"(212) 555-PAWS" }}</span>
+              <span class="text-stone-400 block text-[10px] mt-0.5">Mon &ndash; Sat: 9:00 AM &ndash; 7:00 PM EST | Sun: Private Appointment</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <i class="fa-regular fa-envelope text-gold text-base mt-0.5 shrink-0"></i>
+            <div>
+              <strong class="block text-forest text-sm font-serif font-bold">Electronic Inquiries</strong>
+              <span class="text-stone-700">{{ site_settings.email|default:"concierge@prestigepaws.nyc" }}</span>
+              <span class="text-stone-400 block text-[10px] mt-0.5">Direct concierge response guarantee within 2 hours</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <i class="fa-brands fa-whatsapp text-emerald-600 text-base mt-0.5 shrink-0"></i>
+            <div>
+              <strong class="block text-forest text-sm font-serif font-bold">VIP WhatsApp Desk</strong>
+              <span class="text-stone-700">+1 (212) 555-PAWS</span>
+              <span class="text-stone-400 block text-[10px] mt-0.5">Live video consultations &amp; instant photo requests</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-cream rounded-2xl border border-stone-200 text-xs text-stone-600 space-y-1.5">
+          <strong class="text-forest block font-serif font-bold text-sm">Private Viewing Protocol:</strong>
+          <p class="text-[11px] leading-relaxed font-light">
+            To ensure zero noise and protect the emotional comfort of our young puppies, in-person salon viewings are strictly limited to one family at a time by advance appointment.
+          </p>
+        </div>
+      </div>
+
+      <!-- TRANSIT & DIRECTIONS CARD -->
+      <div class="bg-[#12271C] text-white p-7 rounded-3xl border border-forest-800 space-y-3 text-xs">
+        <h4 class="font-serif text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-train-subway text-gold"></i> Visiting Transit &amp; Valet
+        </h4>
+        <div class="space-y-2 text-stone-300 font-light leading-relaxed">
+          <p><strong>Subway:</strong> Grand Central &ndash; 42nd St Station (4, 5, 6, 7, and S shuttle lines) directly connected via Lexington Ave concourse.</p>
+          <p><strong>Regional Rail:</strong> Metro-North Railroad at Grand Central Terminal (2 blocks away) or LIRR via Grand Central Madison.</p>
+          <p><strong>Parking:</strong> Valet parking garages located on East 44th Street and East 45th Street adjacent to 450 Lexington Avenue.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: INQUIRY SUBMISSION FORM -->
+    <div class="lg:col-span-7">
+      <div class="bg-white p-8 sm:p-10 rounded-3xl border border-stone-200 shadow-sm space-y-6">
+        <div>
+          <span class="badge-gold text-[10px]">Private Transmission</span>
+          <h2 class="font-serif text-3xl font-bold text-forest mt-1">Send a Private Message</h2>
+          <p class="text-xs text-stone-500 mt-1">Submit your adoption inquiry or viewing request below.</p>
+        </div>
+
+        <form method="POST" class="space-y-5 text-xs">
+          {% csrf_token %}
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1.5">Your Full Name *</label>
+              <input type="text" name="name" required placeholder="Eleanor Vance" class="form-input text-xs py-2.5">
+            </div>
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1.5">Email Address *</label>
+              <input type="email" name="email" required placeholder="eleanor@example.com" class="form-input text-xs py-2.5">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1.5">Phone Number (Optional)</label>
+              <input type="text" name="phone" placeholder="(212) 555-0199" class="form-input text-xs py-2.5">
+            </div>
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1.5">Inquiry Subject *</label>
+              <select name="subject" class="form-select text-xs py-2.5">
+                <option value="adoption_inquiry" {% if request.GET.subject == 'adoption_inquiry' %}selected{% endif %}>Pet Placement &amp; Availability Inquiry</option>
+                <option value="private_viewing" {% if request.GET.subject == 'private_viewing' %}selected{% endif %}>Request Private Viewing at Manhattan Atelier</option>
+                <option value="delivery_question" {% if request.GET.subject == 'delivery_question' %}selected{% endif %}>Chaperoned Delivery &amp; Travel Logistics</option>
+                <option value="health_warranty" {% if request.GET.subject == 'health_warranty' %}selected{% endif %}>10-Year Health Guarantee &amp; Lineage Question</option>
+                <option value="general">General Client Concierge Inquiry</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1.5">Companion of Interest (Optional)</label>
+            <input type="text" name="pet_interest" value="{{ request.GET.pet_ref|default:'' }}" placeholder="e.g. Milo (Ref: PP-MP-2026-001) or Maltipoo Female" class="form-input text-xs py-2.5">
+          </div>
+
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1.5">Your Message &amp; Residence Profile *</label>
+            <textarea name="message" required rows="5" placeholder="Please share a few details regarding your residence (house or apartment), family, past pet experience, and any specific timing preferences..." class="form-textarea text-xs"></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary w-full py-4 text-sm font-semibold justify-center shadow-md hover:shadow-lg flex items-center gap-2">
+            <span>Transmit Private Inquiry to Concierge</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} | Prestige Paws NYC Journal{% endblock %}
+{% block meta_description %}{{ post.excerpt|truncatechars:160 }}{% endblock %}
+
+{% block content %}
+<article class="bg-[#FAF8F5] pb-16">
+  <!-- ARTICLE HERO HEADER -->
+  <div class="bg-gradient-to-b from-cream to-cream-dark py-12 border-b border-[#DFD5C6]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-8">
+      <nav class="text-xs text-stone-500 mb-4 flex items-center gap-1.5 flex-wrap">
+        <a href="{% url 'pages:home' %}" class="hover:underline">Home</a>
+        <span>/</span>
+        <a href="{% url 'pages:blog_list' %}" class="hover:underline">Journal</a>
+        {% if post.category %}
+          <span>/</span>
+          <a href="{% url 'pages:blog_list' %}?category={{ post.category.slug }}" class="hover:underline">{{ post.category.name }}</a>
+        {% endif %}
+        <span>/</span>
+        <span class="text-forest font-medium truncate max-w-xs">{{ post.title }}</span>
+      </nav>
+
+      <div class="space-y-4">
+        {% if post.category %}
+          <span class="badge-gold">{{ post.category.name }}</span>
+        {% endif %}
+        <h1 class="font-serif text-3xl sm:text-5xl font-bold text-forest leading-tight">
+          {{ post.title }}
+        </h1>
+        <p class="text-stone-600 text-sm sm:text-base leading-relaxed">
+          {{ post.excerpt }}
+        </p>
+
+        <!-- AUTHOR & METADATA BAR -->
+        <div class="pt-4 border-t border-stone-200/80 flex flex-wrap items-center justify-between gap-4 text-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-full bg-forest text-gold flex items-center justify-center font-serif font-bold text-sm shadow-xs">
+              {{ post.author|slice:":2"|upper }}
+            </div>
+            <div>
+              <span class="font-bold text-forest text-sm block">{{ post.author }}</span>
+              <span class="text-stone-500 block">{{ post.author_title }}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 text-stone-400 text-xs">
+            <span class="flex items-center gap-1.5">
+              <i class="fa-regular fa-calendar text-gold"></i>
+              <span>{{ post.published_at|date:"F d, Y" }}</span>
+            </span>
+            <span>&bull;</span>
+            <span class="flex items-center gap-1.5">
+              <i class="fa-regular fa-clock text-gold"></i>
+              <span>{{ post.read_time }}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE BODY & SIDEBAR -->
+  <div class="max-w-4xl mx-auto px-4 sm:px-8 py-10">
+    <!-- COVER IMAGE -->
+    <div class="rounded-3xl overflow-hidden border border-stone-200 shadow-md mb-10 bg-white">
+      <img src="{{ post.cover_url }}" alt="{{ post.title }}" class="w-full h-80 sm:h-96 md:h-[420px] object-cover">
+    </div>
+
+    <!-- MAIN BODY CONTENT -->
+    <div class="bg-white p-8 sm:p-12 rounded-3xl border border-stone-200 shadow-xs space-y-6">
+      
+      <!-- Article Content -->
+      <div class="prose prose-stone max-w-none text-stone-700 text-sm sm:text-base leading-relaxed space-y-6">
+        {{ post.content|safe }}
+      </div>
+
+      <!-- TAGS -->
+      {% if post.tags %}
+        <div class="pt-8 border-t border-stone-100 flex flex-wrap items-center gap-2">
+          <span class="text-xs font-bold text-forest uppercase tracking-wider mr-2">Topics:</span>
+          {% for tag in post.tags.split %}
+            <span class="px-3 py-1 rounded-full text-xs font-medium bg-cream text-forest border border-stone-200">
+              #{{ tag|cut:',' }}
+            </span>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <!-- AUTHOR BIO CARD -->
+      <div class="mt-8 p-6 bg-cream rounded-2xl border border-stone-200 flex flex-col sm:flex-row items-center gap-5">
+        <div class="w-16 h-16 rounded-full bg-forest text-gold flex items-center justify-center font-serif font-bold text-xl shrink-0 shadow-sm">
+          {{ post.author|slice:":2"|upper }}
+        </div>
+        <div class="space-y-1 text-center sm:text-left">
+          <h4 class="font-serif text-lg font-bold text-forest">{{ post.author }}</h4>
+          <span class="text-xs font-semibold text-gold-dark uppercase tracking-wider block">{{ post.author_title }}</span>
+          <p class="text-xs text-stone-600 leading-relaxed pt-1">
+            Board-certified veterinary practitioner and genetic health consultant for Prestige Paws NYC. Specializing in companion breed neonatal wellness, early neurological stimulation, and hypoallergenic pediatric protocols.
+          </p>
+        </div>
+      </div>
+
+      <!-- SHARE & BACK LINKS -->
+      <div class="pt-6 border-t border-stone-100 flex flex-wrap items-center justify-between gap-4 text-xs">
+        <a href="{% url 'pages:blog_list' %}" class="text-forest font-bold hover:text-gold-dark flex items-center gap-1.5">
+          <i class="fa-solid fa-arrow-left text-[10px]"></i>
+          <span>Back to All Journal Articles</span>
+        </a>
+
+        <div class="flex items-center gap-2">
+          <span class="text-stone-400">Share this guide:</span>
+          <a href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}&url={{ request.build_absolute_uri|urlencode }}" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-forest hover:text-white text-stone-600 flex items-center justify-center transition-colors">
+            <i class="fa-brands fa-x-twitter text-xs"></i>
+          </a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-forest hover:text-white text-stone-600 flex items-center justify-center transition-colors">
+            <i class="fa-brands fa-facebook-f text-xs"></i>
+          </a>
+          <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri|urlencode }}" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-forest hover:text-white text-stone-600 flex items-center justify-center transition-colors">
+            <i class="fa-brands fa-linkedin-in text-xs"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RELATED ARTICLES -->
+    {% if related_posts %}
+      <div class="mt-14 space-y-6">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+          <h3 class="font-serif text-2xl font-bold text-forest">Recommended Journal Readings</h3>
+          <a href="{% url 'pages:blog_list' %}" class="text-xs text-forest font-bold hover:underline">View All &rarr;</a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {% for r in related_posts %}
+            <article class="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div>
+                <a href="{{ r.get_absolute_url }}" class="block h-40 overflow-hidden bg-forest/5">
+                  <img src="{{ r.cover_url }}" alt="{{ r.title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                </a>
+                <div class="p-4 space-y-2">
+                  <span class="text-[10px] font-bold text-gold-dark uppercase tracking-wider block">{{ r.category.name|default:'Guide' }}</span>
+                  <h4 class="font-serif text-base font-bold text-forest leading-snug hover:text-gold-dark">
+                    <a href="{{ r.get_absolute_url }}">{{ r.title }}</a>
+                  </h4>
+                  <p class="text-stone-500 text-xs line-clamp-2">{{ r.excerpt }}</p>
+                </div>
+              </div>
+              <div class="p-4 pt-0 text-[11px] text-stone-400 flex items-center justify-between border-t border-stone-50 mt-2">
+                <span>{{ r.read_time }}</span>
+                <a href="{{ r.get_absolute_url }}" class="text-forest font-bold hover:text-gold-dark">Read &rarr;</a>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+</article>
+{% endblock %}

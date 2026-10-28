@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Saved Companion Wishlist | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-cream-dark py-8 border-b border-[#DFD5C6]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <nav class="text-xs text-stone-500 mb-1 flex items-center gap-1.5">
+      <a href="{% url 'pages:home' %}" class="hover:underline">Home</a>
+      <span>/</span>
+      <span class="text-forest font-medium">Saved Wishlist</span>
+    </nav>
+    <h1 class="font-serif text-3xl font-bold text-forest">Your Saved Companions</h1>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10">
+  {% if pets %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {% for pet in pets %}
+        {% include 'components/pet_card.html' with pet=pet %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="bg-white p-12 text-center rounded-2xl border border-stone-200 shadow-sm max-w-md mx-auto space-y-4">
+      <div class="w-16 h-16 rounded-full bg-cream text-stone-400 flex items-center justify-center mx-auto text-2xl">
+        <i class="fa-regular fa-heart"></i>
+      </div>
+      <h3 class="font-serif text-2xl font-bold text-forest">Your Wishlist is Empty</h3>
+      <p class="text-stone-500 text-xs">Click the heart icon on any puppy portrait to save them to your private list.</p>
+      <a href="{% url 'catalog:pet_list' %}" class="btn-primary text-xs py-2 px-5 inline-block">
+        Explore Available Puppies
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

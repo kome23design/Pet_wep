@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delivery Fleet Dispatch Console | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-forest text-white py-8 border-b border-forest-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <span class="badge-gold text-[10px]">Logistics Directorate</span>
+        <h1 class="font-serif text-3xl font-bold mt-1">Delivery Fleet Dispatch Console</h1>
+        <p class="text-xs text-stone-300">Live operational telemetry oversight of all chaperoned Sprinters and flight nannies nationwide.</p>
+      </div>
+      <a href="{% url 'admin_dashboard:overview' %}" class="btn-secondary text-xs py-2 px-3 text-white border-stone-400 hover:bg-white hover:text-forest">
+        &larr; Back to Overview
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-8">
+  
+  <!-- Active Deliveries Cards -->
+  <div class="space-y-4">
+    <div class="flex items-center justify-between">
+      <h3 class="font-serif text-2xl font-bold text-forest">Active Chaperoned Shipments ({{ active_deliveries.count }})</h3>
+      <span class="badge-forest text-xs"><i class="fa-solid fa-signal mr-1"></i>Real-time GPS Active</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {% for d in active_deliveries %}
+        <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4 text-xs">
+          <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+            <div>
+              <span class="font-mono font-bold text-forest text-sm">{{ d.tracking_number }}</span>
+              <span class="text-stone-400 block text-[10px]">Order #{{ d.order.order_number }}</span>
+            </div>
+            <span class="badge-gold font-bold text-[10px]">{{ d.get_status_display }}</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 bg-cream p-3 rounded-xl border border-stone-200">
+            <div>
+              <span class="text-stone-400 text-[10px] uppercase font-bold block">Assigned Courier</span>
+              <span class="font-bold text-forest">{{ d.assigned_agent.get_full_name|default:"Unassigned" }}</span>
+              <span class="text-stone-400 block text-[10px]">{{ d.assigned_agent.delivery_profile.badge_number|default:"No badge" }}</span>
+            </div>
+            <div>
+              <span class="text-stone-400 text-[10px] uppercase font-bold block">Vehicle Type</span>
+              <span class="font-semibold text-stone-700">{{ d.get_carrier_type_display }}</span>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <p><strong>Companion:</strong> {{ d.order.items.first.pet_name }} ({{ d.order.items.first.pet_breed_name }})</p>
+            <p><strong>Destination:</strong> {{ d.destination_name }} &bull; {{ d.destination_address }}</p>
+            <p class="text-emerald-800 font-semibold"><i class="fa-solid fa-location-crosshairs mr-1"></i>Last Telemetry: {{ d.current_location_label }} ({{ d.last_location_update|date:"H:i:s A" }})</p>
+          </div>
+
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
+            <a href="{% url 'deliveries:live_tracking' d.tracking_number %}" target="_blank" class="btn-primary text-xs py-2 px-4 shadow-xs">
+              <i class="fa-solid fa-map-location-dot mr-1"></i> Open Live Map
+            </a>
+            <a href="{% url 'admin_dashboard:order_detail' d.order.order_number %}" class="btn-secondary text-xs py-2 px-3">
+              Order Details
+            </a>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-stone-400 text-xs col-span-2">No shipments currently in active transit.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Historical All Shipments Table -->
+  <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-4">
+    <h3 class="font-serif text-xl font-bold text-forest border-b border-stone-100 pb-2">All Delivery Records ({{ deliveries.count }})</h3>
+    <div class="overflow-x-auto text-xs">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-stone-400 uppercase text-[10px] border-b border-stone-100">
+            <th class="py-2.5">Tracking Code</th>
+            <th class="py-2.5">Order #</th>
+            <th class="py-2.5">Adopter Destination</th>
+            <th class="py-2.5">Assigned Agent</th>
+            <th class="py-2.5">Carrier Type</th>
+            <th class="py-2.5">Status</th>
+            <th class="py-2.5 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100 text-stone-700">
+          {% for d in deliveries %}
+            <tr class="hover:bg-cream">
+              <td class="py-3 font-mono font-bold text-forest">{{ d.tracking_number }}</td>
+              <td class="py-3 font-mono">{{ d.order.order_number }}</td>
+              <td class="py-3">{{ d.destination_name }} ({{ d.order.delivery_city }}, {{ d.order.delivery_state }})</td>
+              <td class="py-3">{{ d.assigned_agent.get_full_name|default:"Unassigned" }}</td>
+              <td class="py-3">{{ d.get_carrier_type_display }}</td>
+              <td class="py-3"><span class="badge-gold text-[9px]">{{ d.get_status_display }}</span></td>
+              <td class="py-3 text-right">
+                <a href="{% url 'deliveries:live_tracking' d.tracking_number %}" target="_blank" class="text-gold-dark hover:underline font-medium">
+                  Map &rarr;
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

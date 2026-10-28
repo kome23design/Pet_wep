@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Order #{{ order.order_number }} | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-forest text-white py-8 border-b border-forest-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <nav class="text-xs text-stone-300 mb-1 flex items-center gap-1.5">
+          <a href="{% url 'admin_dashboard:overview' %}" class="hover:underline">Dashboard</a>
+          <span>/</span>
+          <a href="{% url 'admin_dashboard:orders' %}" class="hover:underline">Orders</a>
+          <span>/</span>
+          <span class="text-gold font-mono">{{ order.order_number }}</span>
+        </nav>
+        <h1 class="font-serif text-3xl font-bold mt-1">Manage Order #{{ order.order_number }}</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        {% if order.delivery %}
+          <a href="{% url 'deliveries:live_tracking' order.delivery.tracking_number %}" target="_blank" class="btn-gold text-xs py-2 px-4 shadow-sm">
+            <i class="fa-solid fa-map-location-dot"></i> Open Customer Live Map
+          </a>
+        {% endif %}
+        <a href="{% url 'orders:download_receipt' order.order_number %}" target="_blank" class="btn-secondary text-xs py-2 px-3 text-white border-stone-400 hover:bg-white hover:text-forest">
+          <i class="fa-solid fa-print"></i> Printable Invoice
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    
+    <!-- LEFT: STATUS MANAGEMENT & COURIER ASSIGNMENT -->
+    <div class="lg:col-span-6 space-y-6">
+      
+      <!-- Status Transition Form -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-4 text-xs">
+        <h3 class="font-serif text-xl font-bold text-forest border-b border-stone-100 pb-2 flex items-center gap-2">
+          <i class="fa-solid fa-arrows-spin text-gold"></i> Controlled Status Transition
+        </h3>
+
+        <form method="POST" class="space-y-3">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="update_status">
+
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Current Order Status</label>
+            <select name="order_status" class="form-select text-xs">
+              <option value="pending_payment" {% if order.order_status == 'pending_payment' %}selected{% endif %}>Pending Payment</option>
+              <option value="confirmed" {% if order.order_status == 'confirmed' %}selected{% endif %}>Order Confirmed &amp; Health Vetted</option>
+              <option value="preparing" {% if order.order_status == 'preparing' %}selected{% endif %}>Preparing for Chaperoned Travel</option>
+              <option value="in_transit" {% if order.order_status == 'in_transit' %}selected{% endif %}>In Transit with Certified Courier</option>
+              <option value="out_for_delivery" {% if order.order_status == 'out_for_delivery' %}selected{% endif %}>Out for Final Hand-Delivery</option>
+              <option value="delivered" {% if order.order_status == 'delivered' %}selected{% endif %}>Delivered &amp; Custody Transferred</option>
+              <option value="cancelled" {% if order.order_status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Internal Transition Notes</label>
+            <input type="text" name="notes" placeholder="e.g. Cleared USDA health check; dispatched in Sprinter." class="form-input text-xs">
+          </div>
+
+          <button type="submit" class="btn-primary w-full py-2.5 text-xs font-semibold justify-center">
+            Apply Status Transition
+          </button>
+        </form>
+      </div>
+
+      <!-- Courier Assignment Form -->
+      {% if order.delivery %}
+        <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-4 text-xs">
+          <h3 class="font-serif text-xl font-bold text-forest border-b border-stone-100 pb-2 flex items-center gap-2">
+            <i class="fa-solid fa-user-shield text-gold"></i> Courier Chaperone Assignment
+          </h3>
+
+          <form method="POST" class="space-y-3">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="assign_courier">
+
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Assigned Delivery Agent</label>
+              <select name="courier_id" class="form-select text-xs">
+                <option value="">Select Delivery Agent</option>
+                {% for c in couriers %}
+                  <option value="{{ c.id }}" {% if order.delivery.assigned_agent.id == c.id %}selected{% endif %}>
+                    {{ c.get_full_name|default:c.username }} [Badge: {{ c.delivery_profile.badge_number|default:"N/A" }}]
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <button type="submit" class="btn-secondary w-full py-2.5 text-xs font-semibold justify-center">
+              Update Assigned Courier
+            </button>
+          </form>
+        </div>
+      {% endif %}
+
+      <!-- Audit Milestones -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-3 text-xs">
+        <h3 class="font-serif text-xl font-bold text-forest border-b border-stone-100 pb-2">Status Audit History</h3>
+        <div class="space-y-2">
+          {% for h in order.status_history.all %}
+            <div class="border-l-2 border-forest pl-3 py-1">
+              <span class="font-bold text-forest">{{ h.from_status }} &rarr; {{ h.to_status }}</span>
+              <span class="text-stone-400 text-[10px] block">{{ h.timestamp|date:"M d, Y - H:i" }} &bull; By: {{ h.changed_by.username|default:"System" }}</span>
+              {% if h.notes %}<p class="text-stone-500 text-[11px] mt-0.5">{{ h.notes }}</p>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY & ADOPTER SNAPSHOT -->
+    <div class="lg:col-span-6 space-y-6 text-xs">
+      
+      <!-- Adopter & Shipping Box -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-3">
+        <h3 class="font-serif text-xl font-bold text-forest border-b border-stone-100 pb-2">Client &amp; Destination Details</h3>
+        <p><strong>Adopter Legal Name:</strong> {{ order.customer_name }}</p>
+        <p><strong>Email Address:</strong> {{ order.customer_email }}</p>
+        <p><strong>Contact Phone:</strong> {{ order.customer_phone }}</p>
+        <p><strong>Destination:</strong> {{ order.destination_display }}</p>
+        {% if order.delivery_notes %}
+          <div class="bg-cream p-2.5 rounded-lg border border-stone-200 mt-2">
+            <strong>Access Notes:</strong> {{ order.delivery_notes }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Financials Box -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2">
+        <h3 class="font-serif text-xl font-bold text-forest border-b border-stone-100 pb-2">Financial Breakdown</h3>
+        <div class="flex justify-between text-stone-600">
+          <span>Placement Subtotal:</span>
+          <span>${{ order.subtotal|floatformat:2 }}</span>
+        </div>
+        <div class="flex justify-between text-stone-600">
+          <span>Chaperoned Travel Fee:</span>
+          <span>${{ order.delivery_fee|floatformat:2 }}</span>
+        </div>
+        <div class="flex justify-between text-stone-600">
+          <span>Sales Tax:</span>
+          <span>${{ order.tax_amount|floatformat:2 }}</span>
+        </div>
+        <div class="flex justify-between font-bold text-forest text-sm pt-2 border-t border-stone-100">
+          <span>Total Settled (USD):</span>
+          <span>${{ order.total_amount|floatformat:2 }}</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}

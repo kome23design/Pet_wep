@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Secure Checkout &amp; Travel Scheduling | Prestige Paws NYC{% endblock %}
+
+{% block content %}
+<div class="bg-cream-dark py-8 border-b border-[#DFD5C6]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <nav class="text-xs text-stone-500 mb-1 flex items-center gap-1.5">
+      <a href="{% url 'pages:home' %}" class="hover:underline">Home</a>
+      <span>/</span>
+      <a href="{% url 'cart:view_cart' %}" class="hover:underline">Cart</a>
+      <span>/</span>
+      <span class="text-forest font-medium">Checkout</span>
+    </nav>
+    <h1 class="font-serif text-3xl sm:text-4xl font-bold text-forest">Secure Placement &amp; Travel Checkout</h1>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10">
+  <form method="POST" action="{% url 'orders:checkout' %}" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+    {% csrf_token %}
+
+    <!-- LEFT: RECIPIENT & DELIVERY DETAILS -->
+    <div class="lg:col-span-7 space-y-8">
+      
+      <!-- 1. Client Contact Information -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+        <h3 class="font-serif text-2xl font-bold text-forest border-b border-stone-100 pb-3 flex items-center gap-2">
+          <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">1</span>
+          Adopter Contact Information
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div class="sm:col-span-2">
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Full Legal Name *</label>
+            {{ form.customer_name }}
+            {% if form.customer_name.errors %}<p class="text-red-600 mt-1">{{ form.customer_name.errors.0 }}</p>{% endif %}
+          </div>
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Email Address (For Tracking &amp; Vetting) *</label>
+            {{ form.customer_email }}
+            {% if form.customer_email.errors %}<p class="text-red-600 mt-1">{{ form.customer_email.errors.0 }}</p>{% endif %}
+          </div>
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Direct Phone Number (For Courier Contact) *</label>
+            {{ form.customer_phone }}
+            {% if form.customer_phone.errors %}<p class="text-red-600 mt-1">{{ form.customer_phone.errors.0 }}</p>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. US Delivery Residence Address -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+          <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2">
+            <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">2</span>
+            US Delivery Residence Address
+          </h3>
+          <span class="badge-gold text-[10px]">Nationwide Coverage</span>
+        </div>
+
+        <div class="space-y-4 text-xs">
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Street Address *</label>
+            {{ form.delivery_street_address }}
+            {% if form.delivery_street_address.errors %}<p class="text-red-600 mt-1">{{ form.delivery_street_address.errors.0 }}</p>{% endif %}
+          </div>
+
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Apartment, Suite, Unit, Penthouse (Optional)</label>
+            {{ form.delivery_apartment }}
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">City *</label>
+              {{ form.delivery_city }}
+              {% if form.delivery_city.errors %}<p class="text-red-600 mt-1">{{ form.delivery_city.errors.0 }}</p>{% endif %}
+            </div>
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">State *</label>
+              {{ form.delivery_state }}
+              {% if form.delivery_state.errors %}<p class="text-red-600 mt-1">{{ form.delivery_state.errors.0 }}</p>{% endif %}
+            </div>
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">ZIP Code *</label>
+              {{ form.delivery_postal_code }}
+              {% if form.delivery_postal_code.errors %}<p class="text-red-600 mt-1">{{ form.delivery_postal_code.errors.0 }}</p>{% endif %}
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Building Access / Delivery Instructions</label>
+            {{ form.delivery_notes }}
+            <p class="text-[10px] text-stone-400 mt-1">Provide front desk concierge instructions, gate codes, or elevator guidelines.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Chaperoned Travel Scheduling -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+        <h3 class="font-serif text-2xl font-bold text-forest border-b border-stone-100 pb-3 flex items-center gap-2">
+          <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">3</span>
+          Preferred Travel Scheduling
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Preferred Delivery Date</label>
+            {{ form.preferred_delivery_date }}
+            <p class="text-[10px] text-stone-400 mt-1">Requires 48 hours for final pre-travel veterinary inspection.</p>
+          </div>
+
+          <div>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Preferred Arrival Window</label>
+            {{ form.preferred_delivery_window }}
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Special Puppy Care Notes (Optional)</label>
+            {{ form.customer_notes }}
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Payment Method Choice -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+        <h3 class="font-serif text-2xl font-bold text-forest border-b border-stone-100 pb-3 flex items-center gap-2">
+          <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">4</span>
+          Payment Authorization
+        </h3>
+
+        <div class="space-y-3 text-sm">
+          <label class="flex items-start gap-3 p-4 rounded-xl border border-stone-200 bg-cream hover:bg-stone-50 cursor-pointer">
+            <input type="radio" name="payment_choice" value="simulator" checked class="mt-1 text-forest focus:ring-forest">
+            <div>
+              <span class="font-bold text-forest flex items-center gap-2">
+                Development Payment Simulator (Test Sandbox)
+                <span class="badge-gold text-[9px]">Recommended for Dev</span>
+              </span>
+              <p class="text-xs text-stone-500 mt-0.5">Test real transaction confirmation, inventory status updates, and chaperoned delivery dispatch without charging a real card.</p>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:bg-stone-50 cursor-pointer">
+            <input type="radio" name="payment_choice" value="stripe" class="mt-1 text-forest focus:ring-forest">
+            <div>
+              <span class="font-bold text-forest flex items-center gap-2">
+                Stripe Hosted Secure Checkout (Credit/Debit Card)
+                {% if not stripe_configured %}
+                  <span class="text-[10px] text-amber-700 bg-amber-100 px-2 py-0.5 rounded font-mono">Sandbox Mode Active</span>
+                {% endif %}
+              </span>
+              <p class="text-xs text-stone-500 mt-0.5">256-bit encrypted card processing via Stripe. (Redirects to simulator if Stripe API keys are unset in .env).</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- 5. Legal & Welfare Policy Agreements -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-3 text-xs">
+        <h4 class="font-serif text-lg font-bold text-forest border-b border-stone-100 pb-2">Compliance &amp; Animal Welfare Pledge</h4>
+        
+        <label class="flex items-start gap-3 cursor-pointer">
+          {{ form.terms_accepted }}
+          <span class="text-stone-700">
+            I agree to the <a href="{% url 'pages:terms_policy' %}" target="_blank" class="text-gold-dark font-medium underline">Placement Terms &amp; Conditions</a>, confirming I am legally permitted to adopt this pet and maintain a safe living environment.
+          </span>
+        </label>
+        {% if form.terms_accepted.errors %}<p class="text-red-600 pl-6">{{ form.terms_accepted.errors.0 }}</p>{% endif %}
+
+        <label class="flex items-start gap-3 cursor-pointer">
+          {{ form.welfare_policy_acknowledged }}
+          <span class="text-stone-700">
+            I acknowledge the <a href="{% url 'pages:welfare_standards' %}" target="_blank" class="text-gold-dark font-medium underline">Prestige Paws Animal Welfare &amp; Chaperoned Transport Policy</a>. I understand that dispatch is contingent upon veterinary health certificate clearance.
+          </span>
+        </label>
+        {% if form.welfare_policy_acknowledged.errors %}<p class="text-red-600 pl-6">{{ form.welfare_policy_acknowledged.errors.0 }}</p>{% endif %}
+      </div>
+
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY & SUBMIT -->
+    <div class="lg:col-span-5">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm sticky top-24 space-y-5">
+        <h3 class="font-serif text-2xl font-bold text-forest pb-3 border-b border-stone-200">Order Summary</h3>
+
+        <!-- Items Snapshot -->
+        <div class="space-y-3">
+          {% for item in items %}
+            <div class="flex items-center gap-3 p-3 bg-cream rounded-xl border border-stone-200">
+              <img src="{{ item.pet.primary_image.url|default:'/static/images/placeholder_puppy.svg' }}" 
+                   alt="{{ item.pet.name }}" 
+                   class="w-16 h-16 object-cover rounded-lg border border-stone-200">
+              <div class="flex-grow">
+                <span class="text-[9px] font-bold text-gold-dark uppercase block">{{ item.pet.breed.name }}</span>
+                <span class="font-serif text-lg font-bold text-forest block">{{ item.pet.name }}</span>
+                <span class="text-[10px] text-stone-500 font-mono">Ref: {{ item.pet.reference_number }}</span>
+              </div>
+              <span class="font-bold text-sm text-forest">${{ item.pet.price|floatformat:2 }}</span>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Financial Breakdown -->
+        <div class="space-y-2.5 text-xs text-stone-600 pt-2 border-t border-stone-100">
+          <div class="flex justify-between">
+            <span>Subtotal</span>
+            <span class="font-medium text-forest">${{ cart.subtotal|floatformat:2 }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Chaperoned Companion Transport</span>
+            <span class="font-medium text-forest">${{ cart.delivery_fee|floatformat:2 }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Estimated Sales Tax (8.88%)</span>
+            <span class="font-medium text-forest">${{ cart.tax_amount|floatformat:2 }}</span>
+          </div>
+          <div class="border-t border-stone-200 pt-3 flex justify-between items-baseline">
+            <span class="font-serif text-base font-bold text-forest">Total (USD)</span>
+            <span class="font-serif text-3xl font-bold text-forest">${{ cart.total|floatformat:2 }}</span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-primary w-full py-4 text-base font-semibold justify-center shadow-md hover:shadow-lg">
+          <i class="fa-solid fa-lock mr-2"></i> Authorize &amp; Place Order
+        </button>
+
+        <p class="text-[10px] text-stone-400 text-center leading-relaxed">
+          By clicking above, your selected companion is reserved in our inventory. You will be redirected to payment verification.
+        </p>
+
+        <!-- Guarantee Badge -->
+        <div class="bg-forest/5 p-4 rounded-xl border border-forest/15 space-y-1.5 text-xs text-stone-700">
+          <div class="flex items-center gap-2 font-bold text-forest">
+            <i class="fa-solid fa-shield-cat text-gold"></i>
+            <span>Prestige Paws Assurance</span>
+          </div>
+          <p class="text-[11px] text-stone-500 leading-relaxed">
+            Full refund guaranteed if puppy fails pre-travel veterinary clearance. In-cabin flight nanny coordination activated upon itinerary confirmation.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </form>
+</div>
+{% endblock %}
