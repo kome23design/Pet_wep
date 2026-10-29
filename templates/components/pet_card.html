@@ -7,6 +7,7 @@
            alt="{{ pet.name }} - {{ pet.breed.name }}" 
            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
            loading="lazy"
+           decoding="async"
            onerror="this.onerror=null; this.src='{% static 'images/placeholder_puppy.svg' %}';">
     </a>
 

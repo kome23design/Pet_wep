@@ -36,11 +36,27 @@ class CheckoutForm(forms.ModelForm):
     )
     payment_choice = forms.ChoiceField(
         choices=(
-            ('stripe', 'Secure Credit / Debit Card (Stripe)'),
-            ('simulator', 'Development Payment Simulator (Test Sandbox)'),
+            ('card', 'Credit / Debit Card (Stripe)'),
+            ('apple_pay', 'Apple Pay Digital Wallet'),
+            ('paypal', 'PayPal Instant Checkout'),
+            ('zelle', 'Zelle Private Bank Transfer'),
+            ('simulator', 'Development Sandbox Simulator (Test Sandbox)'),
         ),
         widget=forms.RadioSelect,
         initial='simulator'
+    )
+    coupon_code = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Enter Promo Code (e.g. PRESTIGE10)'})
+    )
+    create_account = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-checkbox', 'id': 'create_account_toggle'}),
+        help_text='Save my information and create a private client atelier account.'
+    )
+    account_password = forms.CharField(
+        required=False,
+        widget=forms.PasswordInput(attrs={'class': 'form-input', 'placeholder': 'Create secure password (min. 8 characters)', 'id': 'account_password_input'})
     )
     terms_accepted = forms.BooleanField(
         required=True,

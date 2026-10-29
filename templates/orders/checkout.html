@@ -18,14 +18,32 @@
 </div>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-8 py-10">
-  <form method="POST" action="{% url 'orders:checkout' %}" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+  {% if not request.user.is_authenticated %}
+    <!-- GUEST CHECKOUT NOTIFICATION -->
+    <div class="mb-8 p-4 sm:p-5 rounded-2xl bg-amber-50/80 border border-amber-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs shadow-xs" data-aos="fade-down">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-full bg-gold/20 text-gold-dark flex items-center justify-center shrink-0 text-base">
+          <i class="fa-solid fa-user-check"></i>
+        </div>
+        <div>
+          <span class="font-bold text-forest text-sm block">Guest Checkout Active</span>
+          <span class="text-stone-600">You can complete your puppy reservation with or without creating an account. All veterinary health certifications and itinerary details will be dispatched directly to your email.</span>
+        </div>
+      </div>
+      <a href="{% url 'accounts:login' %}?next={% url 'orders:checkout' %}" class="btn-secondary text-xs py-2 px-4 whitespace-nowrap self-start sm:self-auto shrink-0">
+        Sign In for Saved Residences &rarr;
+      </a>
+    </div>
+  {% endif %}
+
+  <form method="POST" action="{% url 'orders:checkout' %}" id="checkout-form" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
     {% csrf_token %}
 
     <!-- LEFT: RECIPIENT & DELIVERY DETAILS -->
     <div class="lg:col-span-7 space-y-8">
       
       <!-- 1. Client Contact Information -->
-      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4" data-aos="fade-up">
         <h3 class="font-serif text-2xl font-bold text-forest border-b border-stone-100 pb-3 flex items-center gap-2">
           <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">1</span>
           Adopter Contact Information
@@ -38,7 +56,7 @@
             {% if form.customer_name.errors %}<p class="text-red-600 mt-1">{{ form.customer_name.errors.0 }}</p>{% endif %}
           </div>
           <div>
-            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Email Address (For Tracking &amp; Vetting) *</label>
+            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Email Address (For Vetting &amp; Updates) *</label>
             {{ form.customer_email }}
             {% if form.customer_email.errors %}<p class="text-red-600 mt-1">{{ form.customer_email.errors.0 }}</p>{% endif %}
           </div>
@@ -47,11 +65,30 @@
             {{ form.customer_phone }}
             {% if form.customer_phone.errors %}<p class="text-red-600 mt-1">{{ form.customer_phone.errors.0 }}</p>{% endif %}
           </div>
+
+          {% if not request.user.is_authenticated %}
+            <!-- Optional Account Creation for Guest -->
+            <div class="sm:col-span-2 pt-3 border-t border-stone-100 space-y-3">
+              <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-forest select-none">
+                <input type="checkbox" name="create_account" id="create_account_toggle" class="form-checkbox text-forest rounded" {% if form.create_account.value %}checked{% endif %}>
+                <span>Create a client account for order tracking &amp; future reservations (Optional)</span>
+              </label>
+              
+              <div id="account_password_field" class="{% if not form.create_account.value %}hidden{% endif %} space-y-1">
+                <label class="block font-bold text-forest uppercase tracking-wider text-[11px]">Create Account Password *</label>
+                <div class="relative">
+                  {{ form.account_password }}
+                </div>
+                <p class="text-[10px] text-stone-400">Min. 8 characters. View/hide toggle is enabled on all password fields.</p>
+                {% if form.account_password.errors %}<p class="text-red-600 mt-1">{{ form.account_password.errors.0 }}</p>{% endif %}
+              </div>
+            </div>
+          {% endif %}
         </div>
       </div>
 
       <!-- 2. US Delivery Residence Address -->
-      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4" data-aos="fade-up">
         <div class="flex items-center justify-between border-b border-stone-100 pb-3">
           <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2">
             <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">2</span>
@@ -99,7 +136,7 @@
       </div>
 
       <!-- 3. Chaperoned Travel Scheduling -->
-      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4" data-aos="fade-up">
         <h3 class="font-serif text-2xl font-bold text-forest border-b border-stone-100 pb-3 flex items-center gap-2">
           <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">3</span>
           Preferred Travel Scheduling
@@ -124,42 +161,100 @@
         </div>
       </div>
 
-      <!-- 4. Payment Method Choice -->
-      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
-        <h3 class="font-serif text-2xl font-bold text-forest border-b border-stone-100 pb-3 flex items-center gap-2">
-          <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">4</span>
-          Payment Authorization
-        </h3>
+      <!-- 4. Payment Method Choice (PayPal, Zelle, Apple Pay, Card, Simulator) -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4" data-aos="fade-up">
+        <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+          <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2">
+            <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">4</span>
+            Payment Authorization
+          </h3>
+          <span class="text-xs text-stone-500 font-medium"><i class="fa-solid fa-lock text-emerald-600 mr-1"></i>256-Bit SSL Encrypted</span>
+        </div>
 
-        <div class="space-y-3 text-sm">
-          <label class="flex items-start gap-3 p-4 rounded-xl border border-stone-200 bg-cream hover:bg-stone-50 cursor-pointer">
-            <input type="radio" name="payment_choice" value="simulator" checked class="mt-1 text-forest focus:ring-forest">
-            <div>
-              <span class="font-bold text-forest flex items-center gap-2">
-                Development Payment Simulator (Test Sandbox)
-                <span class="badge-gold text-[9px]">Recommended for Dev</span>
-              </span>
-              <p class="text-xs text-stone-500 mt-0.5">Test real transaction confirmation, inventory status updates, and chaperoned delivery dispatch without charging a real card.</p>
+        <div class="space-y-3 text-sm" id="payment-methods-container">
+          <!-- 1. Apple Pay -->
+          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-cream">
+            <input type="radio" name="payment_choice" value="apple_pay" class="mt-1 text-forest focus:ring-forest">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-forest flex items-center gap-2 text-sm">
+                  <span class="bg-black text-white px-2.5 py-0.5 rounded text-xs font-bold tracking-tight"><i class="fa-brands fa-apple text-sm mr-1"></i>Pay</span>
+                  Apple Pay Digital Wallet
+                </span>
+                <span class="text-[10px] font-bold text-stone-500 bg-white px-2 py-0.5 rounded border border-stone-200">1-Touch Biometric</span>
+              </div>
+              <p class="text-xs text-stone-500 mt-1">Instant authorization using Face ID, Touch ID, or Apple passcode on compatible Apple devices.</p>
             </div>
           </label>
 
-          <label class="flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:bg-stone-50 cursor-pointer">
-            <input type="radio" name="payment_choice" value="stripe" class="mt-1 text-forest focus:ring-forest">
-            <div>
-              <span class="font-bold text-forest flex items-center gap-2">
-                Stripe Hosted Secure Checkout (Credit/Debit Card)
-                {% if not stripe_configured %}
-                  <span class="text-[10px] text-amber-700 bg-amber-100 px-2 py-0.5 rounded font-mono">Sandbox Mode Active</span>
-                {% endif %}
-              </span>
-              <p class="text-xs text-stone-500 mt-0.5">256-bit encrypted card processing via Stripe. (Redirects to simulator if Stripe API keys are unset in .env).</p>
+          <!-- 2. PayPal -->
+          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-white">
+            <input type="radio" name="payment_choice" value="paypal" class="mt-1 text-forest focus:ring-forest">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-forest flex items-center gap-2 text-sm">
+                  <span class="bg-[#003087] text-white px-2 py-0.5 rounded text-xs font-bold tracking-tight italic"><i class="fa-brands fa-paypal text-sm mr-1 text-[#0079C1]"></i>PayPal</span>
+                  PayPal Express Checkout
+                </span>
+                <span class="text-[10px] font-bold text-stone-500 bg-stone-50 px-2 py-0.5 rounded border border-stone-200">Buyer Protection</span>
+              </div>
+              <p class="text-xs text-stone-500 mt-1">Pay smoothly using your PayPal balance, linked bank account, or PayPal Credit.</p>
+            </div>
+          </label>
+
+          <!-- 3. Zelle Private Transfer -->
+          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-white">
+            <input type="radio" name="payment_choice" value="zelle" class="mt-1 text-forest focus:ring-forest">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-forest flex items-center gap-2 text-sm">
+                  <span class="bg-[#7414CA] text-white px-2 py-0.5 rounded text-xs font-bold tracking-tight">Zelle&reg;</span>
+                  Zelle Private Bank Transfer
+                </span>
+                <span class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">Zero Processing Fee</span>
+              </div>
+              <p class="text-xs text-stone-500 mt-1">Direct wire transfer to Atelier Treasury at <strong class="text-forest">payments@prestigepaws.nyc</strong>. Instant verification upon order submission.</p>
+            </div>
+          </label>
+
+          <!-- 4. Credit / Debit Card (Stripe) -->
+          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-white">
+            <input type="radio" name="payment_choice" value="card" class="mt-1 text-forest focus:ring-forest">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-forest flex items-center gap-2 text-sm">
+                  <i class="fa-solid fa-credit-card text-gold-dark text-base"></i>
+                  Credit / Debit Card (Stripe Hosted)
+                </span>
+                <div class="flex items-center gap-1.5 text-stone-400 text-sm">
+                  <i class="fa-brands fa-cc-visa"></i>
+                  <i class="fa-brands fa-cc-mastercard"></i>
+                  <i class="fa-brands fa-cc-amex"></i>
+                </div>
+              </div>
+              <p class="text-xs text-stone-500 mt-1">Encrypted card authorization processed securely via Stripe. Card details are never stored on our servers.</p>
+            </div>
+          </label>
+
+          <!-- 5. Development Payment Simulator -->
+          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-gold/80 transition-all cursor-pointer bg-amber-50/50">
+            <input type="radio" name="payment_choice" value="simulator" checked class="mt-1 text-forest focus:ring-forest">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-forest flex items-center gap-2 text-sm">
+                  <i class="fa-solid fa-flask-vial text-amber-600"></i>
+                  Development Payment Simulator (Test Sandbox)
+                </span>
+                <span class="badge-gold text-[9px]">Recommended for Dev</span>
+              </div>
+              <p class="text-xs text-stone-500 mt-1">Instant simulated checkout without charging a real bank card. Updates inventory and dispatches real reservation records.</p>
             </div>
           </label>
         </div>
       </div>
 
       <!-- 5. Legal & Welfare Policy Agreements -->
-      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-3 text-xs">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-3 text-xs" data-aos="fade-up">
         <h4 class="font-serif text-lg font-bold text-forest border-b border-stone-100 pb-2">Compliance &amp; Animal Welfare Pledge</h4>
         
         <label class="flex items-start gap-3 cursor-pointer">
@@ -181,9 +276,9 @@
 
     </div>
 
-    <!-- RIGHT: ORDER SUMMARY & SUBMIT -->
+    <!-- RIGHT: ORDER SUMMARY & COUPON & SUBMIT -->
     <div class="lg:col-span-5">
-      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm sticky top-24 space-y-5">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm sticky top-24 space-y-5" data-aos="fade-left">
         <h3 class="font-serif text-2xl font-bold text-forest pb-3 border-b border-stone-200">Order Summary</h3>
 
         <!-- Items Snapshot -->
@@ -203,8 +298,30 @@
           {% endfor %}
         </div>
 
+        <!-- COUPON CODE BOX -->
+        <div class="pt-4 border-t border-stone-200 space-y-2">
+          <label class="block text-xs font-bold text-forest uppercase tracking-wider">
+            <i class="fa-solid fa-ticket text-gold mr-1"></i> Coupon / Promo Code
+          </label>
+          <div class="flex gap-2">
+            <input type="text" 
+                   id="coupon-code-input" 
+                   name="coupon_code" 
+                   value="{{ form.coupon_code.value|default:'' }}" 
+                   placeholder="e.g. PRESTIGE10 or WELCOME500" 
+                   class="form-input text-xs uppercase flex-1 font-mono tracking-wider">
+            <button type="button" 
+                    id="apply-coupon-btn" 
+                    class="btn-secondary text-xs py-2 px-4 whitespace-nowrap cursor-pointer">
+              Apply
+            </button>
+          </div>
+          <div id="coupon-feedback" class="text-xs font-medium"></div>
+          <p class="text-[10px] text-stone-400">Active atelier codes: <span class="font-mono text-stone-600 font-bold">PRESTIGE10</span> (10% off), <span class="font-mono text-stone-600 font-bold">WELCOME500</span> ($500 off), <span class="font-mono text-stone-600 font-bold">NYCPAWS</span> ($250 off)</p>
+        </div>
+
         <!-- Financial Breakdown -->
-        <div class="space-y-2.5 text-xs text-stone-600 pt-2 border-t border-stone-100">
+        <div class="space-y-2.5 text-xs text-stone-600 pt-3 border-t border-stone-100">
           <div class="flex justify-between">
             <span>Subtotal</span>
             <span class="font-medium text-forest">${{ cart.subtotal|floatformat:2 }}</span>
@@ -217,14 +334,21 @@
             <span>Estimated Sales Tax (8.88%)</span>
             <span class="font-medium text-forest">${{ cart.tax_amount|floatformat:2 }}</span>
           </div>
+
+          <!-- Dynamic Discount Row -->
+          <div id="discount-row" class="hidden justify-between text-emerald-700 font-bold bg-emerald-50 p-2 rounded-lg border border-emerald-200">
+            <span>Coupon Discount (<span id="coupon-applied-name"></span>)</span>
+            <span id="coupon-discount-val">-$0.00</span>
+          </div>
+
           <div class="border-t border-stone-200 pt-3 flex justify-between items-baseline">
             <span class="font-serif text-base font-bold text-forest">Total (USD)</span>
-            <span class="font-serif text-3xl font-bold text-forest">${{ cart.total|floatformat:2 }}</span>
+            <span id="order-total-val" class="font-serif text-3xl font-bold text-forest">${{ cart.total|floatformat:2 }}</span>
           </div>
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="btn-primary w-full py-4 text-base font-semibold justify-center shadow-md hover:shadow-lg">
+        <button type="submit" class="btn-primary w-full py-4 text-base font-semibold justify-center shadow-md hover:shadow-lg cursor-pointer">
           <i class="fa-solid fa-lock mr-2"></i> Authorize &amp; Place Order
         </button>
 
@@ -248,4 +372,97 @@
 
   </form>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. Toggle Account Password Field for Guest Checkout
+  const accountToggle = document.getElementById('create_account_toggle');
+  const passwordField = document.getElementById('account_password_field');
+  const passwordInput = document.getElementById('account_password_input');
+
+  if (accountToggle && passwordField) {
+    accountToggle.addEventListener('change', function() {
+      if (this.checked) {
+        passwordField.classList.remove('hidden');
+        if (passwordInput) passwordInput.required = true;
+      } else {
+        passwordField.classList.add('hidden');
+        if (passwordInput) {
+          passwordInput.required = false;
+          passwordInput.value = '';
+        }
+      }
+    });
+  }
+
+  // 2. Interactive Coupon Code Validation via AJAX
+  const couponInput = document.getElementById('coupon-code-input');
+  const applyBtn = document.getElementById('apply-coupon-btn');
+  const feedback = document.getElementById('coupon-feedback');
+  const discountRow = document.getElementById('discount-row');
+  const couponAppliedName = document.getElementById('coupon-applied-name');
+  const couponDiscountVal = document.getElementById('coupon-discount-val');
+  const orderTotalVal = document.getElementById('order-total-val');
+
+  if (applyBtn && couponInput) {
+    applyBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const code = couponInput.value.trim();
+      if (!code) {
+        feedback.textContent = 'Please enter a promotional code.';
+        feedback.className = 'text-xs font-medium text-amber-700';
+        return;
+      }
+
+      applyBtn.disabled = true;
+      applyBtn.textContent = 'Verifying...';
+
+      fetch(`/orders/api/validate-coupon/?code=${encodeURIComponent(code)}`, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        applyBtn.disabled = false;
+        applyBtn.textContent = 'Apply';
+
+        if (data.valid) {
+          feedback.textContent = `✓ ${data.message}`;
+          feedback.className = 'text-xs font-semibold text-emerald-700';
+          
+          if (discountRow) {
+            discountRow.classList.remove('hidden');
+            discountRow.classList.add('flex');
+          }
+          if (couponAppliedName) couponAppliedName.textContent = data.code;
+          if (couponDiscountVal) couponDiscountVal.textContent = `-${data.discount_display}`;
+          if (orderTotalVal) orderTotalVal.textContent = data.new_total_display;
+        } else {
+          feedback.textContent = `✗ ${data.message}`;
+          feedback.className = 'text-xs font-medium text-rose-600';
+          
+          if (discountRow) {
+            discountRow.classList.add('hidden');
+            discountRow.classList.remove('flex');
+          }
+        }
+      })
+      .catch(() => {
+        applyBtn.disabled = false;
+        applyBtn.textContent = 'Apply';
+        feedback.textContent = 'Unable to validate code at this time.';
+        feedback.className = 'text-xs font-medium text-rose-600';
+      });
+    });
+
+    // Auto-apply if code already prefilled
+    if (couponInput.value.trim().length >= 4) {
+      applyBtn.click();
+    }
+  }
+});
+</script>
 {% endblock %}

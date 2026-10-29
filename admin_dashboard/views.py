@@ -119,6 +119,54 @@ def add_pet_view(request):
 
 
 @user_passes_test(staff_required, login_url='accounts:login')
+def manage_pet_gallery_view(request, pet_id):
+    pet = get_object_or_404(Pet, id=pet_id)
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'add_image':
+            image_file = request.FILES.get('image_file')
+            image_url = request.POST.get('image_url', '').strip()
+            caption = request.POST.get('caption', '').strip()
+            is_primary = bool(request.POST.get('is_primary'))
+
+            if image_file or image_url:
+                if is_primary:
+                    pet.images.update(is_primary=False)
+                new_img = PetImage(
+                    pet=pet,
+                    caption=caption,
+                    is_primary=is_primary or (pet.images.count() == 0),
+                    display_order=pet.images.count() + 1
+                )
+                if image_file:
+                    new_img.image = image_file
+                if image_url:
+                    new_img.image_url = image_url
+                new_img.save()
+                messages.success(request, f"New gallery photograph added to {pet.name}.")
+            else:
+                messages.error(request, "Please provide an image file or a valid image URL.")
+        elif action == 'delete_image':
+            img_id = request.POST.get('image_id')
+            img = get_object_or_404(PetImage, id=img_id, pet=pet)
+            img.delete()
+            # If no primary left, pick first
+            if not pet.images.filter(is_primary=True).exists() and pet.images.exists():
+                first = pet.images.first()
+                first.is_primary = True
+                first.save(update_fields=['is_primary'])
+            messages.info(request, "Gallery photo removed.")
+        elif action == 'set_primary':
+            img_id = request.POST.get('image_id')
+            pet.images.update(is_primary=False)
+            PetImage.objects.filter(id=img_id, pet=pet).update(is_primary=True)
+            messages.success(request, "Primary display photograph updated.")
+        return redirect('admin_dashboard:pet_gallery', pet_id=pet.id)
+
+    return render(request, 'admin_dashboard/pet_gallery.html', {'pet': pet, 'images': pet.images.all()})
+
+
+@user_passes_test(staff_required, login_url='accounts:login')
 def add_category_view(request):
     if request.method == 'POST':
         name = request.POST.get('name', '').strip()

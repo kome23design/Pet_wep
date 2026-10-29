@@ -13,25 +13,6 @@
       <p class="text-stone-500 text-xs">Access order status, companion delivery coordination, and health records.</p>
     </div>
 
-    <!-- Quick Demo Logins Bar -->
-    <div class="bg-cream p-3 rounded-xl border border-stone-200/80 text-xs text-stone-600 space-y-2">
-      <span class="font-bold text-forest block text-[10px] uppercase tracking-wider">Quick Demo Credentials:</span>
-      <div class="grid grid-cols-2 gap-2 text-[11px]">
-        <button type="button" onclick="document.getElementById('id_username').value='customer_sophie'; document.getElementById('id_password').value='CustomerPass2026!';" class="p-1.5 bg-white border border-stone-200 rounded text-left hover:border-gold">
-          <strong>Customer:</strong> customer_sophie
-        </button>
-        <button type="button" onclick="document.getElementById('id_username').value='courier_dave'; document.getElementById('id_password').value='CourierPass2026!';" class="p-1.5 bg-white border border-stone-200 rounded text-left hover:border-gold">
-          <strong>Courier:</strong> courier_dave
-        </button>
-        <button type="button" onclick="document.getElementById('id_username').value='staff_lisa'; document.getElementById('id_password').value='StaffPass2026!';" class="p-1.5 bg-white border border-stone-200 rounded text-left hover:border-gold">
-          <strong>Staff:</strong> staff_lisa
-        </button>
-        <button type="button" onclick="document.getElementById('id_username').value='admin'; document.getElementById('id_password').value='AdminPass2026!';" class="p-1.5 bg-white border border-stone-200 rounded text-left hover:border-gold">
-          <strong>Admin:</strong> admin
-        </button>
-      </div>
-    </div>
-
     <form method="POST" action="{% url 'accounts:login' %}" class="space-y-4 text-xs">
       {% csrf_token %}
       {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}

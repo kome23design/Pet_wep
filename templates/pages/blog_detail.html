@@ -64,14 +64,14 @@
   <div class="max-w-4xl mx-auto px-4 sm:px-8 py-10">
     <!-- COVER IMAGE -->
     <div class="rounded-3xl overflow-hidden border border-stone-200 shadow-md mb-10 bg-white">
-      <img src="{{ post.cover_url }}" alt="{{ post.title }}" class="w-full h-80 sm:h-96 md:h-[420px] object-cover">
+      <img src="{{ post.cover_url }}" alt="{{ post.title }}" loading="lazy" decoding="async" class="w-full h-80 sm:h-96 md:h-[420px] object-cover">
     </div>
 
     <!-- MAIN BODY CONTENT -->
-    <div class="bg-white p-8 sm:p-12 rounded-3xl border border-stone-200 shadow-xs space-y-6">
+    <div class="bg-white p-6 sm:p-12 rounded-3xl border border-stone-200 shadow-xs space-y-6 overflow-hidden">
       
       <!-- Article Content -->
-      <div class="prose prose-stone max-w-none text-stone-700 text-sm sm:text-base leading-relaxed space-y-6">
+      <div class="prose prose-stone max-w-none text-stone-700 text-sm sm:text-base leading-relaxed space-y-6 break-words overflow-x-auto">
         {{ post.content|safe }}
       </div>
 

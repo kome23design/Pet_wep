@@ -81,14 +81,16 @@
     </div>
 
     <!-- Hero Image Showcase -->
-    <div class="lg:col-span-5 relative">
+    <div class="lg:col-span-5 relative overflow-hidden">
       <div class="relative mx-auto max-w-md lg:max-w-none">
         <!-- Decorative frame -->
-        <div class="absolute -inset-4 bg-gradient-to-tr from-gold/30 to-forest/20 rounded-3xl transform rotate-2 blur-xs"></div>
+        <div class="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-gradient-to-tr from-gold/30 to-forest/20 rounded-2xl"></div>
         <div class="relative bg-white p-3 rounded-2xl shadow-xl border border-stone-200 overflow-hidden">
           <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=1000&q=80" 
                alt="Prestige Paws Maltipoo Puppy Portrait" 
                class="w-full h-96 sm:h-[480px] object-cover rounded-xl"
+               loading="eager"
+               decoding="async"
                onerror="this.onerror=null; this.src='{% static 'images/placeholder_puppy.svg' %}';">
           
           <div class="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md p-4 rounded-xl border border-stone-100 shadow-md flex items-center justify-between">
@@ -109,7 +111,7 @@
 </section>
 
 <!-- BREED COMPARISON & DISCOVERY GUIDE (Maltipoo vs Maltese) -->
-<section class="py-16 bg-white border-b border-[#DFD5C6]">
+<section class="py-16 bg-white border-b border-[#DFD5C6] overflow-hidden" data-aos="fade-up">
   <div class="max-w-7xl mx-auto px-4 sm:px-8">
     <div class="text-center max-w-2xl mx-auto mb-12">
       <span class="badge-gold">Breeding Excellence</span>
@@ -187,49 +189,73 @@
   </div>
 </section>
 
-<!-- FEATURED MALTIPOO PUPPIES -->
+<!-- FEATURED MALTIPOO PUPPIES (Swiper Carousel with 7 Posts) -->
 {% if featured_maltipoos %}
-<section class="py-16 bg-[#FAF8F5] border-b border-[#DFD5C6]">
+<section class="py-16 bg-[#FAF8F5] border-b border-[#DFD5C6] overflow-hidden" data-aos="fade-up">
   <div class="max-w-7xl mx-auto px-4 sm:px-8">
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
       <div>
         <span class="badge-gold">Teddy-Bear Companions</span>
         <h2 class="font-serif text-3xl sm:text-4xl font-bold text-forest mt-2">Featured Maltipoo Puppies</h2>
-        <p class="text-stone-500 text-sm mt-1">Hypoallergenic crossbreeds with sweet expressions and playful temperaments.</p>
+        <p class="text-stone-500 text-sm mt-1">Hypoallergenic crossbreeds with sweet expressions, silky curls, and playful temperaments.</p>
       </div>
-      <a href="{% url 'catalog:pet_list' %}?breed=maltipoo" class="text-forest hover:text-gold-dark font-semibold text-sm flex items-center gap-1.5 transition-colors">
-        View All Maltipoos <i class="fa-solid fa-arrow-right text-xs"></i>
-      </a>
+      <div class="flex items-center gap-4">
+        <a href="{% url 'catalog:pet_list' %}?breed=maltipoo" class="text-forest hover:text-gold-dark font-semibold text-sm flex items-center gap-1.5 transition-colors">
+          View All Maltipoos <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {% for pet in featured_maltipoos %}
-        {% include 'components/pet_card.html' with pet=pet %}
-      {% endfor %}
+    <!-- Maltipoo Swiper -->
+    <div class="relative px-2">
+      <div class="swiper maltipoo-swiper">
+        <div class="swiper-wrapper">
+          {% for pet in featured_maltipoos %}
+            <div class="swiper-slide h-auto pb-2">
+              {% include 'components/pet_card.html' with pet=pet %}
+            </div>
+          {% endfor %}
+        </div>
+        <div class="swiper-pagination maltipoo-pagination mt-4"></div>
+      </div>
+      <div class="swiper-button-next maltipoo-next !right-0 sm:!-right-2"></div>
+      <div class="swiper-button-prev maltipoo-prev !left-0 sm:!-left-2"></div>
     </div>
   </div>
 </section>
 {% endif %}
 
-<!-- FEATURED MALTESE PUPPIES -->
+<!-- FEATURED MALTESE PUPPIES (Swiper Carousel with 7 Posts) -->
 {% if featured_maltese %}
-<section class="py-16 bg-white border-b border-[#DFD5C6]">
+<section class="py-16 bg-white border-b border-[#DFD5C6] overflow-hidden" data-aos="fade-up">
   <div class="max-w-7xl mx-auto px-4 sm:px-8">
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
       <div>
         <span class="badge-gold">Purebred Elegance</span>
         <h2 class="font-serif text-3xl sm:text-4xl font-bold text-forest mt-2">Featured Maltese Puppies</h2>
-        <p class="text-stone-500 text-sm mt-1">Silky snow-white coats, dark expressive eyes, and sweet gentle spirits.</p>
+        <p class="text-stone-500 text-sm mt-1">Silky snow-white coats, dark expressive eyes, and gentle lap companion spirits.</p>
       </div>
-      <a href="{% url 'catalog:pet_list' %}?breed=maltese" class="text-forest hover:text-gold-dark font-semibold text-sm flex items-center gap-1.5 transition-colors">
-        View All Maltese <i class="fa-solid fa-arrow-right text-xs"></i>
-      </a>
+      <div class="flex items-center gap-4">
+        <a href="{% url 'catalog:pet_list' %}?breed=maltese" class="text-forest hover:text-gold-dark font-semibold text-sm flex items-center gap-1.5 transition-colors">
+          View All Maltese <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {% for pet in featured_maltese %}
-        {% include 'components/pet_card.html' with pet=pet %}
-      {% endfor %}
+    <!-- Maltese Swiper -->
+    <div class="relative px-2">
+      <div class="swiper maltese-swiper">
+        <div class="swiper-wrapper">
+          {% for pet in featured_maltese %}
+            <div class="swiper-slide h-auto pb-2">
+              {% include 'components/pet_card.html' with pet=pet %}
+            </div>
+          {% endfor %}
+        </div>
+        <div class="swiper-pagination maltese-pagination mt-4"></div>
+      </div>
+      <div class="swiper-button-next maltese-next !right-0 sm:!-right-2"></div>
+      <div class="swiper-button-prev maltese-prev !left-0 sm:!-left-2"></div>
     </div>
   </div>
 </section>
@@ -447,48 +473,125 @@
   </div>
 </section>
 
-<!-- APPROVED VERIFIED CUSTOMER REVIEWS -->
+<!-- APPROVED VERIFIED CUSTOMER REVIEWS (Swiper Carousel with 7 Posts) -->
 {% if approved_reviews %}
-<section class="py-16 bg-cream border-b border-[#DFD5C6]">
+<section class="py-16 bg-cream border-b border-[#DFD5C6] overflow-hidden" data-aos="fade-up">
   <div class="max-w-7xl mx-auto px-4 sm:px-8">
-    <div class="text-center max-w-2xl mx-auto mb-12">
-      <span class="badge-gold">Verified Client Experiences</span>
-      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-forest mt-2">What Our Adopters Say</h2>
-      <p class="text-stone-500 text-sm mt-1">Authentic experiences shared by families placed through Prestige Paws NYC.</p>
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+      <div>
+        <span class="badge-gold">Verified Client Experiences</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-forest mt-2">What Our Adopters Say</h2>
+        <p class="text-stone-500 text-sm mt-1">Authentic experiences shared by families placed through Prestige Paws NYC.</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="{% url 'reviews:review_list' %}" class="text-forest hover:text-gold-dark font-semibold text-sm flex items-center gap-1.5 transition-colors">
+          Read All Reviews <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {% for review in approved_reviews %}
-        <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between">
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <div class="text-amber-500 text-xs">
-                {% for _ in review.stars_range %}<i class="fa-solid fa-star"></i>{% endfor %}
+    <!-- Reviews Swiper -->
+    <div class="relative px-2">
+      <div class="swiper reviews-swiper">
+        <div class="swiper-wrapper">
+          {% for review in approved_reviews %}
+            <div class="swiper-slide h-auto pb-4">
+              <div class="bg-white p-6 rounded-2xl border border-stone-200/90 shadow-sm flex flex-col justify-between h-full hover:border-gold/60 transition-all hover:shadow-md">
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div class="text-amber-500 text-xs">
+                      {% for _ in review.stars_range %}<i class="fa-solid fa-star"></i>{% endfor %}
+                    </div>
+                    {% if review.is_verified_purchase %}
+                      <span class="badge-forest text-[9px]"><i class="fa-solid fa-circle-check mr-1"></i>Verified Adopter</span>
+                    {% endif %}
+                  </div>
+                  <h4 class="font-serif text-lg font-bold text-forest">&ldquo;{{ review.headline }}&rdquo;</h4>
+                  <p class="text-stone-600 text-xs leading-relaxed italic">&ldquo;{{ review.comment|truncatewords:32 }}&rdquo;</p>
+                </div>
+                <div class="pt-4 mt-4 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
+                  <div>
+                    <span class="font-bold text-forest block">{{ review.customer.get_full_name|default:review.customer.username }}</span>
+                    <span>{{ review.adopter_location }}</span>
+                  </div>
+                  {% if review.breed %}
+                    <span class="badge-gold text-[9px]">{{ review.breed.name }}</span>
+                  {% endif %}
+                </div>
               </div>
-              {% if review.is_verified_purchase %}
-                <span class="badge-forest text-[9px]"><i class="fa-solid fa-circle-check mr-1"></i>Verified Adopter</span>
-              {% endif %}
             </div>
-            <h4 class="font-serif text-xl font-bold text-forest">&ldquo;{{ review.headline }}&rdquo;</h4>
-            <p class="text-stone-600 text-xs leading-relaxed italic">&ldquo;{{ review.comment|truncatewords:40 }}&rdquo;</p>
-          </div>
-          <div class="pt-4 mt-4 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
-            <div>
-              <span class="font-bold text-forest block">{{ review.customer.get_full_name|default:review.customer.username }}</span>
-              <span>{{ review.adopter_location }}</span>
-            </div>
-            {% if review.breed %}
-              <span class="badge-gold text-[9px]">{{ review.breed.name }}</span>
-            {% endif %}
-          </div>
+          {% endfor %}
         </div>
-      {% endfor %}
+        <div class="swiper-pagination reviews-pagination mt-4"></div>
+      </div>
+      <div class="swiper-button-next reviews-next !right-0 sm:!-right-2"></div>
+      <div class="swiper-button-prev reviews-prev !left-0 sm:!-left-2"></div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- PRESTIGE JOURNAL & PET ADVICE BLOG (Swiper Carousel with 7 Posts) -->
+{% if featured_blogs %}
+<section class="py-16 bg-[#FAF8F5] border-b border-[#DFD5C6] overflow-hidden" data-aos="fade-up">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+      <div>
+        <span class="badge-gold">Atelier Veterinary Insights</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-forest mt-2">The Prestige Journal</h2>
+        <p class="text-stone-500 text-sm mt-1">Curated advice on pediatric toy puppy care, feline enrichment, nutrition, and home readiness.</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="{% url 'pages:blog_list' %}" class="text-forest hover:text-gold-dark font-semibold text-sm flex items-center gap-1.5 transition-colors">
+          View All Journal Articles <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+      </div>
     </div>
 
-    <div class="text-center mt-8">
-      <a href="{% url 'reviews:review_list' %}" class="btn-secondary text-xs py-2.5 px-6">
-        Read All Verified Client Reviews <i class="fa-solid fa-arrow-right ml-1"></i>
-      </a>
+    <!-- Blog Swiper -->
+    <div class="relative px-2">
+      <div class="swiper blog-swiper">
+        <div class="swiper-wrapper">
+          {% for post in featured_blogs %}
+            <div class="swiper-slide h-auto pb-4">
+              <article class="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm flex flex-col justify-between h-full hover:border-gold/70 transition-all hover:shadow-md group">
+                <div>
+                  <div class="relative h-48 overflow-hidden bg-stone-100">
+                    <img src="{{ post.cover_url }}" alt="{{ post.title }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    {% if post.category %}
+                      <span class="absolute top-3 left-3 bg-[#0F2319]/80 backdrop-blur-sm text-gold text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full border border-gold/30">
+                        {{ post.category.name }}
+                      </span>
+                    {% endif %}
+                  </div>
+                  <div class="p-5 space-y-2">
+                    <div class="flex items-center gap-2 text-[11px] text-stone-400">
+                      <span><i class="fa-regular fa-clock mr-1"></i>{{ post.read_time }}</span>
+                      <span>&bull;</span>
+                      <span>{{ post.published_at|date:"M d, Y" }}</span>
+                    </div>
+                    <h3 class="font-serif text-lg font-bold text-forest group-hover:text-gold-dark transition-colors line-clamp-2">
+                      <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                    </h3>
+                    <p class="text-stone-500 text-xs leading-relaxed line-clamp-3">
+                      {{ post.excerpt }}
+                    </p>
+                  </div>
+                </div>
+                <div class="p-5 pt-0 mt-3 flex items-center justify-between border-t border-stone-100 text-xs">
+                  <span class="text-stone-400 text-[11px] font-medium">{{ post.author }}</span>
+                  <a href="{{ post.get_absolute_url }}" class="text-forest hover:text-gold-dark font-bold text-xs flex items-center gap-1">
+                    Read Article <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                  </a>
+                </div>
+              </article>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="swiper-pagination blog-pagination mt-4"></div>
+      </div>
+      <div class="swiper-button-next blog-next !right-0 sm:!-right-2"></div>
+      <div class="swiper-button-prev blog-prev !left-0 sm:!-left-2"></div>
     </div>
   </div>
 </section>
@@ -496,7 +599,7 @@
 
 <!-- FAQS HIGHLIGHT -->
 {% if faqs %}
-<section class="py-16 bg-white">
+<section class="py-16 bg-white" data-aos="fade-up">
   <div class="max-w-4xl mx-auto px-4 sm:px-8">
     <div class="text-center mb-12">
       <span class="badge-gold">Common Inquiries</span>
@@ -527,4 +630,98 @@
 </section>
 {% endif %}
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof Swiper !== 'undefined') {
+    // 1. Maltipoo Swiper
+    if (document.querySelector('.maltipoo-swiper')) {
+      new Swiper('.maltipoo-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: false,
+        navigation: {
+          nextEl: '.maltipoo-next',
+          prevEl: '.maltipoo-prev',
+        },
+        pagination: {
+          el: '.maltipoo-pagination',
+          clickable: true,
+        },
+        breakpoints: {
+          640: { slidesPerView: 2, spaceBetween: 20 },
+          1024: { slidesPerView: 3, spaceBetween: 24 },
+          1280: { slidesPerView: 4, spaceBetween: 24 },
+        }
+      });
+    }
+
+    // 2. Maltese Swiper
+    if (document.querySelector('.maltese-swiper')) {
+      new Swiper('.maltese-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: false,
+        navigation: {
+          nextEl: '.maltese-next',
+          prevEl: '.maltese-prev',
+        },
+        pagination: {
+          el: '.maltese-pagination',
+          clickable: true,
+        },
+        breakpoints: {
+          640: { slidesPerView: 2, spaceBetween: 20 },
+          1024: { slidesPerView: 3, spaceBetween: 24 },
+          1280: { slidesPerView: 4, spaceBetween: 24 },
+        }
+      });
+    }
+
+    // 3. Reviews Swiper
+    if (document.querySelector('.reviews-swiper')) {
+      new Swiper('.reviews-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: false,
+        navigation: {
+          nextEl: '.reviews-next',
+          prevEl: '.reviews-prev',
+        },
+        pagination: {
+          el: '.reviews-pagination',
+          clickable: true,
+        },
+        breakpoints: {
+          768: { slidesPerView: 2, spaceBetween: 20 },
+          1024: { slidesPerView: 3, spaceBetween: 24 },
+        }
+      });
+    }
+
+    // 4. Blog Swiper
+    if (document.querySelector('.blog-swiper')) {
+      new Swiper('.blog-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: false,
+        navigation: {
+          nextEl: '.blog-next',
+          prevEl: '.blog-prev',
+        },
+        pagination: {
+          el: '.blog-pagination',
+          clickable: true,
+        },
+        breakpoints: {
+          640: { slidesPerView: 2, spaceBetween: 20 },
+          1024: { slidesPerView: 3, spaceBetween: 24 },
+        }
+      });
+    }
+  }
+});
+</script>
 {% endblock %}

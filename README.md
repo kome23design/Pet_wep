@@ -110,14 +110,74 @@ Navigate your browser to `http://127.0.0.1:8000/`.
 
 ---
 
-## 🔑 Pre-Configured Demonstration Accounts
+## 🔑 Administrator & Staff Access Details
 
-| Role | Username | Password | Access Area |
-| :--- | :--- | :--- | :--- |
-| **Executive Admin** | `admin` | `AdminPass2026!` | Full access to `/portal/` and `/admin/` |
-| **Atelier Staff** | `staff_lisa` | `StaffPass2026!` | Management portal `/portal/` |
-| **Certified Courier** | `courier_dave` | `CourierPass2026!` | Courier GPS portal `/deliveries/courier/portal/` |
-| **Verified Client** | `customer_sophie`| `CustomerPass2026!` | Customer dashboard `/accounts/dashboard/` |
+The platform provides two administrative environments:
+1. **Executive Atelier Management Portal** (`/portal/`): A tailored, luxury administrative control center built with high-level KPI cards, puppy inventory controls, dynamic category/breed creation wizards, order fulfillment workflows, review moderation queues, and flight nanny dispatch telemetry.
+2. **Django Core Administration** (`/admin/`): The built-in low-level ORM administration suite for direct database model inspection, user group management, and system logs.
+
+---
+
+### 1. Default Administrator & Staff Credentials
+
+After running `python manage.py populate_demo_data`, the following pre-configured administrative and operational credentials are immediately available:
+
+| Role | Username | Password | Email | Direct URL | Scope & Permissions |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Executive Admin** *(Superuser)* | `admin` | `AdminPass2026!` | `admin@prestigepaws.nyc` | [`/portal/`](http://127.0.0.1:8000/portal/) & [`/admin/`](http://127.0.0.1:8000/admin/) | Full administrative clearance across both the Executive Portal and Django Core Admin. |
+| **Atelier Staff Manager** | `staff_lisa` | `StaffPass2026!` | `lisa@prestigepaws.nyc` | [`/portal/`](http://127.0.0.1:8000/portal/) | Store manager access for inventory adjustments, order fulfillment, and review approvals. |
+| **Certified Flight Courier** | `courier_dave` | `CourierPass2026!` | `courier.dave@prestigepaws.nyc` | [`/deliveries/courier/portal/`](http://127.0.0.1:8000/deliveries/courier/portal/) | Courier mobile console for in-transit GPS checkpoint telemetry updates. |
+| **Verified Private Adopter** | `customer_sophie` | `CustomerPass2026!` | `sophie.adopter@gmail.com` | [`/accounts/dashboard/`](http://127.0.0.1:8000/accounts/dashboard/) | Client dashboard with active adoption history and saved residences. |
+
+---
+
+### 2. How to Access the Admin Interfaces
+
+#### Method A: Direct Portal Access
+1. Start the development server (`python manage.py runserver`).
+2. Open your web browser and navigate directly to:
+   * **Executive Atelier Portal**: [http://127.0.0.1:8000/portal/](http://127.0.0.1:8000/portal/)
+   * **Django Core Admin**: [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
+3. Enter the username `admin` and password `AdminPass2026!`.
+
+#### Method B: Storefront Sign-In with Role Auto-Detection
+1. Navigate to the public storefront login at [http://127.0.0.1:8000/accounts/login/](http://127.0.0.1:8000/accounts/login/).
+2. Sign in with `admin` / `AdminPass2026!` (or `staff_lisa` / `StaffPass2026!`).
+3. Click the user profile dropdown located on the top-right navigation bar. An **Executive Portal** shortcut (`fa-shield-halved`) will automatically appear for staff and admin users, granting 1-click access to the management console.
+
+---
+
+### 3. Executive Portal Features & Route Breakdown
+
+| Section | Route | Capabilities |
+| :--- | :--- | :--- |
+| **Executive Overview** | `/portal/` | Live placement revenue KPI, active companion count, pending moderation counter, recent adoptions, and quick shortcuts. |
+| **Inventory Roster** | `/portal/inventory/` | Complete companion animal inventory with real-time status badges (`available`, `reserved`, `sold`, `unavailable`), price filters, and instant publishing controls. |
+| **Add New Puppy Listing** | `/portal/inventory/add-pet/` | Complete listing creation wizard: upload multiple photographs, register microchip ID, date of birth, breed, sex, hypoallergenic status, and USDA documentation. |
+| **Dynamic Category Creator** | `/portal/inventory/add-category/` | Add new pet categories (e.g., *Cats*, *Rabbits*, *Birds*) dynamically without modifying application code or running migrations. |
+| **Dynamic Breed Creator** | `/portal/inventory/add-breed/` | Add new breeds linked to any active category (e.g., *British Shorthair*, *Mini Lop Rabbit*) with instant storefront sidebar integration. |
+| **Order Management** | `/portal/orders/` | Placement history, payment verification status, status progression (`paid`, `processing`, `out_for_delivery`, `completed`, `cancelled`), and printable invoices. |
+| **Order Detail & Travel Coordination** | `/portal/orders/<order_number>/` | Full client dossier, travel scheduling, flight nanny assignment, and transaction logs. |
+| **Review Moderation Queue** | `/portal/reviews/` | Adopter review inspection queue with 1-click **Approve** or **Reject** buttons and automated verified-adopter badge validation. |
+| **Dispatch & Telemetry Console** | `/portal/dispatch/` | Active companion travel coordination, vehicle and flight nanny assignment, and live milestone updates. |
+
+---
+
+### 4. Creating Additional Administrator Accounts via CLI
+
+To create a new, custom superuser account from the terminal, execute:
+
+```bash
+# Windows PowerShell / macOS / Linux
+python manage.py createsuperuser
+```
+
+Follow the prompts to specify a username, email address, and secure password.
+
+To change or reset an existing administrator's password via CLI:
+```bash
+python manage.py changepassword admin
+```
 
 ---
 

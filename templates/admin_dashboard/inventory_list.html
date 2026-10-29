@@ -106,8 +106,11 @@
                   <span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[9px]">{{ pet.get_status_display }}</span>
                 {% endif %}
               </td>
-              <td class="py-2.5 text-right">
-                <a href="{{ pet.get_absolute_url }}" target="_blank" class="text-gold-dark hover:underline font-medium">
+              <td class="py-2.5 text-right whitespace-nowrap space-x-2">
+                <a href="{% url 'admin_dashboard:pet_gallery' pet.id %}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-cream hover:bg-cream-dark text-forest font-semibold border border-stone-200 text-[11px]" title="Manage Gallery Photos">
+                  <i class="fa-solid fa-images text-gold"></i> Photos ({{ pet.images.count }})
+                </a>
+                <a href="{{ pet.get_absolute_url }}" target="_blank" class="text-gold-dark hover:underline font-medium text-[11px]">
                   View <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               </td>

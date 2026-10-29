@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.dashboard_overview, name='overview'),
     path('inventory/', views.inventory_list, name='inventory'),
     path('inventory/add-pet/', views.add_pet_view, name='add_pet'),
+    path('inventory/<int:pet_id>/gallery/', views.manage_pet_gallery_view, name='pet_gallery'),
     path('inventory/add-category/', views.add_category_view, name='add_category'),
     path('inventory/add-breed/', views.add_breed_view, name='add_breed'),
     path('orders/', views.orders_management, name='orders'),

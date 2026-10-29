@@ -228,6 +228,7 @@ def pet_detail_view(request, slug):
 
     context = {
         'pet': pet,
+        'images': pet.images.all(),
         'related_pets': related_pets,
         'reviews': reviews,
     }

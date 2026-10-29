@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Gallery Photos &bull; {{ pet.name }} | Executive Portal{% endblock %}
+
+{% block content %}
+<div class="bg-forest-900 text-cream py-8 border-b border-forest-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div>
+      <div class="flex items-center gap-2 text-xs text-forest-100 mb-1">
+        <a href="{% url 'admin_dashboard:overview' %}" class="hover:text-gold">Executive Portal</a>
+        <span>/</span>
+        <a href="{% url 'admin_dashboard:inventory' %}" class="hover:text-gold">Inventory</a>
+        <span>/</span>
+        <span class="text-gold">{{ pet.name }} Gallery</span>
+      </div>
+      <h1 class="font-serif text-3xl font-bold text-white flex items-center gap-3">
+        <i class="fa-solid fa-images text-gold"></i> Gallery Photographs &bull; {{ pet.name }}
+      </h1>
+      <p class="text-xs text-forest-100 font-mono mt-1">Ref: {{ pet.reference_number }} &bull; {{ pet.breed.name }} ({{ pet.category.name }})</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="{{ pet.get_absolute_url }}" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-medium transition-all">
+        View Public Page <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+      </a>
+      <a href="{% url 'admin_dashboard:inventory' %}" class="btn-primary text-xs py-2 px-4">
+        &larr; Back to Inventory
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-8">
+
+  <!-- UPLOAD / ADD NEW PHOTO CARD -->
+  <div class="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-sm space-y-4">
+    <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+      <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2">
+        <i class="fa-solid fa-cloud-arrow-up text-gold"></i> Add New Pet Photograph
+      </h3>
+      <span class="badge-gold text-[10px]">Admin Asset Manager</span>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 sm:grid-cols-12 gap-4 text-xs">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="add_image">
+
+      <div class="sm:col-span-4">
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Upload File (Optional)</label>
+        <input type="file" name="image_file" accept="image/*" class="form-input text-xs py-2 bg-stone-50">
+        <p class="text-[10px] text-stone-400 mt-1">JPG, PNG, WEBP high-resolution photography</p>
+      </div>
+
+      <div class="sm:col-span-5">
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Or Photo URL (CDN / Mock)</label>
+        <input type="url" name="image_url" placeholder="https://images.unsplash.com/..." class="form-input text-xs py-2.5">
+        <p class="text-[10px] text-stone-400 mt-1">Direct web link to high-resolution asset</p>
+      </div>
+
+      <div class="sm:col-span-3">
+        <label class="block font-bold text-forest uppercase tracking-wider mb-1">Caption / Description</label>
+        <input type="text" name="caption" placeholder="Playful in nursery suite" class="form-input text-xs py-2.5">
+      </div>
+
+      <div class="sm:col-span-12 flex items-center justify-between pt-2">
+        <label class="flex items-center gap-2 cursor-pointer text-stone-700">
+          <input type="checkbox" name="is_primary" value="1" class="form-checkbox text-forest rounded">
+          <span>Set as Primary Display Photograph</span>
+        </label>
+        <button type="submit" class="btn-primary text-xs py-2.5 px-6">
+          <i class="fa-solid fa-plus mr-1"></i> Add Photograph to Gallery
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- CURRENT GALLERY PHOTOS GRID -->
+  <div class="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-sm space-y-6">
+    <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+      <h3 class="font-serif text-2xl font-bold text-forest">
+        Current Gallery Assets ({{ images.count }})
+      </h3>
+      <span class="text-xs text-stone-500">First image marked as Primary appears on catalog cards &amp; headers.</span>
+    </div>
+
+    {% if images %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for img in images %}
+          <div class="bg-cream rounded-2xl border {% if img.is_primary %}border-gold ring-2 ring-gold/40{% else %}border-stone-200{% endif %} overflow-hidden flex flex-col justify-between shadow-xs">
+            <div class="relative aspect-square overflow-hidden bg-stone-100">
+              <img src="{{ img.url }}" alt="{{ pet.name }}" class="w-full h-full object-cover">
+              {% if img.is_primary %}
+                <span class="absolute top-2 left-2 bg-gold text-[#0F2319] font-bold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded shadow">
+                  <i class="fa-solid fa-star mr-1"></i> Primary
+                </span>
+              {% endif %}
+            </div>
+
+            <div class="p-3.5 space-y-2 text-xs">
+              {% if img.caption %}
+                <p class="text-stone-600 font-medium truncate">{{ img.caption }}</p>
+              {% else %}
+                <p class="text-stone-400 italic">No caption set</p>
+              {% endif %}
+
+              <div class="pt-2 border-t border-stone-200/60 flex items-center justify-between gap-2">
+                {% if not img.is_primary %}
+                  <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="set_primary">
+                    <input type="hidden" name="image_id" value="{{ img.id }}">
+                    <button type="submit" class="text-[11px] font-semibold text-forest hover:text-gold transition-colors flex items-center gap-1">
+                      <i class="fa-regular fa-star"></i> Set Primary
+                    </button>
+                  </form>
+                {% else %}
+                  <span class="text-[11px] text-gold-dark font-bold"><i class="fa-solid fa-check"></i> Active Hero</span>
+                {% endif %}
+
+                <form method="POST" onsubmit="return confirm('Remove this photograph from gallery?');">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="delete_image">
+                  <input type="hidden" name="image_id" value="{{ img.id }}">
+                  <button type="submit" class="text-[11px] font-semibold text-rose-600 hover:text-rose-800 transition-colors">
+                    <i class="fa-regular fa-trash-can mr-0.5"></i> Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="py-12 text-center text-stone-400 text-xs">
+        <i class="fa-solid fa-images text-3xl mb-2 text-stone-300 block"></i>
+        No gallery photos currently registered for {{ pet.name }}. Use the form above to add photographs.
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

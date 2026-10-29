@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login as auth_login
 from django.contrib import messages
+from django.http import JsonResponse
 from django.db import transaction
 from django.urls import reverse
 from django.conf import settings
@@ -8,11 +10,49 @@ from decimal import Decimal
 
 from cart.models import Cart
 from catalog.models import Pet
-from orders.models import Order, OrderItem, OrderStatusHistory
+from orders.models import Order, OrderItem, OrderStatusHistory, Coupon
 from orders.forms import CheckoutForm
-from accounts.models import CustomerAddress
+from accounts.models import User, CustomerAddress
 from deliveries.models import Delivery, DeliveryEvent
 from payments.models import Payment
+
+def validate_coupon_api(request):
+    """
+    JSON API for instant coupon validation at checkout.
+    """
+    code = request.GET.get('code', '').strip()
+    if not code:
+        return JsonResponse({'valid': False, 'message': 'Please enter a coupon code.'})
+
+    coupon = Coupon.objects.filter(code__iexact=code).first()
+    if not coupon:
+        return JsonResponse({'valid': False, 'message': 'Invalid coupon code. Please verify spelling.'})
+
+    # Get cart subtotal
+    cart = None
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+    elif request.session.session_key:
+        cart = Cart.objects.filter(session_key=request.session.session_key).first()
+
+    subtotal = cart.subtotal if cart else Decimal('0.00')
+    is_valid, reason = coupon.is_valid(subtotal)
+    if not is_valid:
+        return JsonResponse({'valid': False, 'message': reason})
+
+    discount = coupon.calculate_discount(subtotal)
+    delivery_fee = cart.delivery_fee if cart else Decimal('250.00')
+    tax_amount = cart.tax_amount if cart else Decimal('0.00')
+    new_total = max(Decimal('0.00'), subtotal - discount + delivery_fee + tax_amount)
+
+    return JsonResponse({
+        'valid': True,
+        'code': coupon.code,
+        'discount_amount': float(discount),
+        'discount_display': f"${discount:,.2f}",
+        'new_total_display': f"${new_total:,.2f}",
+        'message': f"Promotional code {coupon.code} applied successfully ({coupon.get_discount_type_display()})!"
+    })
 
 def checkout_view(request):
     # Retrieve user's cart
@@ -69,13 +109,63 @@ def checkout_view(request):
 
                     # Create Order
                     order = form.save(commit=False)
+                    
+                    # Account handling (Guest vs Authenticated vs Optional Account Creation)
                     if request.user.is_authenticated:
                         order.customer = request.user
+                    elif form.cleaned_data.get('create_account') and form.cleaned_data.get('account_password'):
+                        email = form.cleaned_data.get('customer_email')
+                        raw_pwd = form.cleaned_data.get('account_password')
+                        name_parts = form.cleaned_data.get('customer_name', '').split(' ', 1)
+                        first_name = name_parts[0]
+                        last_name = name_parts[1] if len(name_parts) > 1 else ''
                         
+                        # Generate unique username from email
+                        username_base = email.split('@')[0]
+                        username = username_base
+                        counter = 1
+                        while User.objects.filter(username=username).exists():
+                            username = f"{username_base}{counter}"
+                            counter += 1
+
+                        if not User.objects.filter(email=email).exists():
+                            new_user = User.objects.create_user(
+                                username=username,
+                                email=email,
+                                password=raw_pwd,
+                                first_name=first_name,
+                                last_name=last_name,
+                                role='customer'
+                            )
+                            auth_login(request, new_user)
+                            order.customer = new_user
+                            messages.success(request, f"Welcome to Prestige Paws NYC! Your private client account '{username}' has been created.")
+                    else:
+                        order.customer = None  # Explicit Guest Order!
+
+                    # Coupon & Discount Handling
                     order.subtotal = cart.subtotal
                     order.delivery_fee = cart.delivery_fee
                     order.tax_amount = cart.tax_amount
-                    order.total_amount = cart.total
+                    
+                    coupon_code = form.cleaned_data.get('coupon_code', '').strip()
+                    discount = Decimal('0.00')
+                    if coupon_code:
+                        coupon = Coupon.objects.filter(code__iexact=coupon_code, is_active=True).first()
+                        if coupon:
+                            is_valid, _ = coupon.is_valid(cart.subtotal)
+                            if is_valid:
+                                discount = coupon.calculate_discount(cart.subtotal)
+                                order.coupon = coupon
+                                order.discount_amount = discount
+                                coupon.times_used += 1
+                                coupon.save(update_fields=['times_used'])
+
+                    order.total_amount = max(Decimal('0.00'), cart.subtotal - discount + cart.delivery_fee + cart.tax_amount)
+                    
+                    # Payment Method & Status
+                    payment_choice = form.cleaned_data.get('payment_choice', 'simulator')
+                    order.payment_method = payment_choice
                     order.order_status = 'pending_payment'
                     order.payment_status = 'pending'
                     order.save()
@@ -100,7 +190,7 @@ def checkout_view(request):
                         from_status='initiated',
                         to_status='pending_payment',
                         changed_by=request.user if request.user.is_authenticated else None,
-                        notes='Order placed via secure checkout. Awaiting payment authorization.'
+                        notes=f'Order placed via secure checkout ({order.get_payment_method_display()}). Awaiting payment authorization.'
                     )
 
                     # Create associated Delivery record
@@ -133,8 +223,7 @@ def checkout_view(request):
                 return redirect('cart:view_cart')
 
             # Route to Payment
-            payment_choice = form.cleaned_data.get('payment_choice')
-            if payment_choice == 'stripe' and settings.STRIPE_SECRET_KEY:
+            if payment_choice == 'card' and settings.STRIPE_SECRET_KEY:
                 return redirect('payments:stripe_checkout', order_number=order.order_number)
             else:
                 return redirect('payments:simulate_payment', order_number=order.order_number)
@@ -171,26 +260,24 @@ def order_history_view(request):
     return render(request, 'orders/order_history.html', {'orders': orders})
 
 
-@login_required
 def order_detail_view(request, order_number):
     order = get_object_or_404(
         Order.objects.select_related('customer', 'delivery', 'delivery__assigned_agent').prefetch_related('items', 'items__pet', 'status_history'),
         order_number=order_number
     )
-    if order.customer != request.user and not request.user.is_store_staff:
+    if order.customer and (not request.user.is_authenticated or (order.customer != request.user and not request.user.is_store_staff)):
         messages.error(request, "Access restricted to authorized account owner.")
         return redirect('accounts:dashboard')
         
     return render(request, 'orders/order_detail.html', {'order': order})
 
 
-@login_required
 def download_receipt_view(request, order_number):
     order = get_object_or_404(
         Order.objects.select_related('customer', 'delivery').prefetch_related('items'),
         order_number=order_number
     )
-    if order.customer != request.user and not request.user.is_store_staff:
+    if order.customer and (not request.user.is_authenticated or (order.customer != request.user and not request.user.is_store_staff)):
         messages.error(request, "Access restricted.")
         return redirect('accounts:dashboard')
         

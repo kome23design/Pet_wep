@@ -19,22 +19,29 @@
   </div>
 </div>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10">
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-10 overflow-x-hidden">
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
     
     <!-- LEFT: IMAGE GALLERY & EXTENSIVE HEALTH/GENETICS DOSSIER -->
     <div class="lg:col-span-7 space-y-6">
       
-      <!-- Main Image Display -->
-      <div class="relative bg-white rounded-3xl overflow-hidden border border-stone-200 aspect-[4/3] shadow-sm">
+      <!-- Main Image Display (Click to open fullscreen modal lightbox) -->
+      <div id="main-image-container" class="relative bg-white rounded-3xl overflow-hidden border border-stone-200 aspect-[4/3] shadow-sm cursor-pointer group" title="Click to open fullscreen gallery view">
         <img id="main-gallery-img" 
              src="{{ pet.primary_image.url|default:'/static/images/placeholder_puppy.svg' }}" 
              alt="{{ pet.name }} - {{ pet.breed.name }}" 
-             class="w-full h-full object-cover transition-opacity duration-300"
+             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
              onerror="this.onerror=null; this.src='{% static 'images/placeholder_puppy.svg' %}';">
 
+        <!-- Click to Expand Badge Overlay -->
+        <div class="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+          <span class="bg-[#0F2319]/90 text-gold text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full shadow-lg flex items-center gap-2 border border-gold/40 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+            <i class="fa-solid fa-expand text-sm"></i> Fullscreen Gallery Lightbox
+          </span>
+        </div>
+
         <!-- Status Badges -->
-        <div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
+        <div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2 pointer-events-none">
           {% if pet.status == 'available' %}
             <span class="bg-emerald-800 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
               <i class="fa-solid fa-circle-check mr-1"></i>Available for Placement
@@ -59,23 +66,26 @@
         <!-- Wishlist Button -->
         <a href="{% url 'accounts:wishlist_toggle' pet.id %}" 
            class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-stone-700 hover:text-rose-600 flex items-center justify-center shadow-md transition-all z-10"
-           title="Save to Wishlist">
+           title="Save to Wishlist"
+           onclick="event.stopPropagation();">
           <i class="fa-{% if is_in_wishlist %}solid text-rose-600{% else %}regular{% endif %} fa-heart text-base"></i>
         </a>
 
         <!-- Reference Tag -->
-        <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-stone-300 text-xs font-mono px-3 py-1 rounded">
+        <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-stone-300 text-xs font-mono px-3 py-1 rounded pointer-events-none">
           Ref: {{ pet.reference_number }}
         </div>
       </div>
 
       <!-- Thumbnails -->
       {% if images.count > 1 %}
-        <div class="grid grid-cols-4 sm:grid-cols-6 gap-3">
+        <div class="grid grid-cols-4 sm:grid-cols-6 gap-3" id="pet-thumb-rail">
           {% for img in images %}
-            <button onclick="document.getElementById('main-gallery-img').src='{{ img.url }}'" 
-                    class="aspect-square rounded-xl overflow-hidden border-2 border-stone-200 hover:border-gold focus:border-gold transition-colors focus:outline-none bg-stone-100">
-              <img src="{{ img.url }}" alt="{{ pet.name }}" class="w-full h-full object-cover">
+            <button type="button" 
+                    data-gallery-idx="{{ forloop.counter0 }}"
+                    data-img-url="{{ img.url }}"
+                    class="pet-thumb-btn aspect-square rounded-xl overflow-hidden border-2 {% if forloop.first %}border-gold ring-2 ring-gold/40{% else %}border-stone-200 hover:border-gold{% endif %} transition-all focus:outline-none bg-stone-100 cursor-pointer">
+              <img src="{{ img.url }}" alt="{{ pet.name }} photo {{ forloop.counter }}" class="w-full h-full object-cover">
             </button>
           {% endfor %}
         </div>
@@ -353,4 +363,252 @@
   {% endif %}
 
 </div>
+
+<!-- FULLSCREEN LIGHTBOX MODAL -->
+<div id="lightbox-modal" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md hidden flex-col justify-between p-4 sm:p-6 select-none opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true" aria-label="Fullscreen Gallery">
+  <!-- Top bar -->
+  <div class="flex items-center justify-between z-20 text-white max-w-7xl mx-auto w-full">
+    <div class="flex items-center gap-3">
+      <span class="font-serif text-lg sm:text-xl font-bold text-gold">{{ pet.name }}</span>
+      <span class="text-xs text-stone-400 font-medium hidden sm:inline">&bull; {{ pet.breed.name }}</span>
+      <span id="lightbox-counter" class="text-xs bg-white/10 px-3 py-1 rounded-full text-stone-300 font-mono">1 / 1</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-stone-400 text-xs hidden md:inline">Use &larr; / &rarr; keys or swipe to navigate</span>
+      <button id="lightbox-close" type="button" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg transition-colors cursor-pointer" aria-label="Close Fullscreen Gallery">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Center image stage with navigation buttons -->
+  <div class="relative flex-1 flex items-center justify-center my-2 sm:my-4 overflow-hidden w-full max-w-7xl mx-auto" id="lightbox-stage">
+    <!-- Prev button -->
+    <button id="lightbox-prev" type="button" class="absolute left-2 sm:left-6 z-20 w-12 h-12 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center text-xl transition-all backdrop-blur-sm cursor-pointer shadow-lg hover:scale-105" aria-label="Previous image">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    <!-- Main display image -->
+    <div class="max-w-5xl max-h-[72vh] w-full h-full flex items-center justify-center p-2">
+      <img id="lightbox-img" src="" alt="{{ pet.name }}" class="max-w-full max-h-[72vh] object-contain rounded-2xl shadow-2xl transition-all duration-300">
+    </div>
+
+    <!-- Next button -->
+    <button id="lightbox-next" type="button" class="absolute right-2 sm:right-6 z-20 w-12 h-12 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center text-xl transition-all backdrop-blur-sm cursor-pointer shadow-lg hover:scale-105" aria-label="Next image">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- Bottom thumbnail navigation strip -->
+  <div class="z-20 max-w-4xl mx-auto w-full px-4">
+    <div class="flex justify-center items-center gap-2 overflow-x-auto py-2 no-scrollbar" id="lightbox-thumbs">
+      <!-- Injected by JS or populated from template -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Collect all gallery images
+  const galleryImages = [
+    {% if images.exists %}
+      {% for img in images %}
+        "{{ img.url }}"{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    {% else %}
+      "{{ pet.primary_image.url|default:'/static/images/placeholder_puppy.svg' }}"
+    {% endif %}
+  ];
+
+  let currentIndex = 0;
+  const totalImages = galleryImages.length;
+
+  const mainContainer = document.getElementById('main-image-container');
+  const mainImg = document.getElementById('main-gallery-img');
+  const pageThumbButtons = document.querySelectorAll('.pet-thumb-btn');
+
+  const modal = document.getElementById('lightbox-modal');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCounter = document.getElementById('lightbox-counter');
+  const lightboxClose = document.getElementById('lightbox-close');
+  const lightboxPrev = document.getElementById('lightbox-prev');
+  const lightboxNext = document.getElementById('lightbox-next');
+  const lightboxThumbs = document.getElementById('lightbox-thumbs');
+  const lightboxStage = document.getElementById('lightbox-stage');
+
+  // Build lightbox bottom thumbnails
+  if (lightboxThumbs && totalImages > 1) {
+    lightboxThumbs.innerHTML = '';
+    galleryImages.forEach(function(url, idx) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `w-14 h-14 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 cursor-pointer ${idx === 0 ? 'border-gold ring-2 ring-gold/50 scale-105' : 'border-white/30 opacity-60 hover:opacity-100'}`;
+      btn.innerHTML = `<img src="${url}" class="w-full h-full object-cover" alt="Thumb ${idx + 1}">`;
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        showImage(idx);
+      });
+      lightboxThumbs.appendChild(btn);
+    });
+  }
+
+  function updatePageThumbnails(idx) {
+    pageThumbButtons.forEach(function(btn, i) {
+      if (i === idx) {
+        btn.classList.add('border-gold', 'ring-2', 'ring-gold/40');
+        btn.classList.remove('border-stone-200');
+      } else {
+        btn.classList.remove('border-gold', 'ring-2', 'ring-gold/40');
+        btn.classList.add('border-stone-200');
+      }
+    });
+  }
+
+  function updateLightboxThumbnails(idx) {
+    if (!lightboxThumbs) return;
+    const btns = lightboxThumbs.querySelectorAll('button');
+    btns.forEach(function(btn, i) {
+      if (i === idx) {
+        btn.className = 'w-14 h-14 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 cursor-pointer border-gold ring-2 ring-gold/50 scale-105 opacity-100';
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      } else {
+        btn.className = 'w-14 h-14 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 cursor-pointer border-white/30 opacity-60 hover:opacity-100';
+      }
+    });
+  }
+
+  function showImage(idx) {
+    if (idx < 0) idx = totalImages - 1;
+    if (idx >= totalImages) idx = 0;
+    currentIndex = idx;
+
+    const url = galleryImages[currentIndex];
+    
+    // Update main page image
+    if (mainImg) {
+      mainImg.src = url;
+    }
+    updatePageThumbnails(currentIndex);
+
+    // Update modal image
+    if (lightboxImg) {
+      lightboxImg.style.opacity = '0.4';
+      lightboxImg.src = url;
+      lightboxImg.onload = function() {
+        lightboxImg.style.opacity = '1';
+      };
+    }
+
+    if (lightboxCounter) {
+      lightboxCounter.textContent = `${currentIndex + 1} / ${totalImages}`;
+    }
+
+    updateLightboxThumbnails(currentIndex);
+  }
+
+  function openLightbox(startIdx) {
+    if (typeof startIdx === 'number') {
+      currentIndex = startIdx;
+    }
+    showImage(currentIndex);
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() {
+      modal.classList.remove('opacity-0');
+    }, 10);
+  }
+
+  function closeLightbox() {
+    modal.classList.add('opacity-0');
+    document.body.style.overflow = '';
+    setTimeout(function() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }, 300);
+  }
+
+  // Hook main image click
+  if (mainContainer) {
+    mainContainer.addEventListener('click', function() {
+      openLightbox(currentIndex);
+    });
+  }
+
+  // Hook page thumbnails
+  pageThumbButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const idx = parseInt(btn.dataset.galleryIdx, 10);
+      showImage(idx);
+    });
+  });
+
+  // Modal controls
+  if (lightboxClose) {
+    lightboxClose.addEventListener('click', closeLightbox);
+  }
+
+  if (lightboxPrev) {
+    lightboxPrev.addEventListener('click', function(e) {
+      e.stopPropagation();
+      showImage(currentIndex - 1);
+    });
+  }
+
+  if (lightboxNext) {
+    lightboxNext.addEventListener('click', function(e) {
+      e.stopPropagation();
+      showImage(currentIndex + 1);
+    });
+  }
+
+  // Click background to close
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal || e.target === lightboxStage || e.target.id === 'lightbox-stage') {
+      closeLightbox();
+    }
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (modal.classList.contains('hidden')) return;
+
+    if (e.key === 'Escape') {
+      closeLightbox();
+    } else if (e.key === 'ArrowLeft') {
+      showImage(currentIndex - 1);
+    } else if (e.key === 'ArrowRight') {
+      showImage(currentIndex + 1);
+    }
+  });
+
+  // Touch Swipe for mobile/tablet
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  lightboxStage.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  lightboxStage.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const diff = touchEndX - touchStartX;
+    if (Math.abs(diff) > 40) {
+      if (diff < 0) {
+        // Swiped left -> next
+        showImage(currentIndex + 1);
+      } else {
+        // Swiped right -> prev
+        showImage(currentIndex - 1);
+      }
+    }
+  }
+});
+</script>
 {% endblock %}

@@ -54,10 +54,10 @@ def simulate_payment_view(request, order_number):
                     order=order,
                     defaults={
                         'amount': order.total_amount,
-                        'payment_method': 'simulator',
+                        'payment_method': order.payment_method or 'simulator',
                         'status': 'successful',
                         'stripe_payment_intent_id': order.payment_reference,
-                        'raw_response_notes': 'Authorized via Prestige Paws NYC Development Payment Sandbox'
+                        'raw_response_notes': f'Authorized via {order.get_payment_method_display()} - Prestige Paws Placement Atelier'
                     }
                 )
 

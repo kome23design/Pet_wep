@@ -16,7 +16,7 @@
   </div>
 </div>
 
-<div class="max-w-6xl mx-auto px-4 sm:px-8 py-16 space-y-12">
+<div class="max-w-6xl mx-auto px-4 sm:px-8 py-16 space-y-12 overflow-x-hidden">
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
     
     <!-- LEFT: CONTACT INFORMATION & ATELIER LOCATION -->
@@ -42,9 +42,9 @@
           <div class="flex items-start gap-3">
             <i class="fa-solid fa-phone text-gold text-base mt-0.5 shrink-0"></i>
             <div>
-              <strong class="block text-forest text-sm font-serif font-bold">Direct Concierge Phone</strong>
-              <span class="text-stone-700">{{ site_settings.phone|default:"(212) 555-PAWS" }}</span>
-              <span class="text-stone-400 block text-[10px] mt-0.5">Mon &ndash; Sat: 9:00 AM &ndash; 7:00 PM EST | Sun: Private Appointment</span>
+              <strong class="block text-forest text-sm font-serif font-bold">Direct Concierge Phone &amp; VIP Desk</strong>
+              <span class="text-stone-700 font-semibold text-sm">{{ site_settings.phone|default:"(212) 555-PAWS" }}</span>
+              <span class="text-stone-400 block text-[10px] mt-0.5">Sole official contact number &bull; Calls, SMS &amp; WhatsApp &bull; Mon &ndash; Sat: 9:00 AM &ndash; 7:00 PM EST</span>
             </div>
           </div>
 
@@ -54,15 +54,6 @@
               <strong class="block text-forest text-sm font-serif font-bold">Electronic Inquiries</strong>
               <span class="text-stone-700">{{ site_settings.email|default:"concierge@prestigepaws.nyc" }}</span>
               <span class="text-stone-400 block text-[10px] mt-0.5">Direct concierge response guarantee within 2 hours</span>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-3">
-            <i class="fa-brands fa-whatsapp text-emerald-600 text-base mt-0.5 shrink-0"></i>
-            <div>
-              <strong class="block text-forest text-sm font-serif font-bold">VIP WhatsApp Desk</strong>
-              <span class="text-stone-700">+1 (212) 555-PAWS</span>
-              <span class="text-stone-400 block text-[10px] mt-0.5">Live video consultations &amp; instant photo requests</span>
             </div>
           </div>
         </div>

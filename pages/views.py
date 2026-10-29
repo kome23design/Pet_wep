@@ -12,22 +12,26 @@ def home_view(request):
         breed__slug='maltipoo',
         is_published=True,
         status='available'
-    ).select_related('breed', 'category').prefetch_related('images')[:4]
+    ).select_related('breed', 'category').prefetch_related('images')[:7]
 
     featured_maltese = Pet.objects.filter(
         breed__slug='maltese',
         is_published=True,
         status='available'
-    ).select_related('breed', 'category').prefetch_related('images')[:4]
+    ).select_related('breed', 'category').prefetch_related('images')[:7]
 
     recent_pets = Pet.objects.filter(
         is_published=True,
         status='available'
-    ).select_related('breed', 'category').prefetch_related('images').order_by('-created_at')[:6]
+    ).select_related('breed', 'category').prefetch_related('images').order_by('-created_at')[:8]
 
     approved_reviews = Review.objects.filter(
         status='approved'
-    ).select_related('customer', 'pet', 'breed').order_by('-created_at')[:3]
+    ).select_related('customer', 'pet', 'breed').order_by('-created_at')[:7]
+
+    featured_blogs = BlogPost.objects.filter(
+        is_published=True
+    ).select_related('category').order_by('-published_at', '-id')[:7]
 
     faqs = FAQ.objects.filter(is_published=True).order_by('display_order')[:4]
     categories = PetCategory.objects.filter(is_active=True).prefetch_related('breeds')
@@ -37,6 +41,7 @@ def home_view(request):
         'featured_maltese': featured_maltese,
         'recent_pets': recent_pets,
         'approved_reviews': approved_reviews,
+        'featured_blogs': featured_blogs,
         'faqs': faqs,
         'categories': categories,
     }
