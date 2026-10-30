@@ -164,7 +164,7 @@ def checkout_view(request):
                     order.total_amount = max(Decimal('0.00'), cart.subtotal - discount + cart.delivery_fee + cart.tax_amount)
                     
                     # Payment Method & Status
-                    payment_choice = form.cleaned_data.get('payment_choice', 'simulator')
+                    payment_choice = form.cleaned_data.get('payment_choice', 'paypal')
                     order.payment_method = payment_choice
                     order.order_status = 'pending_payment'
                     order.payment_status = 'pending'
@@ -190,7 +190,18 @@ def checkout_view(request):
                         from_status='initiated',
                         to_status='pending_payment',
                         changed_by=request.user if request.user.is_authenticated else None,
-                        notes=f'Order placed via secure checkout ({order.get_payment_method_display()}). Awaiting payment authorization.'
+                        notes=f'Order placed via secure checkout ({order.get_payment_method_display()}). Admin will contact client with full payment details.'
+                    )
+
+                    # Create pending Payment record for admin tracking
+                    Payment.objects.update_or_create(
+                        order=order,
+                        defaults={
+                            'amount': order.total_amount,
+                            'payment_method': order.payment_method or 'paypal',
+                            'status': 'pending',
+                            'raw_response_notes': f'Awaiting admin payment instructions for {order.get_payment_method_display()}.'
+                        }
                     )
 
                     # Create associated Delivery record
@@ -222,11 +233,16 @@ def checkout_view(request):
                 messages.error(request, f"An error occurred while securing your reservation: {str(e)}")
                 return redirect('cart:view_cart')
 
-            # Route to Payment
+            messages.success(
+                request,
+                f"Order #{order.order_number} confirmed! Our admin will contact you shortly with the full payment details with respect to your chosen payment method ({order.get_payment_method_display()})."
+            )
+
+            # Route to Order Confirmation (or Stripe if configured)
             if payment_choice == 'card' and settings.STRIPE_SECRET_KEY:
                 return redirect('payments:stripe_checkout', order_number=order.order_number)
             else:
-                return redirect('payments:simulate_payment', order_number=order.order_number)
+                return redirect('orders:order_confirmation', order_number=order.order_number)
         else:
             messages.error(request, "Please check the required fields in the checkout form.")
     else:

@@ -195,15 +195,42 @@ h1, h2, h3, .font-serif {
   border-radius: 0.75rem;
   background-color: #FFFFFF;
   color: var(--color-text-main);
-  font-size: 0.95rem;
+  font-size: 16px;
   font-family: var(--font-sans);
   transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
+  touch-action: manipulation;
 }
 .form-input:focus, .form-select:focus, .form-textarea:focus {
   outline: none;
   border-color: var(--color-forest);
   box-shadow: 0 0 0 3px rgba(27, 59, 43, 0.12);
+}
+
+/* Block all forms and inputs from auto-zooming on mobile devices */
+form, input, select, textarea, button, label {
+  touch-action: manipulation;
+}
+
+@media screen and (max-width: 768px) {
+  input,
+  select,
+  textarea,
+  .form-input,
+  .form-select,
+  .form-textarea,
+  form input[type="text"],
+  form input[type="email"],
+  form input[type="password"],
+  form input[type="tel"],
+  form input[type="number"],
+  form input[type="search"],
+  form input[type="url"],
+  form input[type="date"],
+  form select,
+  form textarea {
+    font-size: 16px !important;
+  }
 }
 
 /* Gold Accents & Badges */

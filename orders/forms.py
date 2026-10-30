@@ -36,14 +36,13 @@ class CheckoutForm(forms.ModelForm):
     )
     payment_choice = forms.ChoiceField(
         choices=(
-            ('card', 'Credit / Debit Card (Stripe)'),
-            ('apple_pay', 'Apple Pay Digital Wallet'),
-            ('paypal', 'PayPal Instant Checkout'),
-            ('zelle', 'Zelle Private Bank Transfer'),
-            ('simulator', 'Development Sandbox Simulator (Test Sandbox)'),
+            ('paypal', 'PayPal'),
+            ('chime', 'Chime'),
+            ('cashapp', 'Cash App'),
+            ('apple_pay', 'Apple Pay'),
         ),
         widget=forms.RadioSelect,
-        initial='simulator'
+        initial='paypal'
     )
     coupon_code = forms.CharField(
         required=False,

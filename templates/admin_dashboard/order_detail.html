@@ -149,6 +149,10 @@
           <span>Sales Tax:</span>
           <span>${{ order.tax_amount|floatformat:2 }}</span>
         </div>
+        <div class="flex justify-between text-stone-600">
+          <span>Payment Method:</span>
+          <span class="font-bold text-forest">{{ order.get_payment_method_display }}</span>
+        </div>
         <div class="flex justify-between font-bold text-forest text-sm pt-2 border-t border-stone-100">
           <span>Total Settled (USD):</span>
           <span>${{ order.total_amount|floatformat:2 }}</span>

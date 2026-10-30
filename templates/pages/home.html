@@ -599,7 +599,7 @@
 
 <!-- FAQS HIGHLIGHT -->
 {% if faqs %}
-<section class="py-16 bg-white" data-aos="fade-up">
+<section class="py-16 bg-white">
   <div class="max-w-4xl mx-auto px-4 sm:px-8">
     <div class="text-center mb-12">
       <span class="badge-gold">Common Inquiries</span>
@@ -641,7 +641,13 @@ document.addEventListener('DOMContentLoaded', function() {
       new Swiper('.maltipoo-swiper', {
         slidesPerView: 1,
         spaceBetween: 20,
-        loop: false,
+        loop: true,
+        speed: 800,
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
         navigation: {
           nextEl: '.maltipoo-next',
           prevEl: '.maltipoo-prev',
@@ -663,7 +669,13 @@ document.addEventListener('DOMContentLoaded', function() {
       new Swiper('.maltese-swiper', {
         slidesPerView: 1,
         spaceBetween: 20,
-        loop: false,
+        loop: true,
+        speed: 800,
+        autoplay: {
+          delay: 3200,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
         navigation: {
           nextEl: '.maltese-next',
           prevEl: '.maltese-prev',
@@ -685,7 +697,13 @@ document.addEventListener('DOMContentLoaded', function() {
       new Swiper('.reviews-swiper', {
         slidesPerView: 1,
         spaceBetween: 20,
-        loop: false,
+        loop: true,
+        speed: 800,
+        autoplay: {
+          delay: 3500,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
         navigation: {
           nextEl: '.reviews-next',
           prevEl: '.reviews-prev',
@@ -706,7 +724,13 @@ document.addEventListener('DOMContentLoaded', function() {
       new Swiper('.blog-swiper', {
         slidesPerView: 1,
         spaceBetween: 20,
-        loop: false,
+        loop: true,
+        speed: 800,
+        autoplay: {
+          delay: 3400,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
         navigation: {
           nextEl: '.blog-next',
           prevEl: '.blog-prev',
@@ -720,6 +744,12 @@ document.addEventListener('DOMContentLoaded', function() {
           1024: { slidesPerView: 3, spaceBetween: 24 },
         }
       });
+    }
+
+    if (typeof AOS !== 'undefined') {
+      setTimeout(function() {
+        AOS.refresh();
+      }, 100);
     }
   }
 });

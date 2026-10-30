@@ -56,7 +56,7 @@ class OrdersTestCase(TestCase):
             'preferred_delivery_window': 'Morning (9:00 AM - 1:00 PM EST)',
             'terms_accepted': 'on',
             'welfare_policy_acknowledged': 'on',
-            'payment_choice': 'simulator'
+            'payment_choice': 'paypal'
         }
         response = self.client.post(reverse('orders:checkout'), checkout_payload)
         

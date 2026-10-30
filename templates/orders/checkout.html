@@ -40,216 +40,266 @@
     {% csrf_token %}
 
     <!-- LEFT: RECIPIENT & DELIVERY DETAILS -->
-    <div class="lg:col-span-7 space-y-8">
+    <div class="lg:col-span-7 space-y-6">
       
       <!-- 1. Client Contact Information -->
-      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4" data-aos="fade-up">
-        <h3 class="font-serif text-2xl font-bold text-forest border-b border-stone-100 pb-3 flex items-center gap-2">
-          <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">1</span>
-          Adopter Contact Information
-        </h3>
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm" data-checkout-step="1">
+        <div class="flex items-center justify-between cursor-pointer select-none" data-step-header="1">
+          <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2">
+            <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold" data-step-badge="1">1</span>
+            <span>Adopter Contact Information</span>
+          </h3>
+          <div class="flex items-center gap-2">
+            <span class="hidden text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full" data-step-status="1">
+              <i class="fa-solid fa-check mr-1"></i>Completed
+            </span>
+            <i class="fa-solid fa-chevron-up text-xs text-stone-400 transition-transform duration-200" data-step-chevron="1"></i>
+          </div>
+        </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div class="sm:col-span-2">
-            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Full Legal Name *</label>
-            {{ form.customer_name }}
-            {% if form.customer_name.errors %}<p class="text-red-600 mt-1">{{ form.customer_name.errors.0 }}</p>{% endif %}
-          </div>
-          <div>
-            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Email Address (For Vetting &amp; Updates) *</label>
-            {{ form.customer_email }}
-            {% if form.customer_email.errors %}<p class="text-red-600 mt-1">{{ form.customer_email.errors.0 }}</p>{% endif %}
-          </div>
-          <div>
-            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Direct Phone Number (For Courier Contact) *</label>
-            {{ form.customer_phone }}
-            {% if form.customer_phone.errors %}<p class="text-red-600 mt-1">{{ form.customer_phone.errors.0 }}</p>{% endif %}
-          </div>
-
-          {% if not request.user.is_authenticated %}
-            <!-- Optional Account Creation for Guest -->
-            <div class="sm:col-span-2 pt-3 border-t border-stone-100 space-y-3">
-              <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-forest select-none">
-                <input type="checkbox" name="create_account" id="create_account_toggle" class="form-checkbox text-forest rounded" {% if form.create_account.value %}checked{% endif %}>
-                <span>Create a client account for order tracking &amp; future reservations (Optional)</span>
-              </label>
-              
-              <div id="account_password_field" class="{% if not form.create_account.value %}hidden{% endif %} space-y-1">
-                <label class="block font-bold text-forest uppercase tracking-wider text-[11px]">Create Account Password *</label>
-                <div class="relative">
-                  {{ form.account_password }}
-                </div>
-                <p class="text-[10px] text-stone-400">Min. 8 characters. View/hide toggle is enabled on all password fields.</p>
-                {% if form.account_password.errors %}<p class="text-red-600 mt-1">{{ form.account_password.errors.0 }}</p>{% endif %}
-              </div>
+        <div class="pt-4 mt-3 border-t border-stone-100 space-y-4" data-step-body="1">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div class="sm:col-span-2">
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Full Legal Name *</label>
+              {{ form.customer_name }}
+              {% if form.customer_name.errors %}<p class="text-red-600 mt-1">{{ form.customer_name.errors.0 }}</p>{% endif %}
             </div>
-          {% endif %}
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Email Address (For Vetting &amp; Updates) *</label>
+              {{ form.customer_email }}
+              {% if form.customer_email.errors %}<p class="text-red-600 mt-1">{{ form.customer_email.errors.0 }}</p>{% endif %}
+            </div>
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Direct Phone Number (For Courier Contact) *</label>
+              {{ form.customer_phone }}
+              {% if form.customer_phone.errors %}<p class="text-red-600 mt-1">{{ form.customer_phone.errors.0 }}</p>{% endif %}
+            </div>
+
+            {% if not request.user.is_authenticated %}
+              <!-- Optional Account Creation for Guest -->
+              <div class="sm:col-span-2 pt-3 border-t border-stone-100 space-y-3">
+                <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-forest select-none">
+                  <input type="checkbox" name="create_account" id="create_account_toggle" class="form-checkbox text-forest rounded" {% if form.create_account.value %}checked{% endif %}>
+                  <span>Create a client account for order tracking &amp; future reservations (Optional)</span>
+                </label>
+                
+                <div id="account_password_field" class="{% if not form.create_account.value %}hidden{% endif %} space-y-1">
+                  <label class="block font-bold text-forest uppercase tracking-wider text-[11px]">Create Account Password *</label>
+                  <div class="relative">
+                    {{ form.account_password }}
+                  </div>
+                  <p class="text-[10px] text-stone-400">Min. 8 characters. View/hide toggle is enabled on all password fields.</p>
+                  {% if form.account_password.errors %}<p class="text-red-600 mt-1">{{ form.account_password.errors.0 }}</p>{% endif %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="pt-3 border-t border-stone-100 flex justify-end">
+            <button type="button" data-next-step="2" data-current-step="1" class="btn-primary text-xs py-2.5 px-6 cursor-pointer">
+              <span>Next: Delivery Address</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- 2. US Delivery Residence Address -->
-      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4" data-aos="fade-up">
-        <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm" data-checkout-step="2">
+        <div class="flex items-center justify-between cursor-pointer select-none" data-step-header="2">
           <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2">
-            <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">2</span>
-            US Delivery Residence Address
+            <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold" data-step-badge="2">2</span>
+            <span>US Delivery Residence Address</span>
           </h3>
-          <span class="badge-gold text-[10px]">Nationwide Coverage</span>
+          <div class="flex items-center gap-2">
+            <span class="badge-gold text-[10px] hidden sm:inline-block">Nationwide Coverage</span>
+            <span class="hidden text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full" data-step-status="2">
+              <i class="fa-solid fa-check mr-1"></i>Completed
+            </span>
+            <i class="fa-solid fa-chevron-down text-xs text-stone-400 transition-transform duration-200" data-step-chevron="2"></i>
+          </div>
         </div>
 
-        <div class="space-y-4 text-xs">
-          <div>
-            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Street Address *</label>
-            {{ form.delivery_street_address }}
-            {% if form.delivery_street_address.errors %}<p class="text-red-600 mt-1">{{ form.delivery_street_address.errors.0 }}</p>{% endif %}
+        <div class="hidden pt-4 mt-3 border-t border-stone-100 space-y-4" data-step-body="2">
+          <div class="space-y-4 text-xs">
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Street Address *</label>
+              {{ form.delivery_street_address }}
+              {% if form.delivery_street_address.errors %}<p class="text-red-600 mt-1">{{ form.delivery_street_address.errors.0 }}</p>{% endif %}
+            </div>
+
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Apartment, Suite, Unit, Penthouse (Optional)</label>
+              {{ form.delivery_apartment }}
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block font-bold text-forest uppercase tracking-wider mb-1">City *</label>
+                {{ form.delivery_city }}
+                {% if form.delivery_city.errors %}<p class="text-red-600 mt-1">{{ form.delivery_city.errors.0 }}</p>{% endif %}
+              </div>
+              <div>
+                <label class="block font-bold text-forest uppercase tracking-wider mb-1">State *</label>
+                {{ form.delivery_state }}
+                {% if form.delivery_state.errors %}<p class="text-red-600 mt-1">{{ form.delivery_state.errors.0 }}</p>{% endif %}
+              </div>
+              <div>
+                <label class="block font-bold text-forest uppercase tracking-wider mb-1">ZIP Code *</label>
+                {{ form.delivery_postal_code }}
+                {% if form.delivery_postal_code.errors %}<p class="text-red-600 mt-1">{{ form.delivery_postal_code.errors.0 }}</p>{% endif %}
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Building Access / Delivery Instructions</label>
+              {{ form.delivery_notes }}
+              <p class="text-[10px] text-stone-400 mt-1">Provide front desk concierge instructions, gate codes, or elevator guidelines.</p>
+            </div>
           </div>
 
-          <div>
-            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Apartment, Suite, Unit, Penthouse (Optional)</label>
-            {{ form.delivery_apartment }}
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label class="block font-bold text-forest uppercase tracking-wider mb-1">City *</label>
-              {{ form.delivery_city }}
-              {% if form.delivery_city.errors %}<p class="text-red-600 mt-1">{{ form.delivery_city.errors.0 }}</p>{% endif %}
-            </div>
-            <div>
-              <label class="block font-bold text-forest uppercase tracking-wider mb-1">State *</label>
-              {{ form.delivery_state }}
-              {% if form.delivery_state.errors %}<p class="text-red-600 mt-1">{{ form.delivery_state.errors.0 }}</p>{% endif %}
-            </div>
-            <div>
-              <label class="block font-bold text-forest uppercase tracking-wider mb-1">ZIP Code *</label>
-              {{ form.delivery_postal_code }}
-              {% if form.delivery_postal_code.errors %}<p class="text-red-600 mt-1">{{ form.delivery_postal_code.errors.0 }}</p>{% endif %}
-            </div>
-          </div>
-
-          <div>
-            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Building Access / Delivery Instructions</label>
-            {{ form.delivery_notes }}
-            <p class="text-[10px] text-stone-400 mt-1">Provide front desk concierge instructions, gate codes, or elevator guidelines.</p>
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between gap-3">
+            <button type="button" data-prev-step="1" class="btn-secondary text-xs py-2 px-5 cursor-pointer">
+              <i class="fa-solid fa-arrow-left text-[10px]"></i>
+              <span>Back</span>
+            </button>
+            <button type="button" data-next-step="3" data-current-step="2" class="btn-primary text-xs py-2.5 px-6 cursor-pointer">
+              <span>Next: Travel Scheduling</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
           </div>
         </div>
       </div>
 
       <!-- 3. Chaperoned Travel Scheduling -->
-      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4" data-aos="fade-up">
-        <h3 class="font-serif text-2xl font-bold text-forest border-b border-stone-100 pb-3 flex items-center gap-2">
-          <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">3</span>
-          Preferred Travel Scheduling
-        </h3>
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm" data-checkout-step="3">
+        <div class="flex items-center justify-between cursor-pointer select-none" data-step-header="3">
+          <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2">
+            <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold" data-step-badge="3">3</span>
+            <span>Preferred Travel Scheduling</span>
+          </h3>
+          <div class="flex items-center gap-2">
+            <span class="hidden text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full" data-step-status="3">
+              <i class="fa-solid fa-check mr-1"></i>Completed
+            </span>
+            <i class="fa-solid fa-chevron-down text-xs text-stone-400 transition-transform duration-200" data-step-chevron="3"></i>
+          </div>
+        </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div>
-            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Preferred Delivery Date</label>
-            {{ form.preferred_delivery_date }}
-            <p class="text-[10px] text-stone-400 mt-1">Requires 48 hours for final pre-travel veterinary inspection.</p>
+        <div class="hidden pt-4 mt-3 border-t border-stone-100 space-y-4" data-step-body="3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Preferred Delivery Date</label>
+              {{ form.preferred_delivery_date }}
+              <p class="text-[10px] text-stone-400 mt-1">Requires 48 hours for final pre-travel veterinary inspection.</p>
+            </div>
+
+            <div>
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Preferred Arrival Window</label>
+              {{ form.preferred_delivery_window }}
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block font-bold text-forest uppercase tracking-wider mb-1">Special Puppy Care Notes (Optional)</label>
+              {{ form.customer_notes }}
+            </div>
           </div>
 
-          <div>
-            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Preferred Arrival Window</label>
-            {{ form.preferred_delivery_window }}
-          </div>
-
-          <div class="sm:col-span-2">
-            <label class="block font-bold text-forest uppercase tracking-wider mb-1">Special Puppy Care Notes (Optional)</label>
-            {{ form.customer_notes }}
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between gap-3">
+            <button type="button" data-prev-step="2" class="btn-secondary text-xs py-2 px-5 cursor-pointer">
+              <i class="fa-solid fa-arrow-left text-[10px]"></i>
+              <span>Back</span>
+            </button>
+            <button type="button" data-next-step="4" data-current-step="3" class="btn-primary text-xs py-2.5 px-6 cursor-pointer">
+              <span>Next: Payment Authorization</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- 4. Payment Method Choice (PayPal, Zelle, Apple Pay, Card, Simulator) -->
-      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4" data-aos="fade-up">
-        <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+      <!-- 4. Payment Method Choice (PayPal, Chime, Cash App, Apple Pay) -->
+      <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm" data-checkout-step="4">
+        <div class="flex items-center justify-between cursor-pointer select-none" data-step-header="4">
           <h3 class="font-serif text-2xl font-bold text-forest flex items-center gap-2">
-            <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold">4</span>
-            Payment Authorization
+            <span class="w-7 h-7 rounded-full bg-forest text-gold text-xs flex items-center justify-center font-sans font-bold" data-step-badge="4">4</span>
+            <span>Payment Authorization</span>
           </h3>
-          <span class="text-xs text-stone-500 font-medium"><i class="fa-solid fa-lock text-emerald-600 mr-1"></i>256-Bit SSL Encrypted</span>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-stone-500 font-medium hidden sm:inline"><i class="fa-solid fa-lock text-emerald-600 mr-1"></i>256-Bit SSL Encrypted</span>
+            <i class="fa-solid fa-chevron-down text-xs text-stone-400 transition-transform duration-200" data-step-chevron="4"></i>
+          </div>
         </div>
 
-        <div class="space-y-3 text-sm" id="payment-methods-container">
-          <!-- 1. Apple Pay -->
-          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-cream">
-            <input type="radio" name="payment_choice" value="apple_pay" class="mt-1 text-forest focus:ring-forest">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-forest flex items-center gap-2 text-sm">
-                  <span class="bg-black text-white px-2.5 py-0.5 rounded text-xs font-bold tracking-tight"><i class="fa-brands fa-apple text-sm mr-1"></i>Pay</span>
-                  Apple Pay Digital Wallet
-                </span>
-                <span class="text-[10px] font-bold text-stone-500 bg-white px-2 py-0.5 rounded border border-stone-200">1-Touch Biometric</span>
-              </div>
-              <p class="text-xs text-stone-500 mt-1">Instant authorization using Face ID, Touch ID, or Apple passcode on compatible Apple devices.</p>
-            </div>
-          </label>
-
-          <!-- 2. PayPal -->
-          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-white">
-            <input type="radio" name="payment_choice" value="paypal" class="mt-1 text-forest focus:ring-forest">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-forest flex items-center gap-2 text-sm">
-                  <span class="bg-[#003087] text-white px-2 py-0.5 rounded text-xs font-bold tracking-tight italic"><i class="fa-brands fa-paypal text-sm mr-1 text-[#0079C1]"></i>PayPal</span>
-                  PayPal Express Checkout
-                </span>
-                <span class="text-[10px] font-bold text-stone-500 bg-stone-50 px-2 py-0.5 rounded border border-stone-200">Buyer Protection</span>
-              </div>
-              <p class="text-xs text-stone-500 mt-1">Pay smoothly using your PayPal balance, linked bank account, or PayPal Credit.</p>
-            </div>
-          </label>
-
-          <!-- 3. Zelle Private Transfer -->
-          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-white">
-            <input type="radio" name="payment_choice" value="zelle" class="mt-1 text-forest focus:ring-forest">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-forest flex items-center gap-2 text-sm">
-                  <span class="bg-[#7414CA] text-white px-2 py-0.5 rounded text-xs font-bold tracking-tight">Zelle&reg;</span>
-                  Zelle Private Bank Transfer
-                </span>
-                <span class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">Zero Processing Fee</span>
-              </div>
-              <p class="text-xs text-stone-500 mt-1">Direct wire transfer to Atelier Treasury at <strong class="text-forest">payments@prestigepaws.nyc</strong>. Instant verification upon order submission.</p>
-            </div>
-          </label>
-
-          <!-- 4. Credit / Debit Card (Stripe) -->
-          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-white">
-            <input type="radio" name="payment_choice" value="card" class="mt-1 text-forest focus:ring-forest">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-forest flex items-center gap-2 text-sm">
-                  <i class="fa-solid fa-credit-card text-gold-dark text-base"></i>
-                  Credit / Debit Card (Stripe Hosted)
-                </span>
-                <div class="flex items-center gap-1.5 text-stone-400 text-sm">
-                  <i class="fa-brands fa-cc-visa"></i>
-                  <i class="fa-brands fa-cc-mastercard"></i>
-                  <i class="fa-brands fa-cc-amex"></i>
+        <div class="hidden pt-4 mt-3 border-t border-stone-100 space-y-4" data-step-body="4">
+          <div class="space-y-3 text-sm" id="payment-methods-container">
+            <!-- 1. PayPal -->
+            <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-cream">
+              <input type="radio" name="payment_choice" value="paypal" checked class="mt-1 text-forest focus:ring-forest">
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-forest flex items-center gap-2 text-sm">
+                    <span class="bg-[#003087] text-white px-2 py-0.5 rounded text-xs font-bold tracking-tight italic"><i class="fa-brands fa-paypal text-sm mr-1 text-[#0079C1]"></i>PayPal</span>
+                    PayPal
+                  </span>
+                  <span class="text-[10px] font-bold text-stone-500 bg-white px-2 py-0.5 rounded border border-stone-200">Buyer Protection</span>
                 </div>
+                <p class="text-xs text-stone-500 mt-1">Pay using your PayPal balance or linked account. Our admin will send you the official PayPal payment details after checkout.</p>
               </div>
-              <p class="text-xs text-stone-500 mt-1">Encrypted card authorization processed securely via Stripe. Card details are never stored on our servers.</p>
-            </div>
-          </label>
+            </label>
 
-          <!-- 5. Development Payment Simulator -->
-          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-gold/80 transition-all cursor-pointer bg-amber-50/50">
-            <input type="radio" name="payment_choice" value="simulator" checked class="mt-1 text-forest focus:ring-forest">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-forest flex items-center gap-2 text-sm">
-                  <i class="fa-solid fa-flask-vial text-amber-600"></i>
-                  Development Payment Simulator (Test Sandbox)
-                </span>
-                <span class="badge-gold text-[9px]">Recommended for Dev</span>
+            <!-- 2. Chime -->
+            <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-white">
+              <input type="radio" name="payment_choice" value="chime" class="mt-1 text-forest focus:ring-forest">
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-forest flex items-center gap-2 text-sm">
+                    <span class="bg-[#25C974] text-white px-2.5 py-0.5 rounded text-xs font-bold tracking-tight">chime</span>
+                    Chime
+                  </span>
+                  <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Instant Transfer</span>
+                </div>
+                <p class="text-xs text-stone-500 mt-1">Fast, fee-free transfer via Chime Pay Anyone. Full Chime payment details will be provided by our admin upon checkout.</p>
               </div>
-              <p class="text-xs text-stone-500 mt-1">Instant simulated checkout without charging a real bank card. Updates inventory and dispatches real reservation records.</p>
-            </div>
-          </label>
+            </label>
+
+            <!-- 3. Cash App -->
+            <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-white">
+              <input type="radio" name="payment_choice" value="cashapp" class="mt-1 text-forest focus:ring-forest">
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-forest flex items-center gap-2 text-sm">
+                    <span class="bg-[#00D632] text-white px-2.5 py-0.5 rounded text-xs font-bold tracking-tight"><i class="fa-solid fa-dollar-sign mr-0.5"></i>Cash App</span>
+                    Cash App
+                  </span>
+                  <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Direct $Cashtag</span>
+                </div>
+                <p class="text-xs text-stone-500 mt-1">Quick mobile payment via Cash App. Our admin will contact you with our verified $Cashtag details after checkout.</p>
+              </div>
+            </label>
+
+            <!-- 4. Apple Pay -->
+            <label class="flex items-start gap-3.5 p-4 rounded-xl border border-stone-200 hover:border-forest/60 transition-all cursor-pointer bg-white">
+              <input type="radio" name="payment_choice" value="apple_pay" class="mt-1 text-forest focus:ring-forest">
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-forest flex items-center gap-2 text-sm">
+                    <span class="bg-black text-white px-2.5 py-0.5 rounded text-xs font-bold tracking-tight"><i class="fa-brands fa-apple text-sm mr-1"></i>Pay</span>
+                    Apple Pay
+                  </span>
+                  <span class="text-[10px] font-bold text-stone-500 bg-stone-50 px-2 py-0.5 rounded border border-stone-200">Apple Wallet</span>
+                </div>
+                <p class="text-xs text-stone-500 mt-1">Seamless payment via Apple Pay / Apple Cash. Our admin will contact you with the full Apple Pay payment details after checkout.</p>
+              </div>
+            </label>
+          </div>
+
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
+            <button type="button" data-prev-step="3" class="btn-secondary text-xs py-2 px-5 cursor-pointer">
+              <i class="fa-solid fa-arrow-left text-[10px]"></i>
+              <span>Back</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -353,7 +403,7 @@
         </button>
 
         <p class="text-[10px] text-stone-400 text-center leading-relaxed">
-          By clicking above, your selected companion is reserved in our inventory. You will be redirected to payment verification.
+          By clicking above, your selected companion is reserved in our inventory. After checkout, our admin will contact you with the full payment details for your selected payment method.
         </p>
 
         <!-- Guarantee Badge -->
@@ -462,6 +512,148 @@ document.addEventListener('DOMContentLoaded', function() {
     if (couponInput.value.trim().length >= 4) {
       applyBtn.click();
     }
+  }
+
+  // 3. Collapsible Step-by-Step Checkout Sections
+  const totalSteps = 4;
+  let maxUnlockedStep = 1;
+
+  function openCheckoutStep(stepNumber, scrollToStep) {
+    for (let i = 1; i <= totalSteps; i++) {
+      const body = document.querySelector(`[data-step-body="${i}"]`);
+      const chevron = document.querySelector(`[data-step-chevron="${i}"]`);
+      if (!body) continue;
+
+      if (i === stepNumber) {
+        body.classList.remove('hidden');
+        if (chevron) {
+          chevron.classList.remove('fa-chevron-down');
+          chevron.classList.add('fa-chevron-up');
+        }
+      } else {
+        body.classList.add('hidden');
+        if (chevron) {
+          chevron.classList.remove('fa-chevron-up');
+          chevron.classList.add('fa-chevron-down');
+        }
+      }
+    }
+
+    if (scrollToStep) {
+      const targetCard = document.querySelector(`[data-checkout-step="${stepNumber}"]`);
+      if (targetCard) {
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
+
+  function markStepCompleted(stepNumber, isCompleted) {
+    const statusBadge = document.querySelector(`[data-step-status="${stepNumber}"]`);
+    if (statusBadge) {
+      if (isCompleted) {
+        statusBadge.classList.remove('hidden');
+      } else {
+        statusBadge.classList.add('hidden');
+      }
+    }
+  }
+
+  function validateCheckoutStep(stepNumber) {
+    const body = document.querySelector(`[data-step-body="${stepNumber}"]`);
+    if (!body) return true;
+
+    const fields = body.querySelectorAll('input, select, textarea');
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i];
+      if (field.type === 'hidden' || field.disabled) continue;
+      if (field.closest('.hidden') && field.closest('[data-step-body]') !== field.closest('.hidden')) continue;
+
+      if (field.name === 'delivery_postal_code') {
+        if (field.value.trim().length < 5) {
+          openCheckoutStep(stepNumber, true);
+          field.setCustomValidity('Please enter a valid 5-digit US ZIP code.');
+          field.reportValidity();
+          field.focus();
+          return false;
+        } else {
+          field.setCustomValidity('');
+        }
+      }
+
+      if (!field.checkValidity()) {
+        openCheckoutStep(stepNumber, true);
+        field.reportValidity();
+        field.focus();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // Clear custom validity on ZIP input change
+  const zipInput = document.querySelector('input[name="delivery_postal_code"]');
+  if (zipInput) {
+    zipInput.addEventListener('input', function() {
+      this.setCustomValidity('');
+    });
+  }
+
+  // Next buttons
+  document.querySelectorAll('[data-next-step]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const currentStep = parseInt(this.getAttribute('data-current-step'), 10);
+      const nextStep = parseInt(this.getAttribute('data-next-step'), 10);
+
+      if (validateCheckoutStep(currentStep)) {
+        markStepCompleted(currentStep, true);
+        if (nextStep > maxUnlockedStep) {
+          maxUnlockedStep = nextStep;
+        }
+        openCheckoutStep(nextStep, true);
+      }
+    });
+  });
+
+  // Back buttons
+  document.querySelectorAll('[data-prev-step]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const prevStep = parseInt(this.getAttribute('data-prev-step'), 10);
+      openCheckoutStep(prevStep, true);
+    });
+  });
+
+  // Clicking step headers (allows opening unlocked/completed steps or validating forward)
+  document.querySelectorAll('[data-step-header]').forEach(function(header) {
+    header.addEventListener('click', function() {
+      const clickedStep = parseInt(this.getAttribute('data-step-header'), 10);
+      if (clickedStep <= maxUnlockedStep) {
+        openCheckoutStep(clickedStep, false);
+      } else {
+        // Validate all prior steps before allowing jump ahead
+        for (let s = 1; s < clickedStep; s++) {
+          if (!validateCheckoutStep(s)) {
+            return;
+          }
+          markStepCompleted(s, true);
+        }
+        maxUnlockedStep = clickedStep;
+        openCheckoutStep(clickedStep, false);
+      }
+    });
+  });
+
+  // Ensure all collapsible steps are valid before final form submission
+  const checkoutForm = document.getElementById('checkout-form');
+  if (checkoutForm) {
+    checkoutForm.addEventListener('submit', function(e) {
+      for (let s = 1; s <= totalSteps; s++) {
+        if (!validateCheckoutStep(s)) {
+          e.preventDefault();
+          return;
+        }
+        markStepCompleted(s, true);
+      }
+    });
   }
 });
 </script>

@@ -28,7 +28,20 @@
       <span>&bull;</span>
       <span>Status: <strong class="text-emerald-800 uppercase">{{ order.get_order_status_display }}</strong></span>
       <span>&bull;</span>
-      <span>Payment: <strong class="text-emerald-800">{{ order.get_payment_status_display }}</strong></span>
+      <span>Payment Method: <strong class="text-forest">{{ order.get_payment_method_display }}</strong></span>
+      <span>&bull;</span>
+      <span>Payment Status: <strong class="text-emerald-800">{{ order.get_payment_status_display }}</strong></span>
+    </div>
+
+    <!-- ADMIN PAYMENT DETAILS CONFIRMATION MESSAGE -->
+    <div class="p-6 bg-emerald-50/90 rounded-2xl border-2 border-emerald-300 text-left space-y-2 shadow-xs">
+      <div class="flex items-center gap-2.5 text-emerald-900 font-serif text-xl font-bold">
+        <i class="fa-solid fa-envelope-open-text text-emerald-700"></i>
+        <span>Payment Details &amp; Admin Concierge Follow-Up</span>
+      </div>
+      <p class="text-stone-700 text-xs sm:text-sm leading-relaxed">
+        Thank you for completing your checkout! Our admin will contact you shortly at <strong class="text-forest">{{ order.customer_email }}</strong> and <strong class="text-forest">{{ order.customer_phone }}</strong> with the full payment details and step-by-step instructions with respect to the payment method you chose (<strong class="text-emerald-900">{{ order.get_payment_method_display }}</strong>).
+      </p>
     </div>
 
     <!-- CHAPERONED TRAVEL COORDINATION DOSSIER CARD -->

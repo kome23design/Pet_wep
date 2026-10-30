@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>{% block title %}{{ site_settings.business_name|default:"Prestige Paws NYC" }} &bull; Premier Luxury Pet Placement Atelier{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}New York City's premier luxury pet placement atelier. Ethically hand-reared Maltipoo and Maltese puppies with certified veterinary health credentials and chaperoned delivery across the USA.{% endblock %}">
   
@@ -472,7 +472,10 @@
           duration: 750,
           easing: 'ease-out-cubic',
           once: true,
-          offset: 40,
+          offset: 10,
+        });
+        window.addEventListener('load', function() {
+          AOS.refresh();
         });
       }
     });

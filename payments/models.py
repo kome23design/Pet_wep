@@ -11,15 +11,16 @@ class Payment(models.Model):
     )
 
     METHOD_CHOICES = (
-        ('stripe_checkout', 'Stripe Hosted Secure Checkout'),
-        ('stripe_card', 'Stripe Credit/Debit Card'),
-        ('simulator', 'Development Payment Simulator (Test Sandbox)'),
+        ('paypal', 'PayPal'),
+        ('chime', 'Chime'),
+        ('cashapp', 'Cash App'),
+        ('apple_pay', 'Apple Pay'),
     )
 
     order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='payment')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=10, default='usd')
-    payment_method = models.CharField(max_length=30, choices=METHOD_CHOICES, default='stripe_checkout')
+    payment_method = models.CharField(max_length=30, choices=METHOD_CHOICES, default='paypal')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     
     stripe_session_id = models.CharField(max_length=150, blank=True, default='')

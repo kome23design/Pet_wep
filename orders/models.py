@@ -76,11 +76,10 @@ class Order(models.Model):
     )
 
     PAYMENT_METHOD_CHOICES = (
-        ('card', 'Credit / Debit Card (Stripe)'),
-        ('apple_pay', 'Apple Pay Digital Wallet'),
-        ('paypal', 'PayPal Checkout'),
-        ('zelle', 'Zelle Private Bank Transfer'),
-        ('simulator', 'Development Sandbox Simulator'),
+        ('paypal', 'PayPal'),
+        ('chime', 'Chime'),
+        ('cashapp', 'Cash App'),
+        ('apple_pay', 'Apple Pay'),
     )
 
     order_number = models.CharField(max_length=40, unique=True, editable=False)
@@ -111,7 +110,7 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     
     # Payment Method & Statuses
-    payment_method = models.CharField(max_length=30, choices=PAYMENT_METHOD_CHOICES, default='simulator')
+    payment_method = models.CharField(max_length=30, choices=PAYMENT_METHOD_CHOICES, default='paypal')
     payment_status = models.CharField(max_length=25, choices=PAYMENT_STATUS_CHOICES, default='pending')
     order_status = models.CharField(max_length=25, choices=ORDER_STATUS_CHOICES, default='pending_payment')
     

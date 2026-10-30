@@ -73,7 +73,10 @@ def simulate_payment_view(request, order_number):
                     notes='Payment authorized via Development Simulator sandbox. Order confirmed for chaperoned delivery.'
                 )
 
-            messages.success(request, f"Payment simulation successful! Order #{order.order_number} is confirmed.")
+            messages.success(
+                request,
+                f"Order #{order.order_number} is confirmed! Our admin will contact you shortly with the full payment details with respect to your chosen payment method ({order.get_payment_method_display()})."
+            )
             return redirect('orders:order_confirmation', order_number=order.order_number)
 
         elif action == 'fail':
