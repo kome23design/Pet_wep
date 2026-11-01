@@ -11,6 +11,7 @@ from deliveries.models import Delivery, DeliveryEvent
 from reviews.models import Review, ReviewModerationHistory
 from pages.models import ContactInquiry, NewsletterSubscriber
 from accounts.models import User
+from core.emails import send_order_status_update_email
 
 def staff_required(user):
     return user.is_authenticated and (user.is_store_staff or user.is_superuser)
@@ -251,14 +252,16 @@ def order_detail_admin(request, order_number):
                         order.delivery.actual_delivery_time = timezone.now()
                         order.delivery.save()
                         
+                status_notes = request.POST.get('notes', 'Updated via executive portal')
                 OrderStatusHistory.objects.create(
                     order=order,
                     from_status=old_status,
                     to_status=new_status,
                     changed_by=request.user,
-                    notes=request.POST.get('notes', 'Updated via executive portal')
+                    notes=status_notes
                 )
-                messages.success(request, f"Order status updated to {order.get_order_status_display()}.")
+                send_order_status_update_email(order, status_notes=status_notes)
+                messages.success(request, f"Order status updated to {order.get_order_status_display()} and client notified via support@royalmaltipoos.shop.")
 
         elif action == 'assign_courier':
             courier_id = request.POST.get('courier_id')

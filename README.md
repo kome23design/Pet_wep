@@ -1,11 +1,11 @@
-# Prestige Paws NYC &mdash; Luxury Pet Placement Atelier &amp; Chaperoned Companion Delivery
+# Royal Maltipoos &mdash; Luxury Pet Placement Atelier &amp; Chaperoned Companion Delivery
 
 [![Django](https://img.shields.io/badge/Django-5.2-1B3B2B?style=for-the-badge&logo=django)](https://www.djangoproject.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![Stripe](https://img.shields.io/badge/Stripe-Card_Payments-635BFF?style=for-the-badge&logo=stripe)](https://stripe.com/)
 [![Tests](https://img.shields.io/badge/Automated_Tests-23_Passed_100%25-brightgreen?style=for-the-badge)]()
 
-**Prestige Paws NYC** is a production-ready, full-stack pet e-commerce platform and luxury placement atelier headquartered at **450 Lexington Avenue, Suite 1800, New York, NY 10017**. Designed specifically for high-trust companion pet adoption with nationwide chaperoned transport, the platform combines luxury aesthetics, database-level transactional concurrency locking, flight nanny coordination, an interactive faceted sidebar filter for breeds, lifestyle, and activities, an authoritative Canine Atelier Journal & Blog, Stripe payments with HMAC signature verification, a development payment sandbox simulator, customer review moderation queues, and an executive administration portal.
+**Royal Maltipoos** is a production-ready, full-stack pet e-commerce platform and luxury placement atelier headquartered at **450 Lexington Avenue, Suite 1800, New York, NY 10017**. Designed specifically for high-trust companion pet adoption with nationwide chaperoned transport, the platform combines luxury aesthetics, database-level transactional concurrency locking, flight nanny coordination, an interactive faceted sidebar filter for breeds, lifestyle, and activities, an authoritative Canine Atelier Journal & Blog, Stripe payments with HMAC signature verification, a development payment sandbox simulator, customer review moderation queues, and an executive administration portal.
 
 ---
 
@@ -124,9 +124,9 @@ After running `python manage.py populate_demo_data`, the following pre-configure
 
 | Role | Username | Password | Email | Direct URL | Scope & Permissions |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Executive Admin** *(Superuser)* | `admin` | `AdminPass2026!` | `admin@prestigepaws.nyc` | [`/portal/`](http://127.0.0.1:8000/portal/) & [`/admin/`](http://127.0.0.1:8000/admin/) | Full administrative clearance across both the Executive Portal and Django Core Admin. |
-| **Atelier Staff Manager** | `staff_lisa` | `StaffPass2026!` | `lisa@prestigepaws.nyc` | [`/portal/`](http://127.0.0.1:8000/portal/) | Store manager access for inventory adjustments, order fulfillment, and review approvals. |
-| **Certified Flight Courier** | `courier_dave` | `CourierPass2026!` | `courier.dave@prestigepaws.nyc` | [`/deliveries/courier/portal/`](http://127.0.0.1:8000/deliveries/courier/portal/) | Courier mobile console for in-transit GPS checkpoint telemetry updates. |
+| **Executive Admin** *(Superuser)* | `admin` | `AdminPass2026!` | `support@royalmaltipoos.shop` | [`/portal/`](http://127.0.0.1:8000/portal/) & [`/admin/`](http://127.0.0.1:8000/admin/) | Full administrative clearance across both the Executive Portal and Django Core Admin. |
+| **Atelier Staff Manager** | `staff_lisa` | `StaffPass2026!` | `support@royalmaltipoos.shop` | [`/portal/`](http://127.0.0.1:8000/portal/) | Store manager access for inventory adjustments, order fulfillment, and review approvals. |
+| **Certified Flight Courier** | `courier_dave` | `CourierPass2026!` | `support@royalmaltipoos.shop` | [`/deliveries/courier/portal/`](http://127.0.0.1:8000/deliveries/courier/portal/) | Courier mobile console for in-transit GPS checkpoint telemetry updates. |
 | **Verified Private Adopter** | `customer_sophie` | `CustomerPass2026!` | `sophie.adopter@gmail.com` | [`/accounts/dashboard/`](http://127.0.0.1:8000/accounts/dashboard/) | Client dashboard with active adoption history and saved residences. |
 
 ---
@@ -272,7 +272,7 @@ Before launching in production, verify these settings in `.env`:
 ```env
 DEBUG=False
 DJANGO_SECRET_KEY="generate-a-strong-random-key"
-ALLOWED_HOSTS="prestigepaws.nyc,www.prestigepaws.nyc"
+ALLOWED_HOSTS="royalmaltipoos.shop,www.royalmaltipoos.shop"
 SECURE_SSL_REDIRECT=True
 SESSION_COOKIE_SECURE=True
 CSRF_COOKIE_SECURE=True
@@ -281,4 +281,4 @@ CSRF_COOKIE_SECURE=True
 ---
 
 ## 📄 License & Disclaimer
-This software is developed for **Prestige Paws NYC**. All demo animal photography, USDA license numbers, and sample addresses represent demonstration mock assets designed for testing and development.
+This software is developed for **Royal Maltipoos**. All demo animal photography, USDA license numbers, and sample addresses represent demonstration mock assets designed for testing and development.

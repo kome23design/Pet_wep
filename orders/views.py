@@ -15,6 +15,7 @@ from orders.forms import CheckoutForm
 from accounts.models import User, CustomerAddress
 from deliveries.models import Delivery, DeliveryEvent
 from payments.models import Payment
+from core.emails import send_order_confirmation_email, send_welcome_account_email
 
 def validate_coupon_api(request):
     """
@@ -139,7 +140,8 @@ def checkout_view(request):
                             )
                             auth_login(request, new_user)
                             order.customer = new_user
-                            messages.success(request, f"Welcome to Prestige Paws NYC! Your private client account '{username}' has been created.")
+                            send_welcome_account_email(new_user)
+                            messages.success(request, f"Welcome to Royal Maltipoos! Your private client account '{username}' has been created.")
                     else:
                         order.customer = None  # Explicit Guest Order!
 
@@ -233,9 +235,12 @@ def checkout_view(request):
                 messages.error(request, f"An error occurred while securing your reservation: {str(e)}")
                 return redirect('cart:view_cart')
 
+            # Dispatch professional HTML order confirmation email to customer & support@royalmaltipoos.shop
+            send_order_confirmation_email(order)
+
             messages.success(
                 request,
-                f"Order #{order.order_number} confirmed! Our admin will contact you shortly with the full payment details with respect to your chosen payment method ({order.get_payment_method_display()})."
+                f"Order #{order.order_number} confirmed! A confirmation email has been sent to {order.customer_email}, and our admin will contact you shortly with the full payment details with respect to your chosen payment method ({order.get_payment_method_display()})."
             )
 
             # Route to Order Confirmation (or Stripe if configured)

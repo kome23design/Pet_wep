@@ -25,7 +25,7 @@ def create_stripe_checkout_session(order, success_url, cancel_url):
                 'price_data': {
                     'currency': 'usd',
                     'product_data': {
-                        'name': f"Prestige Paws Placement - Order #{order.order_number}",
+                        'name': f"Royal Maltipoos Placement - Order #{order.order_number}",
                         'description': f"Companion Placement for {order.customer_name}",
                     },
                     'unit_amount': unit_amount,
@@ -53,7 +53,7 @@ def create_stripe_checkout_session(order, success_url, cancel_url):
             'cancel_url': cancel_url,
             'payment_method_types[0]': 'card',
             'line_items[0][price_data][currency]': 'usd',
-            'line_items[0][price_data][product_data][name]': f"Prestige Paws Placement - Order #{order.order_number}",
+            'line_items[0][price_data][product_data][name]': f"Royal Maltipoos Placement - Order #{order.order_number}",
             'line_items[0][price_data][unit_amount]': str(unit_amount),
             'line_items[0][quantity]': '1',
             'metadata[order_number]': order.order_number,

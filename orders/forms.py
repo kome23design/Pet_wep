@@ -60,7 +60,7 @@ class CheckoutForm(forms.ModelForm):
     terms_accepted = forms.BooleanField(
         required=True,
         widget=forms.CheckboxInput(attrs={'class': 'form-checkbox'}),
-        error_messages={'required': 'You must accept the Prestige Paws Placement Terms.'}
+        error_messages={'required': 'You must accept the Royal Maltipoos Placement Terms.'}
     )
     welfare_policy_acknowledged = forms.BooleanField(
         required=True,

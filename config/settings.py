@@ -1,5 +1,5 @@
 """
-Django settings for Prestige Paws NYC project.
+Django settings for Royal Maltipoos project.
 """
 
 from pathlib import Path
@@ -152,7 +152,7 @@ EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() in ('true', '1')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Prestige Paws NYC <concierge@prestigepaws.nyc>')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Royal Maltipoos <support@royalmaltipoos.shop>')
 
 # Stripe Configuration
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
@@ -161,16 +161,17 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
 STRIPE_CURRENCY = 'usd'
 
 # Business Constants
-BUSINESS_NAME = "Prestige Paws NYC"
-BUSINESS_TAGLINE = "Manhattan's Premier Pet Placement & Chaperoned Delivery Atelier"
+BUSINESS_NAME = "Royal Maltipoos"
+BUSINESS_DOMAIN = "royalmaltipoos.shop"
+BUSINESS_TAGLINE = "Premier Luxury Maltipoo & Maltese Placement & Chaperoned Delivery Atelier"
 BUSINESS_CITY = "New York City, NY"
 BUSINESS_ADDRESS = "450 Lexington Avenue, Suite 1800, New York, NY 10017"
 BUSINESS_PHONE = "(212) 555-PAWS"
-BUSINESS_EMAIL = "concierge@prestigepaws.nyc"
+BUSINESS_EMAIL = "support@royalmaltipoos.shop"
 
 # Delivery Constants
 NYC_ORIGIN_LAT = 40.7527
 NYC_ORIGIN_LNG = -73.9772
-NYC_ORIGIN_NAME = "Prestige Paws NYC Flagship Atelier"
+NYC_ORIGIN_NAME = "Royal Maltipoos Flagship Atelier"
 STANDARD_DELIVERY_FEE = 250.00
 NY_TAX_RATE = 0.08875  # 8.875% NYC sales tax

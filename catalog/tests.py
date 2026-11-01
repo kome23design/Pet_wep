@@ -97,3 +97,31 @@ class CatalogTestCase(TestCase):
         response = self.client.get(reverse('catalog:search'), {'q': 'NonExistentPuppy'})
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, "Bella")
+
+    def test_newly_added_pet_appears_first_on_shop_and_homepage(self):
+        new_pet = Pet.objects.create(
+            reference_number="TEST-PET-NEW-999",
+            name="NewestRoyalPup",
+            category=self.category,
+            breed=self.breed,
+            date_of_birth=date.today() - timedelta(days=75),
+            sex='female',
+            coat_color='Red Apricot',
+            expected_adult_size='Toy (5-7 lbs)',
+            price=Decimal("4500.00"),
+            status='available',
+            is_published=True,
+            is_featured=False,
+            description="Newly added royal maltipoo puppy."
+        )
+        # Shop page: NewestRoyalPup (is_featured=False) should appear before older Bella (is_featured=True)
+        shop_resp = self.client.get(reverse('catalog:pet_list'))
+        self.assertEqual(shop_resp.status_code, 200)
+        shop_pets = list(shop_resp.context['pets'])
+        self.assertEqual(shop_pets[0].id, new_pet.id)
+
+        # Homepage swipers: NewestRoyalPup should appear first in featured_maltipoos and recent_pets
+        home_resp = self.client.get(reverse('pages:home'))
+        self.assertEqual(home_resp.status_code, 200)
+        self.assertEqual(list(home_resp.context['featured_maltipoos'])[0].id, new_pet.id)
+        self.assertEqual(list(home_resp.context['recent_pets'])[0].id, new_pet.id)

@@ -1,0 +1,41 @@
+{% extends 'emails/base_email.html' %}
+
+{% block email_title %}Order Status Update #{{ order.order_number }} | Royal Maltipoos{% endblock %}
+
+{% block email_content %}
+  <div style="text-align: center; margin-bottom: 24px;">
+    <span style="display: inline-block; background-color: #F8F4EC; color: #A68318; border: 1px solid #D4AF37; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 6px 16px; border-radius: 999px;">
+      Placement Dossier Update
+    </span>
+    <h1 style="font-family: Georgia, 'Times New Roman', serif; font-size: 26px; color: #0F2319; margin: 14px 0 6px 0; font-weight: 700;">
+      Order #{{ order.order_number }} Status Updated
+    </h1>
+  </div>
+
+  <p style="font-size: 14px; color: #2C3731;">Dear <strong>{{ order.customer_name }}</strong>,</p>
+  <p style="font-size: 14px; color: #2C3731;">
+    Our executive placement team at <strong>Royal Maltipoos</strong> has updated the status of your companion reservation dossier <strong>#{{ order.order_number }}</strong>:
+  </p>
+
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #FAF8F5; border-left: 4px solid #D4AF37; border-radius: 10px; padding: 18px; margin: 20px 0;">
+    <tr>
+      <td>
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #6E7D75; font-weight: 700;">Current Reservation Status</div>
+        <div style="font-family: Georgia, 'Times New Roman', serif; font-size: 22px; font-weight: 700; color: #0F2319; margin-top: 4px;">
+          {{ order.get_order_status_display }}
+        </div>
+        {% if status_notes %}
+        <p style="font-size: 13px; color: #4A5550; margin: 8px 0 0 0;">
+          <strong>Concierge Notes:</strong> {{ status_notes }}
+        </p>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+
+  <div style="text-align: center; margin: 28px 0 10px 0;">
+    <a href="https://royalmaltipoos.shop/order/{{ order.order_number }}/" style="display: inline-block; background-color: #0F2319; color: #D4AF37; font-size: 13px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; padding: 14px 28px; border-radius: 999px; border: 1px solid #D4AF37;">
+      View Order &amp; Delivery Status
+    </a>
+  </div>
+{% endblock %}

@@ -6,24 +6,25 @@ from django.db.models import Q, Count
 from catalog.models import Pet, PetBreed, PetCategory
 from reviews.models import Review
 from pages.models import FAQ, GalleryItem, ContactInquiry, NewsletterSubscriber, BlogPost, BlogCategory
+from core.emails import send_contact_inquiry_email, send_newsletter_welcome_email
 
 def home_view(request):
     featured_maltipoos = Pet.objects.filter(
         breed__slug='maltipoo',
         is_published=True,
         status='available'
-    ).select_related('breed', 'category').prefetch_related('images')[:7]
+    ).select_related('breed', 'category').prefetch_related('images').order_by('-created_at', '-id')[:7]
 
     featured_maltese = Pet.objects.filter(
         breed__slug='maltese',
         is_published=True,
         status='available'
-    ).select_related('breed', 'category').prefetch_related('images')[:7]
+    ).select_related('breed', 'category').prefetch_related('images').order_by('-created_at', '-id')[:7]
 
     recent_pets = Pet.objects.filter(
         is_published=True,
         status='available'
-    ).select_related('breed', 'category').prefetch_related('images').order_by('-created_at')[:8]
+    ).select_related('breed', 'category').prefetch_related('images').order_by('-created_at', '-id')[:8]
 
     approved_reviews = Review.objects.filter(
         status='approved'
@@ -85,7 +86,7 @@ def contact_view(request):
         message = request.POST.get('message', '').strip()
 
         if name and email and message:
-            ContactInquiry.objects.create(
+            inquiry = ContactInquiry.objects.create(
                 name=name,
                 email=email,
                 phone=phone,
@@ -93,9 +94,10 @@ def contact_view(request):
                 pet_interest=pet_interest,
                 message=message,
             )
+            send_contact_inquiry_email(inquiry)
             messages.success(
                 request,
-                f"Thank you, {name}. Your inquiry has been delivered directly to our Manhattan Concierge Directorate. A private pet placement specialist will contact you shortly."
+                f"Thank you, {name}. Your inquiry has been delivered directly to the Royal Maltipoos Concierge Directorate (support@royalmaltipoos.shop). A confirmation email has been sent to {email}."
             )
             return redirect('pages:contact')
         else:
@@ -183,9 +185,10 @@ def newsletter_subscribe_api(request):
         email = request.POST.get('email', '').strip()
         if email and '@' in email:
             NewsletterSubscriber.objects.get_or_create(email=email, defaults={'is_active': True})
+            send_newsletter_welcome_email(email)
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'success': True, 'message': 'Welcome to the Prestige Paws NYC private newsletter.'})
-            messages.success(request, "Thank you for subscribing to our private VIP pet placement newsletter.")
+                return JsonResponse({'success': True, 'message': 'Welcome to the Royal Maltipoos private newsletter.'})
+            messages.success(request, "Thank you for subscribing to the Royal Maltipoos private VIP pet placement newsletter.")
         else:
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': False, 'error': 'Invalid email address.'}, status=400)

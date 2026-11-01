@@ -1,0 +1,27 @@
+{% extends 'emails/base_email.html' %}
+
+{% block email_title %}Welcome to the Private VIP Circle | Royal Maltipoos{% endblock %}
+
+{% block email_content %}
+  <div style="text-align: center; margin-bottom: 24px;">
+    <span style="display: inline-block; background-color: #F8F4EC; color: #A68318; border: 1px solid #D4AF37; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 6px 16px; border-radius: 999px;">
+      Private VIP Circle
+    </span>
+    <h1 style="font-family: Georgia, 'Times New Roman', serif; font-size: 26px; color: #0F2319; margin: 14px 0 6px 0; font-weight: 700;">
+      Welcome to the Royal Maltipoos Private Circle
+    </h1>
+  </div>
+
+  <p style="font-size: 14px; color: #2C3731;">
+    Thank you for joining the <strong>Royal Maltipoos</strong> Private VIP Circle with <strong>{{ email }}</strong>.
+  </p>
+  <p style="font-size: 14px; color: #2C3731;">
+    As an insider member, you will receive priority notifications whenever newly added Maltipoo and Maltese litters enter our Manhattan Atelier before public placement, along with veterinary care guides from our canine specialists.
+  </p>
+
+  <div style="text-align: center; margin: 28px 0 10px 0;">
+    <a href="https://royalmaltipoos.shop/pets/" style="display: inline-block; background-color: #0F2319; color: #D4AF37; font-size: 13px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; padding: 14px 28px; border-radius: 999px; border: 1px solid #D4AF37;">
+      Browse Newly Added Puppies
+    </a>
+  </div>
+{% endblock %}

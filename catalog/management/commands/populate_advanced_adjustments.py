@@ -207,8 +207,8 @@ class Command(BaseCommand):
                     'is_featured': kdata['is_featured'],
                     'vaccination_summary': 'FVRCP Series (Feline Viral Rhinotracheitis, Calicivirus, Panleukopenia), Rabies, Microchipped & Dewormed.',
                     'veterinary_health_certificate_number': 'USDA-APHIS-FELINE-NYC',
-                    'breeder_atelier_origin': 'Prestige Paws Feline Nursery Directorate - New York',
-                    'current_location': 'Prestige Paws Manhattan Atelier - New York, NY',
+                    'breeder_atelier_origin': 'Royal Maltipoos Feline Nursery Directorate - New York',
+                    'current_location': 'Royal Maltipoos Manhattan Atelier - New York, NY',
                 }
             )
             for idx, img_url in enumerate(kdata['images']):
@@ -461,21 +461,21 @@ class Command(BaseCommand):
             ("Vivienne Sterling", 5, "From our private viewing at the Lexington Avenue suite to the doorstep handover in Brooklyn Heights, the entire experience was flawless.", datetime.date(2025, 6, 29), "Brooklyn Heights, NY"),
             ("Alistair Finch", 5, "Our British Shorthair kitten, Cleo, has the sweetest, calmest disposition. She purred the moment she stepped out of her travel carrier.", datetime.date(2025, 7, 15), "SoHo, Manhattan"),
             ("Genevieve Thorne", 5, "Truly a bespoke service. Our courier arrived precisely on time with a temperature-monitored carrier and comprehensive health records.", datetime.date(2025, 8, 3), "Hamptons, NY"),
-            ("Julian & Clara Hayes", 5, "Milo is the joy of our townhouse. His crate training from the nursery made his first week seamless. Thank you Prestige Paws!", datetime.date(2025, 8, 22), "Gramercy Park, NYC"),
+            ("Julian & Clara Hayes", 5, "Milo is the joy of our townhouse. His crate training from the nursery made his first week seamless. Thank you Royal Maltipoos!", datetime.date(2025, 8, 22), "Gramercy Park, NYC"),
             ("Beatrice Montgomery", 5, "The genetic health warranty and USDA certifications gave my family complete peace of mind. Our puppy is thriving.", datetime.date(2025, 9, 10), "West Village, NYC"),
             ("Sophia Kensington", 5, "The flight nanny kept us updated with flight photos and text messages during every layover. Exceptional care for the puppy.", datetime.date(2025, 9, 28), "Beverly Hills, CA"),
-            ("Oliver & Margot Drake", 5, "We adopted our Ragdoll kitten through Prestige Paws and the transition was peaceful and loving. Highest recommendation.", datetime.date(2025, 10, 14), "Midtown East, NYC"),
-            ("Lady Catherine Howard", 5, "Prestige Paws represents what all pet adoption should be: compassionate, transparent, and strictly veterinary-supervised.", datetime.date(2025, 10, 30), "Upper West Side, NYC"),
+            ("Oliver & Margot Drake", 5, "We adopted our Ragdoll kitten through Royal Maltipoos and the transition was peaceful and loving. Highest recommendation.", datetime.date(2025, 10, 14), "Midtown East, NYC"),
+            ("Lady Catherine Howard", 5, "Royal Maltipoos represents what all pet adoption should be: compassionate, transparent, and strictly veterinary-supervised.", datetime.date(2025, 10, 30), "Upper West Side, NYC"),
             ("Sebastian Cross", 5, "Our Maltese puppy arrived bathed, groomed, and happy. The 30-day nutrition starter kit was immensely helpful.", datetime.date(2025, 11, 16), "Boston, MA"),
             ("Audrey & Liam Bennett", 5, "The concierge team answered every single pediatric nutrition question we had. Our Maltipoo is healthy, playful, and so loving.", datetime.date(2025, 12, 2), "DUMBO, Brooklyn"),
-            ("Jonathan Sterling, Esq.", 5, "Impressed by the contractual transparency and health guarantees. Prestige Paws NYC is the premier standard.", datetime.date(2025, 12, 19), "Wall Street Corridor, NYC"),
+            ("Jonathan Sterling, Esq.", 5, "Impressed by the contractual transparency and health guarantees. Royal Maltipoos is the premier standard.", datetime.date(2025, 12, 19), "Wall Street Corridor, NYC"),
             ("Victoria Pemberton", 5, "Our Scottish Fold kitten is healthy, affectionate, and was immediately at home with our family. Wonderful experience.", datetime.date(2026, 1, 8), "Greenwich Village, NYC"),
             ("Maximilian Roth", 5, "The in-person consultation in Manhattan was private, serene, and unhurried. You can tell they deeply love these animals.", datetime.date(2026, 1, 25), "Park Avenue, NYC"),
             ("Isabella Fontaine", 5, "My Maltipoo puppy has become the star of our building. So well-socialized and calm around city noises.", datetime.date(2026, 2, 11), "Chelsea, NYC"),
             ("Alexander Sinclair", 5, "Professionalism from start to finish. The veterinary records were stamped by certified clinicians and all vaccines were up to date.", datetime.date(2026, 2, 27), "Scarsdale, NY"),
             ("Evelyn & Thomas Ward", 5, "Our Maltese is pure joy. Soft, clean, playful, and the gentlest companion for our grandparents.", datetime.date(2026, 3, 15), "Chicago, IL"),
             ("Camilla Davenport", 5, "Everything was managed with clockwork precision. The flight nanny handover ceremony at JFK was warm and professional.", datetime.date(2026, 4, 2), "Long Island, NY"),
-            ("Nathaniel Brooks", 5, "I was hesitant about remote placement, but Prestige Paws provided live video consultations and detailed health reports. Outstanding.", datetime.date(2026, 4, 20), "Miami, FL"),
+            ("Nathaniel Brooks", 5, "I was hesitant about remote placement, but Royal Maltipoos provided live video consultations and detailed health reports. Outstanding.", datetime.date(2026, 4, 20), "Miami, FL"),
             ("Seraphina Laurent", 5, "The best pet adoption experience in New York. Ethical breeding standards you can verify yourself.", datetime.date(2026, 5, 8), "Hudson Yards, NYC"),
 
             # 4-star reviews
@@ -527,7 +527,7 @@ class Command(BaseCommand):
                 defaults={
                     'first_name': fname,
                     'last_name': lname,
-                    'email': f"{uname}@adopter.prestigepaws.nyc",
+                    'email': f"{uname}@adopter.royalmaltipoos.shop",
                     'role': 'customer',
                     'is_verified': True,
                 }

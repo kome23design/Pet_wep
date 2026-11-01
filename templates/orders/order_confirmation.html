@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Order Confirmed &bull; {{ order.order_number }} | Prestige Paws NYC{% endblock %}
+{% block title %}Order Confirmed &bull; {{ order.order_number }} | Royal Maltipoos{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 sm:px-8 py-16">
@@ -33,14 +33,14 @@
       <span>Payment Status: <strong class="text-emerald-800">{{ order.get_payment_status_display }}</strong></span>
     </div>
 
-    <!-- ADMIN PAYMENT DETAILS CONFIRMATION MESSAGE -->
+    <!-- ADMIN PAYMENT DETAILS & EMAIL CONFIRMATION MESSAGE -->
     <div class="p-6 bg-emerald-50/90 rounded-2xl border-2 border-emerald-300 text-left space-y-2 shadow-xs">
       <div class="flex items-center gap-2.5 text-emerald-900 font-serif text-xl font-bold">
         <i class="fa-solid fa-envelope-open-text text-emerald-700"></i>
-        <span>Payment Details &amp; Admin Concierge Follow-Up</span>
+        <span>Email Confirmation Sent &amp; Payment Details Follow-Up</span>
       </div>
       <p class="text-stone-700 text-xs sm:text-sm leading-relaxed">
-        Thank you for completing your checkout! Our admin will contact you shortly at <strong class="text-forest">{{ order.customer_email }}</strong> and <strong class="text-forest">{{ order.customer_phone }}</strong> with the full payment details and step-by-step instructions with respect to the payment method you chose (<strong class="text-emerald-900">{{ order.get_payment_method_display }}</strong>).
+        Thank you for completing your checkout! An official confirmation email has been sent to <strong class="text-forest">{{ order.customer_email }}</strong> from <a href="mailto:support@royalmaltipoos.shop" class="text-emerald-900 font-bold underline">support@royalmaltipoos.shop</a>. Our admin will contact you shortly at <strong class="text-forest">{{ order.customer_email }}</strong> and <strong class="text-forest">{{ order.customer_phone }}</strong> with the full payment details and step-by-step instructions with respect to the payment method you chose (<strong class="text-emerald-900">{{ order.get_payment_method_display }}</strong>).
       </p>
     </div>
 

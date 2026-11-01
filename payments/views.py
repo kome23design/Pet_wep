@@ -57,7 +57,7 @@ def simulate_payment_view(request, order_number):
                         'payment_method': order.payment_method or 'simulator',
                         'status': 'successful',
                         'stripe_payment_intent_id': order.payment_reference,
-                        'raw_response_notes': f'Authorized via {order.get_payment_method_display()} - Prestige Paws Placement Atelier'
+                        'raw_response_notes': f'Authorized via {order.get_payment_method_display()} - Royal Maltipoos Placement Atelier'
                     }
                 )
 

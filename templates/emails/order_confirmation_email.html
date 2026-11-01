@@ -1,0 +1,119 @@
+{% extends 'emails/base_email.html' %}
+
+{% block email_title %}Order Confirmation #{{ order.order_number }} | Royal Maltipoos{% endblock %}
+
+{% block email_content %}
+  <!-- Top Status Badge -->
+  <div style="text-align: center; margin-bottom: 24px;">
+    <span style="display: inline-block; background-color: #EBF5EE; color: #14532D; border: 1px solid #BBF7D0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 6px 16px; border-radius: 999px;">
+      Official Companion Placement Confirmation
+    </span>
+    <h1 style="font-family: Georgia, 'Times New Roman', serif; font-size: 28px; color: #0F2319; margin: 14px 0 6px 0; font-weight: 700;">
+      Thank You for Your Reservation, {{ order.customer_name }}!
+    </h1>
+    <p style="font-size: 13px; color: #5C6B63; margin: 0;">
+      Dossier Reference: <strong style="color: #0F2319; font-family: monospace;">#{{ order.order_number }}</strong> &nbsp;&bull;&nbsp; Placed on {{ order.created_at|date:"F j, Y, g:i a" }}
+    </p>
+  </div>
+
+  <!-- Highlighted Payment Authorization Instructions Box -->
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #FFFBEB; border: 2px solid #D4AF37; border-radius: 14px; padding: 20px; margin-bottom: 28px;">
+    <tr>
+      <td>
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #92400E; margin-bottom: 6px;">
+          Next Step: Payment Authorization ({{ order.get_payment_method_display }})
+        </div>
+        <div style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; font-weight: 700; color: #0F2319; margin-bottom: 8px;">
+          Our Admin Will Contact You Shortly With Full Payment Details
+        </div>
+        <p style="font-size: 13px; color: #4A5550; margin: 0; line-height: 1.6;">
+          Your chosen companion puppy is now officially held under reservation <strong style="color: #0F2319;">#{{ order.order_number }}</strong>. Our executive admin desk (<a href="mailto:support@royalmaltipoos.shop" style="color: #92400E; font-weight: 700; text-decoration: underline;">support@royalmaltipoos.shop</a>) will contact you shortly with the full payment details and verified transfer instructions with respect to your selected payment method (<strong style="color: #0F2319;">{{ order.get_payment_method_display }}</strong>).
+        </p>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Reserved Companion Puppies Table -->
+  <h2 style="font-family: Georgia, 'Times New Roman', serif; font-size: 19px; color: #0F2319; border-bottom: 1px solid #E5DEC9; padding-bottom: 8px; margin: 0 0 16px 0;">
+    Reserved Companion Puppy Dossier
+  </h2>
+
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 24px; border-collapse: collapse;">
+    <thead>
+      <tr style="background-color: #F8F4EC; border-bottom: 1px solid #DFD5C6;">
+        <th align="left" style="padding: 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #5C6B63;">Companion</th>
+        <th align="left" style="padding: 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #5C6B63;">Breed</th>
+        <th align="left" style="padding: 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #5C6B63;">Registry Ref</th>
+        <th align="right" style="padding: 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #5C6B63;">Fee</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in order.items.all %}
+      <tr style="border-bottom: 1px solid #EFE8DC;">
+        <td style="padding: 12px; font-size: 14px; font-weight: 700; color: #0F2319;">{{ item.pet_name }}</td>
+        <td style="padding: 12px; font-size: 13px; color: #4A5550;">{{ item.pet_breed_name }}</td>
+        <td style="padding: 12px; font-size: 12px; font-family: monospace; color: #6E7D75;">{{ item.pet_reference_number }}</td>
+        <td align="right" style="padding: 12px; font-size: 14px; font-weight: 700; color: #0F2319;">${{ item.price|floatformat:2 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Financial Summary Table -->
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #FAF8F5; border: 1px solid #E5DEC9; border-radius: 12px; padding: 18px; margin-bottom: 28px;">
+    <tr>
+      <td style="padding: 4px 0; font-size: 13px; color: #5C6B63;">Companion Placement Subtotal</td>
+      <td align="right" style="padding: 4px 0; font-size: 13px; font-weight: 600; color: #0F2319;">${{ order.subtotal|floatformat:2 }}</td>
+    </tr>
+    {% if order.discount_amount and order.discount_amount > 0 %}
+    <tr>
+      <td style="padding: 4px 0; font-size: 13px; color: #15803D;">Promotional Grant Applied {% if order.coupon %}({{ order.coupon.code }}){% endif %}</td>
+      <td align="right" style="padding: 4px 0; font-size: 13px; font-weight: 600; color: #15803D;">-${{ order.discount_amount|floatformat:2 }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td style="padding: 4px 0; font-size: 13px; color: #5C6B63;">USDA Chaperoned Home Delivery</td>
+      <td align="right" style="padding: 4px 0; font-size: 13px; font-weight: 600; color: #0F2319;">${{ order.delivery_fee|floatformat:2 }}</td>
+    </tr>
+    <tr>
+      <td style="padding: 4px 0 10px 0; font-size: 13px; color: #5C6B63;">NY State &amp; Municipal Tax</td>
+      <td align="right" style="padding: 4px 0 10px 0; font-size: 13px; font-weight: 600; color: #0F2319;">${{ order.tax_amount|floatformat:2 }}</td>
+    </tr>
+    <tr>
+      <td style="padding-top: 12px; border-top: 1px solid #DFD5C6; font-family: Georgia, 'Times New Roman', serif; font-size: 17px; font-weight: 700; color: #0F2319;">Total Placement Balance</td>
+      <td align="right" style="padding-top: 12px; border-top: 1px solid #DFD5C6; font-family: Georgia, 'Times New Roman', serif; font-size: 20px; font-weight: 700; color: #0F2319;">${{ order.total_amount|floatformat:2 }} USD</td>
+    </tr>
+    <tr>
+      <td style="padding-top: 6px; font-size: 12px; color: #5C6B63;">Selected Payment Method</td>
+      <td align="right" style="padding-top: 6px; font-size: 12px; font-weight: 700; color: #A68318;">{{ order.get_payment_method_display }}</td>
+    </tr>
+  </table>
+
+  <!-- Delivery & Contact Details -->
+  <h2 style="font-family: Georgia, 'Times New Roman', serif; font-size: 19px; color: #0F2319; border-bottom: 1px solid #E5DEC9; padding-bottom: 8px; margin: 0 0 14px 0;">
+    US Delivery Residence &amp; Travel Schedule
+  </h2>
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 28px; font-size: 13px; color: #374151;">
+    <tr>
+      <td width="50%" valign="top" style="padding-right: 12px;">
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #6E7D75; font-weight: 700; margin-bottom: 4px;">Adopter Contact</div>
+        <strong>{{ order.customer_name }}</strong><br>
+        {{ order.customer_email }}<br>
+        {{ order.customer_phone }}
+      </td>
+      <td width="50%" valign="top" style="padding-left: 12px;">
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #6E7D75; font-weight: 700; margin-bottom: 4px;">Destination Residence</div>
+        <strong>{{ order.delivery_street_address }}{% if order.delivery_apartment %}, {{ order.delivery_apartment }}{% endif %}</strong><br>
+        {{ order.delivery_city }}, {{ order.delivery_state }} {{ order.delivery_postal_code }}<br>
+        <span style="color: #A68318; font-weight: 600;">Window: {{ order.preferred_delivery_window }}</span>
+      </td>
+    </tr>
+  </table>
+
+  <!-- CTA Button -->
+  <div style="text-align: center; margin: 30px 0 10px 0;">
+    <a href="https://royalmaltipoos.shop/order/{{ order.order_number }}/" style="display: inline-block; background-color: #0F2319; color: #D4AF37; font-size: 13px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; padding: 14px 28px; border-radius: 999px; border: 1px solid #D4AF37;">
+      View Order Dossier &amp; Live GPS Tracking
+    </a>
+  </div>
+{% endblock %}

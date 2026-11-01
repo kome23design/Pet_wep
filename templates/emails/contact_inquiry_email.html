@@ -1,0 +1,42 @@
+{% extends 'emails/base_email.html' %}
+
+{% block email_title %}We Received Your Inquiry | Royal Maltipoos{% endblock %}
+
+{% block email_content %}
+  <div style="text-align: center; margin-bottom: 24px;">
+    <span style="display: inline-block; background-color: #F8F4EC; color: #A68318; border: 1px solid #D4AF37; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 6px 16px; border-radius: 999px;">
+      Private Concierge Directorate
+    </span>
+    <h1 style="font-family: Georgia, 'Times New Roman', serif; font-size: 26px; color: #0F2319; margin: 14px 0 6px 0; font-weight: 700;">
+      Thank You for Contacting Royal Maltipoos
+    </h1>
+  </div>
+
+  <p style="font-size: 14px; color: #2C3731;">Dear <strong>{{ inquiry.name }}</strong>,</p>
+  <p style="font-size: 14px; color: #2C3731;">
+    Your message has been received by the <strong>Royal Maltipoos</strong> Private Concierge Directorate (<a href="mailto:support@royalmaltipoos.shop" style="color: #A68318; font-weight: 600;">support@royalmaltipoos.shop</a>). One of our senior companion placement specialists will respond to you shortly.
+  </p>
+
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #FAF8F5; border: 1px solid #E5DEC9; border-radius: 12px; padding: 18px; margin: 20px 0; font-size: 13px;">
+    <tr>
+      <td style="padding: 4px 0; color: #6E7D75; width: 130px;"><strong>Inquiry Topic:</strong></td>
+      <td style="padding: 4px 0; color: #0F2319; font-weight: 600;">{{ inquiry.get_subject_display }}</td>
+    </tr>
+    {% if inquiry.pet_interest %}
+    <tr>
+      <td style="padding: 4px 0; color: #6E7D75;"><strong>Puppy Reference:</strong></td>
+      <td style="padding: 4px 0; color: #0F2319;">{{ inquiry.pet_interest }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td valign="top" style="padding: 8px 0 4px 0; color: #6E7D75;"><strong>Your Message:</strong></td>
+      <td style="padding: 8px 0 4px 0; color: #2C3731; font-style: italic;">"{{ inquiry.message }}"</td>
+    </tr>
+  </table>
+
+  <div style="text-align: center; margin: 26px 0 8px 0;">
+    <a href="https://royalmaltipoos.shop/pets/" style="display: inline-block; background-color: #0F2319; color: #D4AF37; font-size: 13px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; padding: 13px 26px; border-radius: 999px; border: 1px solid #D4AF37;">
+      Explore Available Puppies
+    </a>
+  </div>
+{% endblock %}

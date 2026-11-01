@@ -2,9 +2,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic.base import RedirectView
 from core.views import custom_404, custom_500, robots_txt, sitemap_xml
 
+admin.site.site_header = "Royal Maltipoos Administration — support@royalmaltipoos.shop"
+admin.site.site_title = "Royal Maltipoos Admin (royalmaltipoos.shop)"
+admin.site.index_title = "Royal Maltipoos Executive Administration | support@royalmaltipoos.shop"
+
 urlpatterns = [
+    # Browser URL Favicon
+    path('favicon.ico', RedirectView.as_view(url='/static/images/royal_maltipoos_logo.png', permanent=False), name='favicon'),
+
     # Built-in Django Admin
     path('admin/', admin.site.urls),
     

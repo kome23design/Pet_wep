@@ -63,7 +63,7 @@ class DeliveriesTestCase(TestCase):
             order=self.order,
             assigned_agent=self.courier,
             status='in_transit',
-            origin_name='Prestige Paws NYC Flagship Atelier',
+            origin_name='Royal Maltipoos Flagship Atelier',
             origin_address='450 Lexington Ave, Suite 1800, New York, NY 10017',
             origin_latitude=40.7527,
             origin_longitude=-73.9772,

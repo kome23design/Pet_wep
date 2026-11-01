@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.db import transaction
 from decimal import Decimal
 from datetime import date, timedelta
@@ -68,6 +69,15 @@ class OrdersTestCase(TestCase):
         # Pet availability status should transition to reserved
         self.pet.refresh_from_db()
         self.assertEqual(self.pet.status, 'reserved')
+
+        # Verify order confirmation email was dispatched to customer
+        self.assertGreaterEqual(len(mail.outbox), 1)
+        confirmation_email = mail.outbox[-1]
+        self.assertIn('ordercustomer@example.com', confirmation_email.to)
+        self.assertIn(order.order_number, confirmation_email.subject)
+        self.assertIn('Royal Maltipoos', confirmation_email.subject)
+        self.assertTrue(len(confirmation_email.alternatives) > 0)
+        self.assertIn('support@royalmaltipoos.shop', confirmation_email.alternatives[0][0])
 
     def test_order_cancellation_restores_inventory(self):
         # Create an order with reserved pet

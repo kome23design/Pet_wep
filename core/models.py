@@ -1,10 +1,10 @@
 from django.db import models
 
 class SiteSetting(models.Model):
-    business_name = models.CharField(max_length=100, default='Prestige Paws NYC')
-    tagline = models.CharField(max_length=255, default="Manhattan's Premier Pet Placement & Chaperoned Delivery Atelier")
+    business_name = models.CharField(max_length=100, default='Royal Maltipoos')
+    tagline = models.CharField(max_length=255, default="Premier Luxury Maltipoo & Maltese Placement & Chaperoned Delivery Atelier")
     phone = models.CharField(max_length=30, default='(212) 555-PAWS')
-    email = models.EmailField(default='concierge@prestigepaws.nyc')
+    email = models.EmailField(default='support@royalmaltipoos.shop')
     address = models.CharField(max_length=255, default='450 Lexington Avenue, Suite 1800, New York, NY 10017')
     operating_hours = models.CharField(max_length=150, default='Mon - Sat: 9:00 AM - 7:00 PM EST | Sun: By Private Appointment')
     delivery_disclaimer = models.TextField(

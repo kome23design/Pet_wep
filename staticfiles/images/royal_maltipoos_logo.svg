@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <radialGradient id="royalForestGrad" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#1D4230"/>
+      <stop offset="65%" stop-color="#0F2319"/>
+      <stop offset="100%" stop-color="#07120C"/>
+    </radialGradient>
+    <linearGradient id="royalGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F9E596"/>
+      <stop offset="35%" stop-color="#D4AF37"/>
+      <stop offset="70%" stop-color="#AA820A"/>
+      <stop offset="100%" stop-color="#F3D678"/>
+    </linearGradient>
+    <linearGradient id="creamFurGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDF9"/>
+      <stop offset="100%" stop-color="#EFE6D5"/>
+    </linearGradient>
+    <filter id="softGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Luxury Crest Medallion -->
+  <circle cx="256" cy="256" r="244" fill="url(#royalForestGrad)" stroke="url(#royalGoldGrad)" stroke-width="10"/>
+  <circle cx="256" cy="256" r="224" fill="none" stroke="url(#royalGoldGrad)" stroke-width="2" stroke-dasharray="6,6" opacity="0.75"/>
+  <circle cx="256" cy="256" r="208" fill="none" stroke="url(#royalGoldGrad)" stroke-width="1.5" opacity="0.45"/>
+
+  <!-- Golden Laurel Wreath Accents -->
+  <g fill="none" stroke="url(#royalGoldGrad)" stroke-width="4" stroke-linecap="round" opacity="0.85">
+    <path d="M106,340 C70,275 76,185 128,130"/>
+    <path d="M406,340 C442,275 436,185 384,130"/>
+  </g>
+  <!-- Laurel Leaves Left & Right -->
+  <g fill="url(#royalGoldGrad)" opacity="0.85">
+    <ellipse cx="90" cy="295" rx="12" ry="5" transform="rotate(-55 90 295)"/>
+    <ellipse cx="82" cy="255" rx="12" ry="5" transform="rotate(-75 82 255)"/>
+    <ellipse cx="86" cy="215" rx="12" ry="5" transform="rotate(-95 86 215)"/>
+    <ellipse cx="102" cy="175" rx="12" ry="5" transform="rotate(-115 102 175)"/>
+    <ellipse cx="422" cy="295" rx="12" ry="5" transform="rotate(55 422 295)"/>
+    <ellipse cx="430" cy="255" rx="12" ry="5" transform="rotate(75 430 255)"/>
+    <ellipse cx="426" cy="215" rx="12" ry="5" transform="rotate(95 426 215)"/>
+    <ellipse cx="410" cy="175" rx="12" ry="5" transform="rotate(115 410 175)"/>
+  </g>
+
+  <!-- Sovereign Royal Crown -->
+  <g filter="url(#softGlow)">
+    <path d="M176,138 L196,86 L228,116 L256,72 L284,116 L316,86 L336,138 Z" fill="url(#royalGoldGrad)" stroke="#FFF6D6" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="176" y="138" width="160" height="14" rx="7" fill="url(#royalGoldGrad)" stroke="#FFF6D6" stroke-width="1.5"/>
+    <circle cx="196" cy="80" r="6" fill="#FFF6D6"/>
+    <circle cx="256" cy="64" r="8" fill="#FFF6D6"/>
+    <circle cx="316" cy="80" r="6" fill="#FFF6D6"/>
+    <!-- Crown Jewels -->
+    <circle cx="216" cy="145" r="3" fill="#0F2319"/>
+    <circle cx="256" cy="145" r="3.5" fill="#0F2319"/>
+    <circle cx="296" cy="145" r="3" fill="#0F2319"/>
+  </g>
+
+  <!-- Stylized Maltipoo Puppy Portrait -->
+  <g filter="url(#softGlow)">
+    <!-- Fluffy Teddy Ears -->
+    <path d="M168,180 C128,186 112,240 132,286 C146,315 174,306 184,274 Z" fill="#E5D5BC" stroke="url(#royalGoldGrad)" stroke-width="3"/>
+    <path d="M344,180 C384,186 400,240 380,286 C366,315 338,306 328,274 Z" fill="#E5D5BC" stroke="url(#royalGoldGrad)" stroke-width="3"/>
+
+    <!-- Fluffy Head & Cheeks -->
+    <path d="M174,174 C194,146 318,146 338,174 C368,214 362,298 318,324 C284,344 228,344 194,324 C150,298 144,214 174,174 Z" fill="url(#creamFurGrad)" stroke="url(#royalGoldGrad)" stroke-width="3.5"/>
+
+    <!-- Teddy Muzzle -->
+    <ellipse cx="256" cy="278" rx="54" ry="40" fill="#FFFFFF" stroke="#E5D5BC" stroke-width="2"/>
+
+    <!-- Expressive Dark Button Eyes -->
+    <circle cx="214" cy="232" r="14" fill="#121D17"/>
+    <circle cx="210" cy="227" r="4.5" fill="#FFFFFF"/>
+    <circle cx="298" cy="232" r="14" fill="#121D17"/>
+    <circle cx="294" cy="227" r="4.5" fill="#FFFFFF"/>
+
+    <!-- Cute Button Nose & Smile -->
+    <path d="M242,262 Q256,255 270,262 L256,277 Z" fill="#121D17"/>
+    <path d="M256,276 L256,291 M240,291 Q256,302 272,291" stroke="#121D17" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+    <!-- Royal Golden Collar & Medallion -->
+    <path d="M204,328 Q256,348 308,328" fill="none" stroke="url(#royalGoldGrad)" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="256" cy="348" r="10" fill="url(#royalGoldGrad)" stroke="#FFF6D6" stroke-width="2"/>
+  </g>
+
+  <!-- Brand Ribbon / Banner Text -->
+  <text x="256" y="406" font-family="'Cormorant Garamond', 'Playfair Display', Georgia, serif" font-size="30" font-weight="700" fill="url(#royalGoldGrad)" text-anchor="middle" letter-spacing="3.5">ROYAL MALTIPOOS</text>
+  <text x="256" y="432" font-family="'Plus Jakarta Sans', 'Montserrat', sans-serif" font-size="11" font-weight="600" fill="#E1ECE6" text-anchor="middle" letter-spacing="4">ROYALMALTIPOOS.SHOP</text>
+</svg>

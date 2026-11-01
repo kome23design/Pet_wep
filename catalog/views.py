@@ -17,7 +17,7 @@ def pet_list_view(request):
     status = request.GET.get('status', '').strip()
     min_price = request.GET.get('min_price', '').strip()
     max_price = request.GET.get('max_price', '').strip()
-    sort_by = request.GET.get('sort', '-is_featured').strip()
+    sort_by = request.GET.get('sort', 'newest').strip()
     
     active_category = None
     active_breed = None
@@ -86,17 +86,17 @@ def pet_list_view(request):
         except ValueError:
             pass
 
-    # Sorting
+    # Sorting (default: newly added pets first)
     if sort_by == 'price_asc':
-        pets = pets.order_by('price')
+        pets = pets.order_by('price', '-created_at', '-id')
     elif sort_by == 'price_desc':
-        pets = pets.order_by('-price')
-    elif sort_by == 'newest':
-        pets = pets.order_by('-created_at')
+        pets = pets.order_by('-price', '-created_at', '-id')
+    elif sort_by == '-is_featured':
+        pets = pets.order_by('-is_featured', '-created_at', '-id')
     elif sort_by == 'age':
-        pets = pets.order_by('-date_of_birth')
+        pets = pets.order_by('-date_of_birth', '-created_at', '-id')
     else:
-        pets = pets.order_by('-is_featured', '-created_at')
+        pets = pets.order_by('-created_at', '-id')
 
     # Counts for sidebar filters
     all_published_pets = Pet.objects.filter(is_published=True)
@@ -158,7 +158,7 @@ def pet_list_view(request):
 
 def category_detail_view(request, category_slug):
     category = get_object_or_404(PetCategory, slug=category_slug, is_active=True)
-    pets = Pet.objects.filter(category=category, is_published=True).select_related('breed').prefetch_related('images')
+    pets = Pet.objects.filter(category=category, is_published=True).select_related('breed').prefetch_related('images').order_by('-created_at', '-id')
     
     breed_slug = request.GET.get('breed')
     if breed_slug:
@@ -184,7 +184,7 @@ def breed_detail_view(request, category_slug=None, breed_slug=None):
         breed_slug = request.resolver_match.kwargs['breed_slug']
 
     breed = get_object_or_404(PetBreed.objects.select_related('category'), slug=breed_slug, is_active=True)
-    pets = Pet.objects.filter(breed=breed, is_published=True).prefetch_related('images')
+    pets = Pet.objects.filter(breed=breed, is_published=True).prefetch_related('images').order_by('-created_at', '-id')
     
     paginator = Paginator(pets, 9)
     page_obj = paginator.get_page(request.GET.get('page'))

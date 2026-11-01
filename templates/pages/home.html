@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Find Your New Best Friend | Prestige Paws NYC Luxury Pet Atelier{% endblock %}
+{% block title %}Find Your New Best Friend | Royal Maltipoos Luxury Pet Atelier{% endblock %}
 {% block meta_description %}New York City's premier luxury pet placement atelier. Ethically hand-reared Maltipoo and Maltese puppies with certified veterinary health credentials, 10-year warranty, and chaperoned companion delivery nationwide.{% endblock %}
 
 {% block content %}
@@ -87,7 +87,7 @@
         <div class="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-gradient-to-tr from-gold/30 to-forest/20 rounded-2xl"></div>
         <div class="relative bg-white p-3 rounded-2xl shadow-xl border border-stone-200 overflow-hidden">
           <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=1000&q=80" 
-               alt="Prestige Paws Maltipoo Puppy Portrait" 
+               alt="Royal Maltipoos Maltipoo Puppy Portrait" 
                class="w-full h-96 sm:h-[480px] object-cover rounded-xl"
                loading="eager"
                decoding="async"
@@ -261,16 +261,73 @@
 </section>
 {% endif %}
 
-<!-- WHY CHOOSE PRESTIGE PAWS NYC -->
+<!-- WHY CHOOSE ROYAL MALTIPOOS -->
 <section class="py-20 bg-[#0F2319] text-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-8">
     <div class="text-center max-w-2xl mx-auto mb-16">
       <span class="text-gold uppercase tracking-widest text-xs font-semibold">The Prestige Covenant</span>
-      <h2 class="font-serif text-4xl sm:text-5xl font-bold mt-2 text-[#FAF8F5]">Why Discerning Adopters Trust Prestige Paws</h2>
+      <h2 class="font-serif text-4xl sm:text-5xl font-bold mt-2 text-[#FAF8F5]">Why Discerning Adopters Trust Royal Maltipoos</h2>
       <p class="text-stone-400 text-sm mt-3">We adhere to the most rigorous ethical breeding, veterinary inspection, and placement protocols in the United States.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <!-- Mobile Swiper (Automatic & Continuous) -->
+    <div class="md:hidden relative px-2">
+      <div class="swiper covenant-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide h-auto pb-2">
+            <div class="bg-[#173324] p-8 rounded-2xl border border-forest-800 space-y-4 h-full">
+              <div class="w-12 h-12 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-xl">
+                <i class="fa-solid fa-stethoscope"></i>
+              </div>
+              <h3 class="font-serif text-2xl font-bold text-white">USDA Clinical Exam</h3>
+              <p class="text-stone-400 text-sm leading-relaxed">
+                Every puppy completes a comprehensive nose-to-tail clinical inspection by licensed veterinarians, verified with official USDA-APHIS health certification within 5 days of placement.
+              </p>
+            </div>
+          </div>
+
+          <div class="swiper-slide h-auto pb-2">
+            <div class="bg-[#173324] p-8 rounded-2xl border border-forest-800 space-y-4 h-full">
+              <div class="w-12 h-12 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-xl">
+                <i class="fa-solid fa-shield-heart"></i>
+              </div>
+              <h3 class="font-serif text-2xl font-bold text-white">10-Year Genetic Warranty</h3>
+              <p class="text-stone-400 text-sm leading-relaxed">
+                Our industry-leading warranty protects against hereditary and congenital conditions, supported by multi-panel DNA parentage screenings and OFA health clearances.
+              </p>
+            </div>
+          </div>
+
+          <div class="swiper-slide h-auto pb-2">
+            <div class="bg-[#173324] p-8 rounded-2xl border border-forest-800 space-y-4 h-full">
+              <div class="w-12 h-12 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-xl">
+                <i class="fa-solid fa-plane-arrival"></i>
+              </div>
+              <h3 class="font-serif text-2xl font-bold text-white">Chaperoned Hand Delivery</h3>
+              <p class="text-stone-400 text-sm leading-relaxed">
+                We never place animals in cargo. All travel is personally chaperoned in-cabin by certified flight nannies or in dedicated climate-controlled Mercedes-Benz Sprinters.
+              </p>
+            </div>
+          </div>
+
+          <div class="swiper-slide h-auto pb-2">
+            <div class="bg-[#173324] p-8 rounded-2xl border border-forest-800 space-y-4 h-full">
+              <div class="w-12 h-12 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-xl">
+                <i class="fa-solid fa-heart-pulse"></i>
+              </div>
+              <h3 class="font-serif text-2xl font-bold text-white">Lifetime Support Covenant</h3>
+              <p class="text-stone-400 text-sm leading-relaxed">
+                Complimentary direct access to our Manhattan canine nutritionists, behaviorists, 24/7 universal microchip recovery network, and lifetime rehoming guarantee.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination covenant-pagination mt-4"></div>
+      </div>
+    </div>
+
+    <!-- Desktop Grid -->
+    <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-8">
       
       <div class="bg-[#173324] p-8 rounded-2xl border border-forest-800 space-y-4">
         <div class="w-12 h-12 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-xl">
@@ -325,7 +382,64 @@
       <p class="text-stone-500 text-sm mt-2">Crafted to ensure zero stress for the puppy and total peace of mind for your household.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center">
+    <!-- Mobile Swiper (Automatic & Continuous) -->
+    <div class="md:hidden relative px-2">
+      <div class="swiper methodology-swiper">
+        <div class="swiper-wrapper text-center">
+          <div class="swiper-slide h-auto pb-2">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2 h-full">
+              <div class="w-10 h-10 rounded-full bg-forest text-gold font-serif font-bold text-base flex items-center justify-center mx-auto">1</div>
+              <h4 class="font-serif text-lg font-bold text-forest">Selection &amp; Match</h4>
+              <p class="text-xs text-stone-500 leading-relaxed">Explore listings online or book an atelier consultation to match puppy temperament to your lifestyle.</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide h-auto pb-2">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2 h-full">
+              <div class="w-10 h-10 rounded-full bg-forest text-gold font-serif font-bold text-base flex items-center justify-center mx-auto">2</div>
+              <h4 class="font-serif text-lg font-bold text-forest">Deposit &amp; Hold</h4>
+              <p class="text-xs text-stone-500 leading-relaxed">Secure reservation instantly with transactional database locking to prevent duplicate inquiries.</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide h-auto pb-2">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2 h-full">
+              <div class="w-10 h-10 rounded-full bg-forest text-gold font-serif font-bold text-base flex items-center justify-center mx-auto">3</div>
+              <h4 class="font-serif text-lg font-bold text-forest">Clinical Exam</h4>
+              <p class="text-xs text-stone-500 leading-relaxed">Nose-to-tail veterinary clearance, cardiac check, stool screening, and travel certificate issuance.</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide h-auto pb-2">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2 h-full">
+              <div class="w-10 h-10 rounded-full bg-forest text-gold font-serif font-bold text-base flex items-center justify-center mx-auto">4</div>
+              <h4 class="font-serif text-lg font-bold text-forest">Travel Prep</h4>
+              <p class="text-xs text-stone-500 leading-relaxed">Comfort crate preparation with maternal scent blanket, organic nutrient hydration, and flight bag.</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide h-auto pb-2">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2 h-full">
+              <div class="w-10 h-10 rounded-full bg-forest text-gold font-serif font-bold text-base flex items-center justify-center mx-auto">5</div>
+              <h4 class="font-serif text-lg font-bold text-forest">Chaperoned Trip</h4>
+              <p class="text-xs text-stone-500 leading-relaxed">Continuous personal care by our licensed flight nanny or climate-controlled private courier.</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide h-auto pb-2">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-2 h-full">
+              <div class="w-10 h-10 rounded-full bg-forest text-gold font-serif font-bold text-base flex items-center justify-center mx-auto">6</div>
+              <h4 class="font-serif text-lg font-bold text-forest">Home Handover</h4>
+              <p class="text-xs text-stone-500 leading-relaxed">Personal in-home handover, dossier transfer, feeding demonstration, and celebratory welcome.</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination methodology-pagination mt-4"></div>
+      </div>
+    </div>
+
+    <!-- Desktop Grid -->
+    <div class="hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-6 text-center">
       
       <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-xs space-y-2">
         <div class="w-10 h-10 rounded-full bg-forest text-gold font-serif font-bold text-base flex items-center justify-center mx-auto">1</div>
@@ -377,7 +491,7 @@
         Chaperoned Hand-Delivery to Your Door
       </h2>
       <p class="text-stone-600 text-sm leading-relaxed">
-        Commercial cargo shipping is stressful and dangerous for young toy puppies. That is why Prestige Paws NYC maintains an uncompromising covenant: every single puppy travels strictly in the direct personal care of a certified chaperone.
+        Commercial cargo shipping is stressful and dangerous for young toy puppies. That is why Royal Maltipoos maintains an uncompromising covenant: every single puppy travels strictly in the direct personal care of a certified chaperone.
       </p>
 
       <div class="space-y-4 pt-2">
@@ -432,7 +546,7 @@
     <div class="lg:col-span-6 bg-cream p-8 rounded-3xl border border-stone-200 shadow-sm space-y-6">
       <div class="flex items-center justify-between pb-4 border-b border-stone-200">
         <div>
-          <span class="text-[10px] text-stone-400 uppercase font-bold tracking-wider">Prestige Paws Logistics</span>
+          <span class="text-[10px] text-stone-400 uppercase font-bold tracking-wider">Royal Maltipoos Logistics</span>
           <h4 class="font-serif text-2xl font-bold text-forest">Nationwide Handover Protocol</h4>
         </div>
         <span class="badge-gold text-xs">All 50 States</span>
@@ -481,7 +595,7 @@
       <div>
         <span class="badge-gold">Verified Client Experiences</span>
         <h2 class="font-serif text-3xl sm:text-4xl font-bold text-forest mt-2">What Our Adopters Say</h2>
-        <p class="text-stone-500 text-sm mt-1">Authentic experiences shared by families placed through Prestige Paws NYC.</p>
+        <p class="text-stone-500 text-sm mt-1">Authentic experiences shared by families placed through Royal Maltipoos.</p>
       </div>
       <div class="flex items-center gap-4">
         <a href="{% url 'reviews:review_list' %}" class="text-forest hover:text-gold-dark font-semibold text-sm flex items-center gap-1.5 transition-colors">
@@ -607,7 +721,30 @@
       <p class="text-stone-500 text-sm mt-1">Key information regarding health warranties, vetting, and nationwide chaperoned travel.</p>
     </div>
 
-    <div class="space-y-4">
+    <!-- Mobile Swiper (Automatic & Continuous) -->
+    <div class="md:hidden relative px-2">
+      <div class="swiper faq-swiper">
+        <div class="swiper-wrapper">
+          {% for faq in faqs %}
+            <div class="swiper-slide h-auto pb-2">
+              <div class="border border-stone-200 rounded-xl p-5 bg-cream h-full">
+                <h4 class="font-serif text-xl font-bold text-forest flex items-center justify-between gap-2">
+                  <span>{{ faq.question }}</span>
+                  <i class="fa-solid fa-chevron-right text-xs text-gold shrink-0"></i>
+                </h4>
+                <p class="text-stone-600 text-xs leading-relaxed mt-2.5 pt-2.5 border-t border-stone-200/60">
+                  {{ faq.answer }}
+                </p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="swiper-pagination faq-pagination mt-4"></div>
+      </div>
+    </div>
+
+    <!-- Desktop List -->
+    <div class="hidden md:block space-y-4">
       {% for faq in faqs %}
         <div class="border border-stone-200 rounded-xl p-5 bg-cream">
           <h4 class="font-serif text-xl font-bold text-forest flex items-center justify-between">
@@ -743,6 +880,69 @@ document.addEventListener('DOMContentLoaded', function() {
           640: { slidesPerView: 2, spaceBetween: 20 },
           1024: { slidesPerView: 3, spaceBetween: 24 },
         }
+      });
+    }
+
+    // 5. Prestige Covenant Mobile Swiper
+    if (document.querySelector('.covenant-swiper')) {
+      new Swiper('.covenant-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 16,
+        loop: true,
+        speed: 800,
+        observer: true,
+        observeParents: true,
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
+        pagination: {
+          el: '.covenant-pagination',
+          clickable: true,
+        },
+      });
+    }
+
+    // 6. Placement Methodology Mobile Swiper
+    if (document.querySelector('.methodology-swiper')) {
+      new Swiper('.methodology-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 16,
+        loop: true,
+        speed: 800,
+        observer: true,
+        observeParents: true,
+        autoplay: {
+          delay: 2800,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
+        pagination: {
+          el: '.methodology-pagination',
+          clickable: true,
+        },
+      });
+    }
+
+    // 7. FAQ Mobile Swiper
+    if (document.querySelector('.faq-swiper')) {
+      new Swiper('.faq-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 16,
+        loop: true,
+        speed: 800,
+        observer: true,
+        observeParents: true,
+        autoplay: {
+          delay: 3500,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
+        pagination: {
+          el: '.faq-pagination',
+          clickable: true,
+        },
       });
     }
 

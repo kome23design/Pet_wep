@@ -16,8 +16,9 @@ def site_context(request):
     return {
         'site_settings': settings,
         'nav_categories': categories,
-        'BUSINESS_NAME': getattr(settings, 'business_name', 'Prestige Paws NYC'),
+        'BUSINESS_NAME': getattr(settings, 'business_name', 'Royal Maltipoos'),
+        'BUSINESS_DOMAIN': 'royalmaltipoos.shop',
         'BUSINESS_PHONE': getattr(settings, 'phone', '(212) 555-PAWS'),
-        'BUSINESS_EMAIL': getattr(settings, 'email', 'concierge@prestigepaws.nyc'),
+        'BUSINESS_EMAIL': getattr(settings, 'email', 'support@royalmaltipoos.shop'),
         'BUSINESS_ADDRESS': getattr(settings, 'address', '450 Lexington Avenue, Suite 1800, New York, NY 10017'),
     }

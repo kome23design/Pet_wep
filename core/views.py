@@ -17,7 +17,7 @@ def robots_txt(request):
         "Disallow: /admin/",
         "Allow: /",
         "",
-        "Sitemap: https://prestigepaws.nyc/sitemap.xml",
+        "Sitemap: https://royalmaltipoos.shop/sitemap.xml",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
@@ -37,14 +37,14 @@ def sitemap_xml(request):
         '/health-documentation-policy/', '/privacy-policy/', '/terms-and-conditions/'
     ]
     for u in urls:
-        xml.append(f"  <url><loc>https://prestigepaws.nyc{u}</loc><priority>0.8</priority></url>")
+        xml.append(f"  <url><loc>https://royalmaltipoos.shop{u}</loc><priority>0.8</priority></url>")
         
     for c in categories:
-        xml.append(f"  <url><loc>https://prestigepaws.nyc/category/{c.slug}/</loc><priority>0.9</priority></url>")
+        xml.append(f"  <url><loc>https://royalmaltipoos.shop/category/{c.slug}/</loc><priority>0.9</priority></url>")
     for b in breeds:
-        xml.append(f"  <url><loc>https://prestigepaws.nyc/collection/{b.slug}/</loc><priority>0.9</priority></url>")
+        xml.append(f"  <url><loc>https://royalmaltipoos.shop/collection/{b.slug}/</loc><priority>0.9</priority></url>")
     for p in pets:
-        xml.append(f"  <url><loc>https://prestigepaws.nyc/pet/{p.slug}/</loc><priority>1.0</priority></url>")
+        xml.append(f"  <url><loc>https://royalmaltipoos.shop/pet/{p.slug}/</loc><priority>1.0</priority></url>")
 
     xml.append('</urlset>')
     return HttpResponse("\n".join(xml), content_type="application/xml")

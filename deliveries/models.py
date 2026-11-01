@@ -35,7 +35,7 @@ class Delivery(models.Model):
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='scheduled')
     
     # Origin (Manhattan Atelier by default)
-    origin_name = models.CharField(max_length=150, default='Prestige Paws NYC Flagship Atelier')
+    origin_name = models.CharField(max_length=150, default='Royal Maltipoos Flagship Atelier')
     origin_address = models.CharField(max_length=255, default='450 Lexington Avenue, New York, NY 10017')
     origin_latitude = models.FloatField(default=40.7527)
     origin_longitude = models.FloatField(default=-73.9772)

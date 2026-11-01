@@ -97,7 +97,7 @@ class Command(BaseCommand):
                 'tags': 'Puppy Preparation, First 72 Hours, Crate Training, Sleep Setup, Anxiety Prevention',
                 'content': """
 <h3 class="font-serif text-2xl font-bold text-forest mb-3">The Psychology of the First Day</h3>
-<p class="mb-4">Entering a brand new environment with unfamiliar scents, acoustic echoes, and faces is the most momentous transition of your puppy's life. At Prestige Paws NYC, every companion leaves the nursery accompanied by a mother-scented fleece blanket and heartbeat simulator to create an unbroken scent anchor.</p>
+<p class="mb-4">Entering a brand new environment with unfamiliar scents, acoustic echoes, and faces is the most momentous transition of your puppy's life. At Royal Maltipoos, every companion leaves the nursery accompanied by a mother-scented fleece blanket and heartbeat simulator to create an unbroken scent anchor.</p>
 
 <h3 class="font-serif text-2xl font-bold text-forest mt-6 mb-3">Hour-by-Hour Timeline: Day 1 Arrival</h3>
 <p class="mb-4">Follow this exact sequence the moment your puppy steps across your threshold:</p>

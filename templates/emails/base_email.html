@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block email_title %}Royal Maltipoos | royalmaltipoos.shop{% endblock %}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #242E28; -webkit-font-smoothing: antialiased;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #FAF8F5; padding: 32px 16px;">
+    <tr>
+      <td align="center">
+        <!-- Main Email Card -->
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width: 640px; background-color: #FFFFFF; border-radius: 20px; overflow: hidden; border: 1px solid #DFD5C6; box-shadow: 0 12px 32px rgba(15, 35, 25, 0.08);">
+          
+          <!-- Top Gold Accent Bar -->
+          <tr>
+            <td style="height: 5px; background: linear-gradient(90deg, #9E7A18 0%, #D4AF37 50%, #F5E6A8 75%, #D4AF37 100%); font-size: 0; line-height: 0;">&nbsp;</td>
+          </tr>
+
+          <!-- Luxury Royal Header -->
+          <tr>
+            <td align="center" style="background-color: #0F2319; padding: 34px 32px 28px 32px; border-bottom: 1px solid #1E3F2E;">
+              <a href="https://royalmaltipoos.shop" style="text-decoration: none; display: inline-block;">
+                <img src="https://royalmaltipoos.shop/static/images/royal_maltipoos_logo.png" alt="Royal Maltipoos Logo" width="68" height="68" style="display: block; margin: 0 auto 12px auto; width: 68px; height: 68px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; background-color: #142C20;">
+                <div style="font-family: Georgia, 'Times New Roman', serif; font-size: 26px; font-weight: 700; color: #FFFFFF; letter-spacing: 2px; text-transform: uppercase; margin: 0;">
+                  ROYAL MALTIPOOS
+                </div>
+                <div style="font-size: 10px; font-weight: 700; color: #D4AF37; letter-spacing: 3.5px; text-transform: uppercase; margin-top: 5px;">
+                  ROYALMALTIPOOS.SHOP &bull; LUXURY PUPPY ATELIER
+                </div>
+              </a>
+            </td>
+          </tr>
+
+          <!-- Email Body Content -->
+          <tr>
+            <td style="padding: 36px 32px; font-size: 14px; line-height: 1.7; color: #2C3731;">
+              {% block email_content %}{% endblock %}
+            </td>
+          </tr>
+
+          <!-- Concierge Support Banner -->
+          <tr>
+            <td style="padding: 0 32px 32px 32px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #FAF8F5; border: 1px solid #E5DEC9; border-radius: 14px; padding: 20px;">
+                <tr>
+                  <td style="font-size: 12px; line-height: 1.6; color: #4A5550;">
+                    <strong style="color: #0F2319; font-size: 13px; display: block; margin-bottom: 4px;">Royal Maltipoos Private Concierge Directorate</strong>
+                    Need immediate assistance with your puppy reservation, payment instructions, or chaperoned delivery? Reply directly to this email or contact our executive desk:<br>
+                    <span style="color: #0F2319; font-weight: 600;">Email:</span> <a href="mailto:support@royalmaltipoos.shop" style="color: #A68318; font-weight: 700; text-decoration: none;">support@royalmaltipoos.shop</a> &nbsp;|&nbsp;
+                    <span style="color: #0F2319; font-weight: 600;">Web:</span> <a href="https://royalmaltipoos.shop" style="color: #A68318; font-weight: 700; text-decoration: none;">royalmaltipoos.shop</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Luxury Footer -->
+          <tr>
+            <td align="center" style="background-color: #0F2319; padding: 28px 32px; color: #A3B5AB; font-size: 11px; line-height: 1.6; border-top: 1px solid #1E3F2E;">
+              <div style="font-family: Georgia, 'Times New Roman', serif; font-size: 16px; font-weight: 700; color: #D4AF37; letter-spacing: 1.5px; margin-bottom: 6px;">
+                ROYAL MALTIPOOS
+              </div>
+              <div style="margin-bottom: 10px; color: #D0DDD6;">
+                450 Lexington Avenue, Suite 1800, New York, NY 10017 &bull; (212) 555-PAWS
+              </div>
+              <div style="margin-bottom: 12px;">
+                <a href="https://royalmaltipoos.shop/pets/" style="color: #D4AF37; text-decoration: none; margin: 0 8px;">Shop Puppies</a> &bull;
+                <a href="https://royalmaltipoos.shop/animal-welfare-standards/" style="color: #D4AF37; text-decoration: none; margin: 0 8px;">Welfare Covenant</a> &bull;
+                <a href="https://royalmaltipoos.shop/health-documentation-policy/" style="color: #D4AF37; text-decoration: none; margin: 0 8px;">10-Year Health Warranty</a> &bull;
+                <a href="mailto:support@royalmaltipoos.shop" style="color: #D4AF37; text-decoration: none; margin: 0 8px;">support@royalmaltipoos.shop</a>
+              </div>
+              <div style="color: #6E8478; font-size: 10px;">
+                &copy; {% now "Y" %} Royal Maltipoos (<a href="https://royalmaltipoos.shop" style="color: #8CA396; text-decoration: none;">royalmaltipoos.shop</a>). All rights reserved.
+              </div>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

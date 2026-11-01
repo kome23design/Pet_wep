@@ -1,0 +1,30 @@
+{% extends 'emails/base_email.html' %}
+
+{% block email_title %}Welcome to Royal Maltipoos | Private Client Account{% endblock %}
+
+{% block email_content %}
+  <div style="text-align: center; margin-bottom: 24px;">
+    <span style="display: inline-block; background-color: #F8F4EC; color: #A68318; border: 1px solid #D4AF37; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 6px 16px; border-radius: 999px;">
+      Private Client Membership
+    </span>
+    <h1 style="font-family: Georgia, 'Times New Roman', serif; font-size: 26px; color: #0F2319; margin: 14px 0 6px 0; font-weight: 700;">
+      Welcome to Royal Maltipoos, {{ user.first_name|default:user.username }}!
+    </h1>
+  </div>
+
+  <p style="font-size: 14px; color: #2C3731;">
+    We are honored to welcome you to <strong>Royal Maltipoos</strong> (<a href="https://royalmaltipoos.shop" style="color: #A68318; font-weight: 600;">royalmaltipoos.shop</a>). Your private client portal is now active, giving you direct access to:
+  </p>
+
+  <ul style="font-size: 13px; color: #2C3731; line-height: 1.8; padding-left: 20px; margin: 16px 0;">
+    <li><strong>Companion Reservation Dossiers:</strong> Manage your orders, veterinary health certificates, and official receipts.</li>
+    <li><strong>Live GPS Chaperoned Delivery Telemetry:</strong> Track your puppy's journey from our Manhattan Atelier to your doorstep.</li>
+    <li><strong>Saved Wishlist &amp; Residences:</strong> Curate your favorite Maltipoo and Maltese puppies for priority placement.</li>
+  </ul>
+
+  <div style="text-align: center; margin: 28px 0 10px 0;">
+    <a href="https://royalmaltipoos.shop/accounts/dashboard/" style="display: inline-block; background-color: #0F2319; color: #D4AF37; font-size: 13px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; padding: 14px 28px; border-radius: 999px; border: 1px solid #D4AF37;">
+      Access Your Client Portal
+    </a>
+  </div>
+{% endblock %}

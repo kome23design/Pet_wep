@@ -23,7 +23,7 @@ class PetCategory(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         if not self.seo_title:
-            self.seo_title = f"{self.name} for Sale | Prestige Paws NYC"
+            self.seo_title = f"{self.name} for Sale | Royal Maltipoos"
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -101,18 +101,18 @@ class Pet(models.Model):
         default='DHPP Series (Core Vaccinations), Bordetella, Rabies (age-appropriate), Deworming Schedule Complete.'
     )
     veterinary_health_certificate_number = models.CharField(max_length=80, blank=True, default='USDA-APHIS-7001-NYC')
-    genetic_health_warranty_years = models.PositiveIntegerField(default=10, help_text='Prestige Paws 10-Year Genetic Health Warranty')
+    genetic_health_warranty_years = models.PositiveIntegerField(default=10, help_text='Royal Maltipoos 10-Year Genetic Health Warranty')
     
     # Lineage and Origin
     breeder_atelier_origin = models.CharField(max_length=150, default='Certified Ethical NY/CT Partner Atelier')
-    current_location = models.CharField(max_length=150, default='Prestige Paws Manhattan Atelier - New York, NY')
+    current_location = models.CharField(max_length=150, default='Royal Maltipoos Manhattan Atelier - New York, NY')
     
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-is_featured', '-created_at']
+        ordering = ['-created_at', '-id']
 
     def save(self, *args, **kwargs):
         if not self.slug:

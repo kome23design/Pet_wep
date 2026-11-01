@@ -16,17 +16,17 @@ from pages.models import FAQ, GalleryItem, ContactInquiry
 User = get_user_model()
 
 class Command(BaseCommand):
-    help = 'Populates the Prestige Paws NYC database with comprehensive demonstration data.'
+    help = 'Populates the Royal Maltipoos database with comprehensive demonstration data.'
 
     def handle(self, *args, **options):
-        self.stdout.write(self.style.NOTICE("Initializing Prestige Paws NYC demonstration dataset..."))
+        self.stdout.write(self.style.NOTICE("Initializing Royal Maltipoos demonstration dataset..."))
 
         # 1. Site Setting
         settings = SiteSetting.get_settings()
-        settings.business_name = "Prestige Paws NYC"
+        settings.business_name = "Royal Maltipoos"
         settings.tagline = "Manhattan's Premier Pet Placement & Chaperoned Delivery Atelier"
         settings.phone = "(212) 555-PAWS"
-        settings.email = "concierge@prestigepaws.nyc"
+        settings.email = "support@royalmaltipoos.shop"
         settings.address = "450 Lexington Avenue, Suite 1800, New York, NY 10017"
         settings.standard_delivery_fee = Decimal('250.00')
         settings.tax_rate = Decimal('0.0888')
@@ -39,7 +39,7 @@ class Command(BaseCommand):
         admin_user, created = User.objects.get_or_create(
             username='admin',
             defaults={
-                'email': 'admin@prestigepaws.nyc',
+                'email': 'support@royalmaltipoos.shop',
                 'first_name': 'Alexander',
                 'last_name': 'Vanderbilt',
                 'role': 'admin',
@@ -56,7 +56,7 @@ class Command(BaseCommand):
         staff_user, created = User.objects.get_or_create(
             username='staff_lisa',
             defaults={
-                'email': 'lisa@prestigepaws.nyc',
+                'email': 'support@royalmaltipoos.shop',
                 'first_name': 'Lisa',
                 'last_name': 'Sterling',
                 'role': 'staff',
@@ -72,7 +72,7 @@ class Command(BaseCommand):
         courier_user, created = User.objects.get_or_create(
             username='courier_dave',
             defaults={
-                'email': 'courier.dave@prestigepaws.nyc',
+                'email': 'support@royalmaltipoos.shop',
                 'first_name': 'David',
                 'last_name': 'Ross',
                 'role': 'delivery_agent',
@@ -143,7 +143,7 @@ class Command(BaseCommand):
             defaults={
                 'slug': 'dogs',
                 'description': 'Hand-reared, ethically bred puppies from our certified network of veterinary-inspected partner ateliers.',
-                'seo_title': 'Premium Puppies for Sale in NYC & US Home Delivery | Prestige Paws',
+                'seo_title': 'Premium Puppies for Sale in NYC & US Home Delivery | Royal Maltipoos',
                 'seo_description': 'Discover exquisite Maltipoo and Maltese puppies for sale in New York City with chaperoned delivery across the USA.',
                 'display_order': 1,
             }
@@ -317,7 +317,7 @@ class Command(BaseCommand):
                 'price': Decimal('4300.00'),
                 'is_featured': False,
                 'status': 'sold',  # For demonstrating sold state and order history
-                'desc': 'Jasper is a playful and intelligent Maltese male placed into his loving forever home in Manhattan. Example of a successfully transitioned Prestige Paws placement.',
+                'desc': 'Jasper is a playful and intelligent Maltese male placed into his loving forever home in Manhattan. Example of a successfully transitioned Royal Maltipoos placement.',
                 'images': [
                     'https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&w=800&q=80',
                 ]
@@ -343,8 +343,8 @@ class Command(BaseCommand):
                     'is_featured': p['is_featured'],
                     'microchip_id': f"98514100{hash(p['ref']) % 9000000 + 1000000}",
                     'veterinary_health_certificate_number': f"USDA-APHIS-NYC-{p['ref'][-3:]}",
-                    'breeder_atelier_origin': 'Prestige Paws Certified NY Partner Atelier',
-                    'current_location': 'Prestige Paws Manhattan Atelier - New York, NY',
+                    'breeder_atelier_origin': 'Royal Maltipoos Certified NY Partner Atelier',
+                    'current_location': 'Royal Maltipoos Manhattan Atelier - New York, NY',
                 }
             )
             created_pets[p['ref']] = pet_obj
@@ -355,7 +355,7 @@ class Command(BaseCommand):
                     pet=pet_obj,
                     image_url=img_url,
                     defaults={
-                        'caption': f"{pet_obj.name} - Prestige Paws Certified Portrait",
+                        'caption': f"{pet_obj.name} - Royal Maltipoos Certified Portrait",
                         'is_primary': (idx == 0),
                         'display_order': idx,
                     }
@@ -388,9 +388,9 @@ class Command(BaseCommand):
                 pet=pet_obj,
                 document_type='warranty',
                 defaults={
-                    'title': f'Prestige Paws 10-Year Genetic Health Warranty - {pet_obj.name}',
-                    'issuing_veterinarian': 'Prestige Paws Placement Directorate',
-                    'clinic_name': 'Prestige Paws Legal & Veterinary Affairs',
+                    'title': f'Royal Maltipoos 10-Year Genetic Health Warranty - {pet_obj.name}',
+                    'issuing_veterinarian': 'Royal Maltipoos Placement Directorate',
+                    'clinic_name': 'Royal Maltipoos Legal & Veterinary Affairs',
                     'issued_date': today,
                     'notes': 'Comprehensive coverage guaranteeing freedom from congenital life-threatening genetic defects.',
                 }
@@ -460,7 +460,7 @@ class Command(BaseCommand):
                     'assigned_agent': courier_user,
                     'carrier_type': 'courier_sprinter',
                     'status': 'in_transit',
-                    'origin_name': 'Prestige Paws NYC Flagship Atelier',
+                    'origin_name': 'Royal Maltipoos Flagship Atelier',
                     'origin_address': '450 Lexington Avenue, New York, NY 10017',
                     'origin_latitude': 40.7527,
                     'origin_longitude': -73.9772,
@@ -517,7 +517,7 @@ class Command(BaseCommand):
                 status='preparing',
                 title='Pre-Travel Veterinary Check & Comfort Crate Placement',
                 description='Dr. Vance verified hydration, temperature, and temperament. Climate-controlled Sprinter prepared at 70°F.',
-                location_name='Prestige Paws Medical Bay'
+                location_name='Royal Maltipoos Medical Bay'
             )
             DeliveryEvent.objects.create(
                 delivery=delivery,
@@ -559,7 +559,7 @@ class Command(BaseCommand):
                 'customer': customer_user,
                 'rating': 5,
                 'headline': 'Unrivaled care, transparency, and animal welfare standards.',
-                'comment': 'Having visited other breeders, Prestige Paws stands in a category of its own. They prioritize animal welfare above all else. The 10-year genetic health guarantee speaks volumes about their confidence in their bloodlines.',
+                'comment': 'Having visited other breeders, Royal Maltipoos stands in a category of its own. They prioritize animal welfare above all else. The 10-year genetic health guarantee speaks volumes about their confidence in their bloodlines.',
                 'location': 'Greenwich, Connecticut',
                 'is_verified': True,
                 'status': 'approved',
@@ -590,7 +590,7 @@ class Command(BaseCommand):
         faqs_data = [
             {
                 'cat': 'adoption',
-                'q': 'How does the Prestige Paws placement process work?',
+                'q': 'How does the Royal Maltipoos placement process work?',
                 'a': 'Our placement process is designed to ensure a perfect match. You may browse our available puppies online, schedule a private consultation at our Manhattan Atelier, or complete your reservation directly through our secure platform. Every adoption includes comprehensive health documents, full ownership transfer, and chaperoned travel coordination.',
                 'order': 1
             },
@@ -658,7 +658,7 @@ class Command(BaseCommand):
             )
 
         self.stdout.write(self.style.SUCCESS("[OK] Demonstration FAQs and Gallery loaded."))
-        self.stdout.write(self.style.SUCCESS("\n[SUCCESS] Complete Prestige Paws NYC demonstration dataset populated successfully!"))
+        self.stdout.write(self.style.SUCCESS("\n[SUCCESS] Complete Royal Maltipoos demonstration dataset populated successfully!"))
         self.stdout.write(self.style.NOTICE("Demo credentials:"))
         self.stdout.write(self.style.NOTICE("  Admin:      admin / AdminPass2026!"))
         self.stdout.write(self.style.NOTICE("  Staff:      staff_lisa / StaffPass2026!"))

@@ -8,6 +8,7 @@ from accounts.models import CustomerProfile, CustomerAddress
 from orders.models import Order
 from catalog.models import Pet
 from reviews.models import Review
+from core.emails import send_welcome_account_email, send_password_reset_email
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -18,7 +19,8 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, f"Welcome to Prestige Paws NYC, {user.first_name or user.username}! Your private client account is active.")
+            send_welcome_account_email(user)
+            messages.success(request, f"Welcome to Royal Maltipoos, {user.first_name or user.username}! Your private client account is active.")
             return redirect('accounts:dashboard')
         else:
             messages.error(request, "Please correct the errors in the registration form below.")
@@ -51,7 +53,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    messages.info(request, "You have been securely signed out of Prestige Paws NYC.")
+    messages.info(request, "You have been securely signed out of Royal Maltipoos.")
     return redirect('pages:home')
 
 
@@ -175,10 +177,12 @@ def toggle_wishlist_view(request, pet_id):
 
 def password_reset_request_view(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
+        email = request.POST.get('email', '').strip()
+        if email:
+            send_password_reset_email(email)
         messages.success(
             request,
-            f"If an account exists with {email}, a secure password reset link has been dispatched to your inbox (or logged in console for development)."
+            f"If an account exists with {email}, a secure password reset link has been dispatched from support@royalmaltipoos.shop."
         )
         return render(request, 'accounts/password_reset_done.html', {'email': email})
     return render(request, 'accounts/password_reset.html')

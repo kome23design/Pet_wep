@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Live Chaperoned Pet Delivery Tracking &bull; {{ delivery.tracking_number }} | Prestige Paws NYC{% endblock %}
+{% block title %}Live Chaperoned Pet Delivery Tracking &bull; {{ delivery.tracking_number }} | Royal Maltipoos{% endblock %}
 
 {% block content %}
 <div class="bg-cream-dark py-8 border-b border-[#DFD5C6]">
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // OpenStreetMap Tile Layer
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; OpenStreetMap contributors | Prestige Paws NYC'
+    attribution: '&copy; OpenStreetMap contributors | Royal Maltipoos'
   }).addTo(map);
 
   // Custom Icon: Origin (Manhattan Atelier)
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Add Markers
   const originMarker = L.marker([originLat, originLng], { icon: originIcon }).addTo(map)
-    .bindPopup('<strong>Prestige Paws Flagship Atelier</strong><br>Dispatch Facility, 450 Lexington Ave, NY');
+    .bindPopup('<strong>Royal Maltipoos Flagship Atelier</strong><br>Dispatch Facility, 450 Lexington Ave, NY');
 
   const destMarker = L.marker([destLat, destLng], { icon: destIcon }).addTo(map)
     .bindPopup('<strong>Destination Residence</strong><br>{{ delivery.destination_address }}');
